@@ -18,7 +18,7 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>Redis学习笔记2 Hash数据类型 - Hexo</title>
+  <title>Redis学习笔记5 sorted_set数据类型 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Redis学习笔记2 Hash数据类型">
+            <span class="h2" id="subtitle" title="Redis学习笔记5 sorted_set数据类型">
               
             </span>
 
@@ -173,7 +173,7 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-04-21 12:35" pubdate>
+      <time datetime="2021-04-21 16:39" pubdate>
         April 21, 2021 pm
       </time>
     </span>
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      774 字
+      704 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      8
+      7
        分钟
     </span>
   
@@ -225,75 +225,95 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Redis学习笔记2 Hash数据类型</h1>
+            <h1 style="display: none">Redis学习笔记5 sorted_set数据类型</h1>
             
             <div class="markdown-body">
-              <h2 id="一、hash类型"><a href="#一、hash类型" class="headerlink" title="一、hash类型"></a>一、hash类型</h2><ul>
-<li><p>新的存储需求：对一系列存储的数据进行编组，方便管理，典型应用存储对象信息。</p>
-</li>
-<li><p>需要的存储结构：一个存储空间保存多个键值对数据</p>
-</li>
-<li><p>hash类型：底层使用哈希表结构实现数据存储。</p>
-<p><img src="https://img-blog.csdnimg.cn/20210413221436565.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-</li>
+              <h2 id="sorted-set类型"><a href="#sorted-set类型" class="headerlink" title="sorted_set类型"></a>sorted_set类型</h2><ul>
+<li>新的存储需求：数据排序有利于数据的有效显示，需要提供一种可以根据自身特征进行排序的方式</li>
+<li>需要的存储结构：新的存储模型，可以保存可排序的数据</li>
+<li>sorted_set类型：在set的存储结构基础上添加可排序字段</li>
 </ul>
-<p><strong>hash存储结构优化</strong></p>
-<ul>
-<li>如果field数量较少，存储结构优化为类数组结构</li>
-<li>如果field数量较多，存储结构使用HashMap结构</li>
-</ul>
-<h2 id="二、hash类型数据的基本操作"><a href="#二、hash类型数据的基本操作" class="headerlink" title="二、hash类型数据的基本操作"></a>二、hash类型数据的基本操作</h2><ul>
-<li>添加/修改数据<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hset key field value<br></code></pre></td></tr></table></figure></li>
-<li>获取数据<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">hget key field<br>hgetall key<br></code></pre></td></tr></table></figure></li>
-<li>删除数据<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hdel key field1 [field2]<br></code></pre></td></tr></table></figure></li>
-<li>获取哈希表中是否存在指定的字段<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hexists key field<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="三、hash类型数据拓展操作"><a href="#三、hash类型数据拓展操作" class="headerlink" title="三、hash类型数据拓展操作"></a>三、hash类型数据拓展操作</h2><ul>
-<li>获取哈希表中所有的字段名或字段值<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hkeys key<br></code></pre></td></tr></table></figure></li>
-<li>设定指定字段的数值数据增加指定范围的值<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">hincrby key field increment<br>hincrbyfloat key field increment<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="四、hash类型数据操作的注意事项"><a href="#四、hash类型数据操作的注意事项" class="headerlink" title="四、hash类型数据操作的注意事项"></a>四、hash类型数据操作的注意事项</h2><ul>
-<li>hash类型下的value只能存储字符串，不允许存储其他数据类型，不存在嵌套现象。如果数据未获取到，对应的值为（nil）</li>
-<li>每个hash可以存储2的32次方-1个键值对</li>
-<li>hash类型十分贴近对象的数据存储形式，并且可以灵活添加删除对象属性。但hash设计初衷不是为了存储大量对象而设计的，不可滥用，不能将hash作为对象列表使用</li>
-<li>hgetall操作可以获取全部属性，如果内部field过多，遍历整体数据效率就会很低，有可能成为数据访问瓶颈。</li>
-</ul>
-<h2 id="五、hash类型的应用场景"><a href="#五、hash类型的应用场景" class="headerlink" title="五、hash类型的应用场景"></a>五、hash类型的应用场景</h2><p><strong>业务场景1</strong></p>
-<p>电商网站购物车的实现</p>
-<p><img src="https://img-blog.csdnimg.cn/20210414104649492.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-<p><strong>业务分析</strong></p>
-<ul>
-<li>仅分析购物车的redis存储模型（添加、浏览、更改数量、删除、清空</li>
-<li>购物车与数据库间持久化同步</li>
-<li>购物车与订单间关系（提交购物车：读取数据生成订单 商家临时价格调整：隶属于订单级别）</li>
-<li>未登录用户购物车信息存储（cookie存储）</li>
-</ul>
-<p><strong>解决方案</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20210414110019950.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-<p><img src="https://img-blog.csdnimg.cn/20210414110917809.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-<p><strong>当前设计是否加速了购物车的呈现</strong><br>当前仅仅是将数据存储到reids中，并没有起到加速的作用，商品还需要二次查询数据库</p>
-<ul>
-<li>每条购物车中的商品记录保存成两条field</li>
-<li>field1专用于保存购买数量<br> 命名格式：商品id：nums<pre><code> 保存数据：数值
-</code></pre>
-</li>
-<li>field2专用于保存购物车中的显示信息，包含文字描述，图片地址，所属商家信息等<br>命名格式：商品id：info<br>保存数据：json</li>
-</ul>
-<p><strong>我们可以把field2作为独立hash，来减少数据的重复</strong><br><font color=#999AAA>创建数据，如果已存在数据则创建失败，如果没有则创建成功</font></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hsetnx key field value<br></code></pre></td></tr></table></figure>
+<p><img src="https://img-blog.csdnimg.cn/20210421164359468.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h2 id="sorted-set类型数据的基本操作"><a href="#sorted-set类型数据的基本操作" class="headerlink" title="sorted_set类型数据的基本操作"></a>sorted_set类型数据的基本操作</h2><ul>
+<li><p>添加数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zadd key score1 member1 [score2 member2]<br><br></code></pre></td></tr></table></figure></li>
+<li><p>获取全部数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrange key start stop [WITHSCORES]<br></code></pre></td></tr></table></figure></li>
+<li><p>删除数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrem key member [member1 ...]<br></code></pre></td></tr></table></figure></li>
+<li><p>按条件获取数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrangebyscore key min max [WITHSCORES] [LIMIT]<br>zrevrangebyscore key max min [WITHSCORES] #逆排序<br></code></pre></td></tr></table></figure>
 
-
-<p><strong>业务场景2</strong></p>
-<p>抢购活动</p>
-<p><img src="https://img-blog.csdnimg.cn/20210414111343238.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="https://img-blog.csdnimg.cn/20210421165618285.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>​</p>
+</li>
+</ul>
+<ul>
+<li><p>按条件获取数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zremrangebyrank key start stop   #按索引删除<br>zremrangebyscore key min max<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p><em>注意</em>：</p>
+<ul>
+<li><em>min与max用于限定搜索查询的条件</em></li>
+<li><em>start与stop用于限定查询范围，作用于索引，表示开始和结束索引</em></li>
+<li><em>offset与count用于限定查询范围，作用于查询结果，表示开始位置和数据总量</em></li>
+</ul>
+<p>​    </p>
+<ul>
+<li><p>获取集合数据总量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs shell">zcard key<br>zcount key min max<br><br></code></pre></td></tr></table></figure></li>
+<li><p>集合交、并操作</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zinterstore destination numkeys key [key ...]<br>zunionstore destination numkeys key [key ...]<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="sorted-set类型数据的扩展操作"><a href="#sorted-set类型数据的扩展操作" class="headerlink" title="sorted_set类型数据的扩展操作"></a>sorted_set类型数据的扩展操作</h2><p><strong>业务场景</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210421171218699.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><strong>解决方案</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20210414111420146.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-<p><font color=#999AAA>创建id为00001的商铺，货物1 25个，货物2 100个。</font></p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hmset shopping:id:00001 good1 25 good2 100<br></code></pre></td></tr></table></figure>
-<p><font color=#999AAA>店铺货物1被抢走了10个</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">hincrby shopping:id:00001 good1 -10<br></code></pre></td></tr></table></figure>
-<hr>
-<p>学习链接:<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1CJ411m7Gc">https://www.bilibili.com/video/BV1CJ411m7Gc</a></p>
+<ul>
+<li><p>获取数据对应的索引（排名）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zrank key member<br>zrevrank key member<br></code></pre></td></tr></table></figure></li>
+<li><p>score 值获取与修改</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">zscore key member<br>zincrby key increment member<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/20210421171509850.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+<li><p>redis应用于计数器组合排序功能对应的排名</p>
+</li>
+</ul>
+<h2 id="sorted-set类型数据操作的注意事项"><a href="#sorted-set类型数据操作的注意事项" class="headerlink" title="sorted_set类型数据操作的注意事项"></a>sorted_set类型数据操作的注意事项</h2><ul>
+<li>score保存的数据存储空间是64位，如果是整数范围是-9007199254740992~9007199254740992</li>
+<li>score保存的数据也可以是一个双精度的double值，基于双精度浮点数的特征，可能会丢失精度，使用时侯要慎重</li>
+<li>sorted_set底层存储还是基于set结构的，因此数据不能重复，如果重复添加相同的数据，score值将被反复覆盖，保留最后一次修改的结果</li>
+</ul>
+<p><strong>业务场景</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210421171846808.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p> <strong>解决方案</strong></p>
+<ul>
+<li><p>对于基于时间线限定的任务处理，将处理时间记录位score值，利用排序功能区分处理的先后顺序</p>
+</li>
+<li><p>记录下一个要处理的事件，当到期后处理对应的任务，移除redis中的记录，并记录下一个要处理的时间</p>
+</li>
+<li><p>当新任务加入时，判定并更新当前下一个要处理的任务时间</p>
+</li>
+<li><p>为提升sorted_set的性能，通常将任务根据特征存储成若干个sorted_set.例如1小时内，1天内，年度等，操作时逐渐提升，将即将操作的若干个任务纳入到1小时内处理队列中</p>
+</li>
+<li><p>获取当前系统时间</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">time<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>redis应用于定时任务顺序管理或任务过期管理</li>
+</ul>
+</li>
+</ul>
+<p><strong>业务场景（任务/消息权重设定应用）</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210421172226972.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>解决方案</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/2021042117234594.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li><p>带有权重的任务，优先处理权重高的任务，采用score记录权重即可</p>
+<p><img src="https://img-blog.csdnimg.cn/20210421172537332.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>​</p>
+</li>
+</ul>
 
             </div>
             <hr>
@@ -328,18 +348,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03-List%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Redis学习笔记3 List数据类型</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/04/20/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0-String%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
-                        <span class="hidden-mobile">Redis学习笔记 String数据类型</span>
+                      <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04-Set%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+                        <span class="hidden-mobile">Redis学习笔记4 Set数据类型</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
