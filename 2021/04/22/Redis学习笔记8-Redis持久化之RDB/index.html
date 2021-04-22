@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.3k 字
+      1.4k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      13
+      15
        分钟
     </span>
   
@@ -358,6 +358,21 @@
 <li>RDB方式无论是执行指令还是利用配置，无法做到实时持久化，具有较大的可能性丢失数据</li>
 <li>bgsave指令每次运行要执行fork操作创建子进程，要牺牲掉一些性能</li>
 <li>redis的众多版本中未进行RDB文件格式的版本统一，有可能出现各版本服务器之间数据格式无法兼容现象</li>
+</ul>
+<h3 id="RDB存储的弊端"><a href="#RDB存储的弊端" class="headerlink" title="RDB存储的弊端"></a>RDB存储的弊端</h3><ul>
+<li>存储数据量大，效率较低<ul>
+<li>基于快照思想，每次读写都是全部数据，当数据量巨大时，效率非常低</li>
+</ul>
+</li>
+<li>大数据量下的IO性能较低</li>
+<li>基于fork创建子进程，内存产生额外消耗</li>
+<li>宕机带来的数据丢失风险</li>
+</ul>
+<p><strong>解决思路</strong></p>
+<ul>
+<li>不写全数据，仅记录部分数据</li>
+<li>降低区分数据是否改变的难度，改记录数据为记录操作过程</li>
+<li>对所有操作均进行记录，排除丢失数据的风险</li>
 </ul>
 
             </div>
