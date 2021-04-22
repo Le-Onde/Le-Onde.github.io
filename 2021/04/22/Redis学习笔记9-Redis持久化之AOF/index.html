@@ -18,7 +18,7 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>Redis学习笔记 String数据类型 - Hexo</title>
+  <title>Redis学习笔记9 Redis持久化之AOF - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Redis学习笔记 String数据类型">
+            <span class="h2" id="subtitle" title="Redis学习笔记9 Redis持久化之AOF">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-04-20 18:31" pubdate>
-        April 20, 2021 pm
+      <time datetime="2021-04-22 19:42" pubdate>
+        April 22, 2021 pm
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      544 字
+      1.1k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6
+      12
        分钟
     </span>
   
@@ -225,95 +225,131 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Redis学习笔记 String数据类型</h1>
+            <h1 style="display: none">Redis学习笔记9 Redis持久化之AOF</h1>
             
             <div class="markdown-body">
-              <h1 id="redis-数据类型"><a href="#redis-数据类型" class="headerlink" title="redis 数据类型"></a>redis 数据类型</h1><ol>
-<li>String</li>
-<li>Hash</li>
-<li>list</li>
-<li>set</li>
-<li>sorted_set</li>
-</ol>
-<h1 id="String数据类型"><a href="#String数据类型" class="headerlink" title="String数据类型"></a>String数据类型</h1><h2 id="1-redis-数据存储格式"><a href="#1-redis-数据存储格式" class="headerlink" title="1.redis 数据存储格式"></a>1.redis 数据存储格式</h2><ul>
-<li><p> redis自身是一个Map，其中所有的数据类型都是采用key：value的形式存储。</p>
+              <h3 id="一、AOF概念"><a href="#一、AOF概念" class="headerlink" title="一、AOF概念"></a>一、AOF概念</h3><ul>
+<li>AOF(append only file)持久化：以独立日志的方式记录每次写命令，重启时再重新执行AOF文件中命令，达到恢复数据的目的。与RDB相比可以简单描述为<strong>改记录数据为记录数据产生的过程</strong></li>
+<li>AOF的主要作用时解决了数据持久化的实时性，目前已经是Redis持久化的主流方式</li>
+</ul>
+<h3 id="二、AOF写数据过程"><a href="#二、AOF写数据过程" class="headerlink" title="二、AOF写数据过程"></a>二、AOF写数据过程</h3><p><img src="https://img-blog.csdnimg.cn/20210422194954247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="三、AOF写数据三种策略（appendfsync）"><a href="#三、AOF写数据三种策略（appendfsync）" class="headerlink" title="三、AOF写数据三种策略（appendfsync）"></a>三、AOF写数据三种策略（appendfsync）</h3><ul>
+<li><p>always（每次）</p>
+<p>每次写入操作均同步到AOF文件中，<strong>数据零误差，性能较低</strong></p>
 </li>
-<li><p>数据类型指的是存储的数据的类型，也就是value部分的类型，key部分永远都是字符串。</p>
-<table>
-<thead>
-<tr>
-<th>key</th>
-<th>value</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>name</td>
-<td>Ruby</td>
-</tr>
-<tr>
-<td>age</td>
-<td>17</td>
-</tr>
-</tbody></table>
+<li><p>everysec（每秒）</p>
+<p>每次将缓冲区中的指令同步到AOF文件中，<strong>数据准确性较高，性能较高</strong>，在系统突然宕机的情况下丢失1秒内的数据（建议使用，也是默认配置）</p>
+</li>
+<li><p>no（系统控制）</p>
+<p>由操作系统控制每次同步到AOF文件的周期，整体过程<strong>不可控</strong></p>
+<p>​</p>
 </li>
 </ul>
-<h2 id="2-string类型"><a href="#2-string类型" class="headerlink" title="2.string类型"></a>2.string类型</h2><ul>
-<li>存储的数据：单个数据，最简单的数据存储类型，也是最常用的数据存储类型</li>
-<li>-存储数据的格式：一个存储空间保存一个数据</li>
-<li>存储内容：通常使用字符串，如果字符串以整数形式展示，可作为数字操作使用。</li>
-</ul>
-<h2 id="3-string类型数据的基本操作"><a href="#3-string类型数据的基本操作" class="headerlink" title="3.string类型数据的基本操作"></a>3.string类型数据的基本操作</h2><ul>
-<li><p>添加/修改数据</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">set key value<br></code></pre></td></tr></table></figure></li>
-<li><p>获取数据</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">get key<br></code></pre></td></tr></table></figure></li>
-<li><p>删除数据</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">del key<br></code></pre></td></tr></table></figure></li>
-<li><p>添加/修改多个数据</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mset key1 value1 key2 value2 ...<br></code></pre></td></tr></table></figure></li>
-<li><p>获取多个数据</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">mget key<br></code></pre></td></tr></table></figure></li>
-<li><p>获取数据字符串个数（字符串长度）</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">strlen key<br></code></pre></td></tr></table></figure></li>
-<li><p>追加信息到原始信息后部（如果原始信息存在就追加，否则新建）</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">append key value<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h2 id="4-string类型数据的拓展操作"><a href="#4-string类型数据的拓展操作" class="headerlink" title="4.string类型数据的拓展操作"></a>4.string类型数据的拓展操作</h2><ul>
-<li><p>设置数据具有指定的生命周期</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">set key seconds value<br>psetex key milliseconds value<br></code></pre></td></tr></table></figure>
+<h3 id="四、AOF功能开启"><a href="#四、AOF功能开启" class="headerlink" title="四、AOF功能开启"></a>四、AOF功能开启</h3><ul>
+<li><p>配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">appendonly yes|no<br></code></pre></td></tr></table></figure>
 
-<p><em>设置user时效为5s，超出5秒则无法获取。</em></p>
-<p><img src="https://img-blog.csdnimg.cn/20210413204021597.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-</li>
-<li><p>redis控制数据的生命周期，通过数据是否失效控制业务，适用于所有具有时效性限定控制的操作</p>
+<ul>
+<li><p>作用</p>
+<p>是否开启AOF持久化功能，默认为不开启状态</p>
 </li>
 </ul>
-<h2 id="5-string类型数据操作的注意事项"><a href="#5-string类型数据操作的注意事项" class="headerlink" title="5.string类型数据操作的注意事项"></a>5.string类型数据操作的注意事项</h2><ol>
-<li>表示运行结果是否成功<br>（integer）0 → false 失败<br>（integer）1 → true 成功</li>
-<li>表示运行结果值<br>（integer） 3 → 3 3个<br>（integer） 1 →1 1个</li>
-<li>数据未获取<br>（nil）== null</li>
-<li>数据最大存储量<br>512MB</li>
-<li>数据计算最大范围（java中的long的最大值）<br>9223372036854775807</li>
+</li>
+<li><p>配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">appendfsync always|everysec|no<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>作用</p>
+<p>AOF写数据策略</p>
+</li>
+</ul>
+</li>
+<li><p>配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">appendfilename filename<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>作用</p>
+<p>AOF持久化文件名，默认文件名为appendonly.aof，建议配置为appendonly-端口号.aof</p>
+</li>
+</ul>
+</li>
+<li><p>配置</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">dir<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li><p>作用</p>
+<p>AOF持久化文件保存路径，与RDB持久化文件保持一致即可</p>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="五、AOF写数据遇到的问题"><a href="#五、AOF写数据遇到的问题" class="headerlink" title="五、AOF写数据遇到的问题"></a>五、AOF写数据遇到的问题</h3><p><strong>如果连续执行如下指令该如何处理</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/2021042220280729.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>解决方案</strong></p>
+<p>AOF重写</p>
+<h3 id="六、AOF重写"><a href="#六、AOF重写" class="headerlink" title="六、AOF重写"></a>六、AOF重写</h3><p>随着命令不断写入AOF，文件会越来越大，为了解决这个问题，Redis引入AOF重写机制压缩文件体积。AOF文件重写是将Redis进程内的数据转化为写命令同步到新AOF文件的过程。简单说就是<strong>将对同一个数据的若干条命令执行结果转化成最终结果数据对应的指令进行记录。</strong></p>
+<h4 id="AOF重写作用"><a href="#AOF重写作用" class="headerlink" title="AOF重写作用"></a>AOF重写作用</h4><ul>
+<li>降低磁盘占用量，提高磁盘利用率</li>
+<li>提高持久化效率，降低持久化写时间，提高IO性能</li>
+<li>降低数据恢复用时，提高数据恢复效率</li>
+</ul>
+<h4 id="AOF重写规则"><a href="#AOF重写规则" class="headerlink" title="AOF重写规则"></a>AOF重写规则</h4><ul>
+<li><p>进程内已超时的数据不再写入文件</p>
+</li>
+<li><p>忽略无效指令，重写时使用进程内数据直接生成，这样新的AOF文件只保留最终数据的写入命令，如del key1、hdel key2、srem key3、set key4 123、set key4 222等</p>
+</li>
+<li><p>对同一数据的多条写命令合并为一条命令，如lpush list1 a、lpush list1 b、lpush list1 c 可以转化为：lpush list1 a b c。</p>
+<p>为防止数据量过大造成客户端缓冲区溢出，对list、set、hash、zset等类型、每条指令最多写入64个元素</p>
+</li>
+</ul>
+<h4 id="AOF重写方式（手动重写）"><a href="#AOF重写方式（手动重写）" class="headerlink" title="AOF重写方式（手动重写）"></a>AOF重写方式（手动重写）</h4><ul>
+<li><p>手动重写</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">bgrewriteaof<br></code></pre></td></tr></table></figure></li>
+<li><p>自动重写</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">auto-aof-rewrite-min-size size<br>auto-aof-rewrite-percentage percentage<br></code></pre></td></tr></table></figure></li>
+</ul>
+<h4 id="AOF手动重写——bgrewriteaof指令工作原理"><a href="#AOF手动重写——bgrewriteaof指令工作原理" class="headerlink" title="AOF手动重写——bgrewriteaof指令工作原理"></a>AOF手动重写——bgrewriteaof指令工作原理</h4><p><img src="https://img-blog.csdnimg.cn/20210422204256378.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="AOF重写方式（自动重写）"><a href="#AOF重写方式（自动重写）" class="headerlink" title="AOF重写方式（自动重写）"></a>AOF重写方式（自动重写）</h4><ul>
+<li><p>自动重写触发条件格式</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">auto-aof-rewrite-min-size size<br>auto-aof-rewrite-percentage percent<br></code></pre></td></tr></table></figure></li>
+<li><p>自动重写触发对比参数（运行指令info Persistence获取具体信息）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">aof_current_size<br>aof_base_size<br></code></pre></td></tr></table></figure></li>
+<li><p>自动重写触发条件</p>
+<p><img src="https://img-blog.csdnimg.cn/20210422205637212.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="AOF工作流程"><a href="#AOF工作流程" class="headerlink" title="AOF工作流程"></a>AOF工作流程</h4><p><img src="https://img-blog.csdnimg.cn/20210422210052662.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h4 id="AOF重写流程"><a href="#AOF重写流程" class="headerlink" title="AOF重写流程"></a>AOF重写流程</h4><p><img src="https://img-blog.csdnimg.cn/20210422210223933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210422210336449.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<ul>
+<li>AOF缓冲区同步文件策略，由参数appendfsync控制</li>
+</ul>
+<p><strong>系统调用write和fsync说明：</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210422210709540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<h3 id="七、RDB与AOF区别"><a href="#七、RDB与AOF区别" class="headerlink" title="七、RDB与AOF区别"></a>七、RDB与AOF区别</h3><p><img src="https://img-blog.csdnimg.cn/20210422210809864.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>RDB与AOF选择之惑</strong></p>
+<ul>
+<li>对数据非常敏感，建议使用默认的AOF持久化方案<ul>
+<li>AOF持久化策略使用erverysecond，每秒钟fsync一次。该策略redis任然可以保持很好的处理性能，当出现问题时，最多丢失0-1秒中的数据。</li>
+<li>注意：由于AOF文件存储体积较大，且恢复数据较慢</li>
+</ul>
+</li>
+<li>数据呈现阶段有效性，建议使用RDB持久化方案<ul>
+<li>数据可以良好的做到阶段内无丢失（该阶段是开发者或运维人工手工维护的），且恢复速度较快，阶段点数据恢复通常采用RDB方案</li>
+<li>注意：利用RDB实现紧凑的数据持久化会使Redis降得很低</li>
+</ul>
+</li>
+<li>综合对比<ol>
+<li>RDB与AOF得选择实际上是在做一种权衡，每种都有利弊</li>
+<li>如不能承受数分钟以内得数据丢失，对业务数据非常敏感，选用AOF</li>
+<li>如能承受数分钟以内数据丢失，且追求大数据集得恢复速度，选用RDB</li>
+<li>灾难恢复选用RDB</li>
+<li>双保险策略，同时开启RDB和AOF，重启后，Redis优先使用AOF来恢复数据，降低丢失数据的量</li>
 </ol>
-<h2 id="6-业务场景"><a href="#6-业务场景" class="headerlink" title="6.业务场景"></a>6.业务场景</h2><ul>
-<li>主页高频访问信息显示控制，列如新浪微博大V主页显示粉丝数于微博数量</li>
-</ul>
-<p><strong>解决方案</strong> </p>
-<ul>
-<li>在redis中为大v用户设定用户信息，以用户主键和属性值为key，后台设定定时刷新策略。</li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20210413210057424.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<ul>
-<li><p>在redis中以json格式存储大v用户，定时刷新</p>
-<p><img src="https://img-blog.csdnimg.cn/20210413210832666.png" srcset="/img/loading.gif" lazyload alt="img"></p>
 </li>
 </ul>
-<h2 id="7-key的设置约定"><a href="#7-key的设置约定" class="headerlink" title="7.key的设置约定"></a>7.key的设置约定</h2><ul>
-<li><p>热点数据key命名管理</p>
-<p><img src="https://img-blog.csdnimg.cn/20210413211455137.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-</li>
-</ul>
-<hr>
+<p><strong>持久化应用场景</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210422211202670.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
 
             </div>
             <hr>
@@ -348,18 +384,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-Hash%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Redis学习笔记2 Hash数据类型</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/04/19/%E4%B8%80%E4%BA%9B%E5%A5%BD%E7%94%A8%E7%9A%84%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/">
-                        <span class="hidden-mobile">一些好用的网站推荐</span>
+                      <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B08-Redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8BRDB/">
+                        <span class="hidden-mobile">Redis学习笔记8 Redis持久化之RDB</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
