@@ -18,7 +18,7 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>Redis学习笔记9 Redis持久化之AOF - Hexo</title>
+  <title>Redis学习笔记10 事务与事务锁 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="Redis学习笔记9 Redis持久化之AOF">
+            <span class="h2" id="subtitle" title="Redis学习笔记10 事务与事务锁">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-04-22 19:42" pubdate>
-        April 22, 2021 pm
+      <time datetime="2021-04-23 15:43" pubdate>
+        April 23, 2021 pm
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      1.1k 字
+      1.3k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      12
+      13
        分钟
     </span>
   
@@ -225,131 +225,158 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">Redis学习笔记9 Redis持久化之AOF</h1>
+            <h1 style="display: none">Redis学习笔记10 事务与事务锁</h1>
             
             <div class="markdown-body">
-              <h3 id="一、AOF概念"><a href="#一、AOF概念" class="headerlink" title="一、AOF概念"></a>一、AOF概念</h3><ul>
-<li>AOF(append only file)持久化：以独立日志的方式记录每次写命令，重启时再重新执行AOF文件中命令，达到恢复数据的目的。与RDB相比可以简单描述为<strong>改记录数据为记录数据产生的过程</strong></li>
-<li>AOF的主要作用时解决了数据持久化的实时性，目前已经是Redis持久化的主流方式</li>
+              <h3 id="一、事务简介"><a href="#一、事务简介" class="headerlink" title="一、事务简介"></a>一、事务简介</h3><p>Redis执行命令过程中，多条连续执行的指令被干扰，打断，插队</p>
+<h4 id="什么是事务"><a href="#什么是事务" class="headerlink" title="什么是事务"></a>什么是事务</h4><p>redis事务就是一个命令执行的队列，将一系列预定命令包装成一个整体（一个队列）。当执行时，按照添加顺序依次执行，中间不会被打断或者干扰。</p>
+<p>一个队列中，一次性，顺序性，排他性的执行一系列命令</p>
+<h3 id="二、事务的基本操作"><a href="#二、事务的基本操作" class="headerlink" title="二、事务的基本操作"></a>二、事务的基本操作</h3><ul>
+<li><p>开启事务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">multi<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>作用：设定事务的开启位置，此指令执行后，后续的所有指令均加入到事务中</li>
 </ul>
-<h3 id="二、AOF写数据过程"><a href="#二、AOF写数据过程" class="headerlink" title="二、AOF写数据过程"></a>二、AOF写数据过程</h3><p><img src="https://img-blog.csdnimg.cn/20210422194954247.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h3 id="三、AOF写数据三种策略（appendfsync）"><a href="#三、AOF写数据三种策略（appendfsync）" class="headerlink" title="三、AOF写数据三种策略（appendfsync）"></a>三、AOF写数据三种策略（appendfsync）</h3><ul>
-<li><p>always（每次）</p>
-<p>每次写入操作均同步到AOF文件中，<strong>数据零误差，性能较低</strong></p>
 </li>
-<li><p>everysec（每秒）</p>
-<p>每次将缓冲区中的指令同步到AOF文件中，<strong>数据准确性较高，性能较高</strong>，在系统突然宕机的情况下丢失1秒内的数据（建议使用，也是默认配置）</p>
+<li><p>执行事务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">exec<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>作用：设定事务的结束位置，同时执行事务。与multi成对出现，成对使用</li>
+</ul>
 </li>
-<li><p>no（系统控制）</p>
-<p>由操作系统控制每次同步到AOF文件的周期，整体过程<strong>不可控</strong></p>
+</ul>
+<p><em>注意：</em> <strong>加入事务的命令暂时进入到任务队列中，并没有立即执行，只有执行exec命令才开始执行。</strong></p>
+<ul>
+<li><p>取消事务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">discard<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>作用：终止当前事务的定义，发生在multi之后，exec之前</li>
+</ul>
+</li>
+</ul>
+<h3 id="三、事物的工作流程"><a href="#三、事物的工作流程" class="headerlink" title="三、事物的工作流程"></a>三、事物的工作流程</h3><ul>
+<li><p>未开启事务前的set指令</p>
+<p><img src="https://img-blog.csdnimg.cn/20210423145755640.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p>​</p>
 </li>
 </ul>
-<h3 id="四、AOF功能开启"><a href="#四、AOF功能开启" class="headerlink" title="四、AOF功能开启"></a>四、AOF功能开启</h3><ul>
-<li><p>配置</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">appendonly yes|no<br></code></pre></td></tr></table></figure>
-
 <ul>
-<li><p>作用</p>
-<p>是否开启AOF持久化功能，默认为不开启状态</p>
+<li><p>创建事务队列</p>
+<p><img src="https://img-blog.csdnimg.cn/20210423150112123.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>​</p>
 </li>
 </ul>
-</li>
-<li><p>配置</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">appendfsync always|everysec|no<br></code></pre></td></tr></table></figure>
-
 <ul>
-<li><p>作用</p>
-<p>AOF写数据策略</p>
+<li><p>开启事务后的set指令</p>
+<p><img src="https://img-blog.csdnimg.cn/20210423150227995.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>​</p>
 </li>
 </ul>
-</li>
-<li><p>配置</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">appendfilename filename<br></code></pre></td></tr></table></figure>
-
 <ul>
-<li><p>作用</p>
-<p>AOF持久化文件名，默认文件名为appendonly.aof，建议配置为appendonly-端口号.aof</p>
+<li><p>开启事务后的del指令</p>
+<p><img src="https://img-blog.csdnimg.cn/20210423150354629.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+<li><p>关闭事务队列</p>
+<p><img src="https://img-blog.csdnimg.cn/20210423150515144.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+</li>
+<li><p>取消事务</p>
+<p><img src="https://img-blog.csdnimg.cn/2021042315064864.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
 </li>
 </ul>
+<h3 id="四、事物的注意事项"><a href="#四、事物的注意事项" class="headerlink" title="四、事物的注意事项"></a>四、事物的注意事项</h3><h4 id="定义事务的过程中，命令格式输入错误怎么办？"><a href="#定义事务的过程中，命令格式输入错误怎么办？" class="headerlink" title="定义事务的过程中，命令格式输入错误怎么办？"></a>定义事务的过程中，命令格式输入错误怎么办？</h4><ul>
+<li><p>语法错误</p>
+<p>指命令书写格式有误</p>
 </li>
-<li><p>配置</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">dir<br></code></pre></td></tr></table></figure>
-
+<li><p>处理结果</p>
+<p>如果定义的事务中所包含的命令存在语法错误，整体事务中所以命令均不会执行。包括那些语法正确的命令。</p>
+</li>
+</ul>
+<h4 id="定义事务的过程中，命令执行出现错误怎么办？"><a href="#定义事务的过程中，命令执行出现错误怎么办？" class="headerlink" title="定义事务的过程中，命令执行出现错误怎么办？"></a>定义事务的过程中，命令执行出现错误怎么办？</h4><ul>
+<li><p>运行错误</p>
+<p>指命令格式正确，但是无法正确的执行，列如对list进行incr操作</p>
+</li>
+<li><p>处理结果</p>
+<p>能够正确运行的命令会执行，运行错误的命令不会执行</p>
+</li>
+</ul>
+<p><em>注意：</em> <strong>已经执行完毕的命令对应的数据不会自动回滚，需要程序员自己在代码中实现回滚</strong></p>
+<h4 id="手动进行事务回滚"><a href="#手动进行事务回滚" class="headerlink" title="手动进行事务回滚"></a>手动进行事务回滚</h4><ul>
+<li>记录操作过程中被影响的数据之前的状态<ul>
+<li>单数据：string</li>
+<li>多数据：hash、list、set、zset</li>
+</ul>
+</li>
+<li>设置指令恢复所有的被修改的项<ul>
+<li>单数据：直接set（注意周边属性，列如时效）</li>
+<li>多数据：修改对应值或整体克隆复制</li>
+</ul>
+</li>
+</ul>
+<h3 id="五、锁"><a href="#五、锁" class="headerlink" title="五、锁"></a>五、锁</h3><h4 id="基于特定条件的事务执行——锁"><a href="#基于特定条件的事务执行——锁" class="headerlink" title="基于特定条件的事务执行——锁"></a>基于特定条件的事务执行——锁</h4><p><strong>业务场景1</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210423160652713.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>业务分析</strong></p>
 <ul>
-<li><p>作用</p>
-<p>AOF持久化文件保存路径，与RDB持久化文件保持一致即可</p>
-</li>
+<li>多个客户端有可能同时操作同一组数据，并且该数据一旦被操纵修改后，将不适用于继续操作</li>
+<li>在操作之前锁定要操作的数据，一旦发生变化，终止当前操作</li>
 </ul>
-</li>
-</ul>
-<h3 id="五、AOF写数据遇到的问题"><a href="#五、AOF写数据遇到的问题" class="headerlink" title="五、AOF写数据遇到的问题"></a>五、AOF写数据遇到的问题</h3><p><strong>如果连续执行如下指令该如何处理</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/2021042220280729.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
 <p><strong>解决方案</strong></p>
-<p>AOF重写</p>
-<h3 id="六、AOF重写"><a href="#六、AOF重写" class="headerlink" title="六、AOF重写"></a>六、AOF重写</h3><p>随着命令不断写入AOF，文件会越来越大，为了解决这个问题，Redis引入AOF重写机制压缩文件体积。AOF文件重写是将Redis进程内的数据转化为写命令同步到新AOF文件的过程。简单说就是<strong>将对同一个数据的若干条命令执行结果转化成最终结果数据对应的指令进行记录。</strong></p>
-<h4 id="AOF重写作用"><a href="#AOF重写作用" class="headerlink" title="AOF重写作用"></a>AOF重写作用</h4><ul>
-<li>降低磁盘占用量，提高磁盘利用率</li>
-<li>提高持久化效率，降低持久化写时间，提高IO性能</li>
-<li>降低数据恢复用时，提高数据恢复效率</li>
-</ul>
-<h4 id="AOF重写规则"><a href="#AOF重写规则" class="headerlink" title="AOF重写规则"></a>AOF重写规则</h4><ul>
-<li><p>进程内已超时的数据不再写入文件</p>
-</li>
-<li><p>忽略无效指令，重写时使用进程内数据直接生成，这样新的AOF文件只保留最终数据的写入命令，如del key1、hdel key2、srem key3、set key4 123、set key4 222等</p>
-</li>
-<li><p>对同一数据的多条写命令合并为一条命令，如lpush list1 a、lpush list1 b、lpush list1 c 可以转化为：lpush list1 a b c。</p>
-<p>为防止数据量过大造成客户端缓冲区溢出，对list、set、hash、zset等类型、每条指令最多写入64个元素</p>
-</li>
-</ul>
-<h4 id="AOF重写方式（手动重写）"><a href="#AOF重写方式（手动重写）" class="headerlink" title="AOF重写方式（手动重写）"></a>AOF重写方式（手动重写）</h4><ul>
-<li><p>手动重写</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">bgrewriteaof<br></code></pre></td></tr></table></figure></li>
-<li><p>自动重写</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">auto-aof-rewrite-min-size size<br>auto-aof-rewrite-percentage percentage<br></code></pre></td></tr></table></figure></li>
-</ul>
-<h4 id="AOF手动重写——bgrewriteaof指令工作原理"><a href="#AOF手动重写——bgrewriteaof指令工作原理" class="headerlink" title="AOF手动重写——bgrewriteaof指令工作原理"></a>AOF手动重写——bgrewriteaof指令工作原理</h4><p><img src="https://img-blog.csdnimg.cn/20210422204256378.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h4 id="AOF重写方式（自动重写）"><a href="#AOF重写方式（自动重写）" class="headerlink" title="AOF重写方式（自动重写）"></a>AOF重写方式（自动重写）</h4><ul>
-<li><p>自动重写触发条件格式</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">auto-aof-rewrite-min-size size<br>auto-aof-rewrite-percentage percent<br></code></pre></td></tr></table></figure></li>
-<li><p>自动重写触发对比参数（运行指令info Persistence获取具体信息）</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">aof_current_size<br>aof_base_size<br></code></pre></td></tr></table></figure></li>
-<li><p>自动重写触发条件</p>
-<p><img src="https://img-blog.csdnimg.cn/20210422205637212.png" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h4 id="AOF工作流程"><a href="#AOF工作流程" class="headerlink" title="AOF工作流程"></a>AOF工作流程</h4><p><img src="https://img-blog.csdnimg.cn/20210422210052662.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h4 id="AOF重写流程"><a href="#AOF重写流程" class="headerlink" title="AOF重写流程"></a>AOF重写流程</h4><p><img src="https://img-blog.csdnimg.cn/20210422210223933.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-</li>
-</ul>
-<p><img src="https://img-blog.csdnimg.cn/20210422210336449.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
 <ul>
-<li>AOF缓冲区同步文件策略，由参数appendfsync控制</li>
+<li><p>对key添加监视锁，在执行exec前如果key发生了变化，终止事务执行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">watch key1 [key2...]<br></code></pre></td></tr></table></figure></li>
+<li><p>取消对所有key的监视</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">unwatch<br></code></pre></td></tr></table></figure></li>
+<li><p>redis应用基于状态控制的批量任务执行</p>
+</li>
 </ul>
-<p><strong>系统调用write和fsync说明：</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20210422210709540.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h3 id="七、RDB与AOF区别"><a href="#七、RDB与AOF区别" class="headerlink" title="七、RDB与AOF区别"></a>七、RDB与AOF区别</h3><p><img src="https://img-blog.csdnimg.cn/20210422210809864.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-<p><strong>RDB与AOF选择之惑</strong></p>
+<h4 id="基于特定条件的事务执行——分布式锁"><a href="#基于特定条件的事务执行——分布式锁" class="headerlink" title="基于特定条件的事务执行——分布式锁"></a>基于特定条件的事务执行——分布式锁</h4><p><strong>业务场景2</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210423161241863.png" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><strong>业务分析</strong></p>
 <ul>
-<li>对数据非常敏感，建议使用默认的AOF持久化方案<ul>
-<li>AOF持久化策略使用erverysecond，每秒钟fsync一次。该策略redis任然可以保持很好的处理性能，当出现问题时，最多丢失0-1秒中的数据。</li>
-<li>注意：由于AOF文件存储体积较大，且恢复数据较慢</li>
+<li>使用watch监控一个key有没有改变已经不能解决问题，此处要监控的是具体数据</li>
+<li>虽然redis是单线程的，但是多个客户端对同一个数据同时操作时，如何避免不被同时修改？</li>
+</ul>
+<p><strong>解决方案</strong></p>
+<ul>
+<li><p>使用setnx设置一个公共锁</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">setnx lock-key value<br></code></pre></td></tr></table></figure>
+
+<p>利用setnx命令的返回值特征，有值则返回设置失败，无值则返回设置成功</p>
+<ul>
+<li>对于返回设置成功时，拥有控制权，进行下一步的具体业务操作</li>
+<li>对于返回设置失败的，不具有控制权，排队或等待</li>
 </ul>
 </li>
-<li>数据呈现阶段有效性，建议使用RDB持久化方案<ul>
-<li>数据可以良好的做到阶段内无丢失（该阶段是开发者或运维人工手工维护的），且恢复速度较快，阶段点数据恢复通常采用RDB方案</li>
-<li>注意：利用RDB实现紧凑的数据持久化会使Redis降得很低</li>
+<li><p>操作完毕通过del操作释放锁</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs shell">del lock-key<br></code></pre></td></tr></table></figure></li>
+</ul>
+<p><em>注意</em> ： 上述解决方案是一种设计概念，依赖规范保障，具有风险性</p>
+<ul>
+<li>redis应有基于分布式对应的场景控制</li>
+</ul>
+<h4 id="基于特定条件的事务执行——分布式锁改良"><a href="#基于特定条件的事务执行——分布式锁改良" class="headerlink" title="基于特定条件的事务执行——分布式锁改良"></a>基于特定条件的事务执行——分布式锁改良</h4><p><strong>业务场景</strong></p>
+<p>依赖分布式锁的机制，某个用户操作时对应客户机宕机，并且此时已经获取到锁，如何解决？</p>
+<p><strong>业务分析</strong></p>
+<ul>
+<li>由于锁操作由用户控制加锁解锁，必定会存在加锁后未解锁的风险</li>
+<li>需要解锁操作不能仅依赖用户控制，系统级别要给出对应的保底处理方案</li>
+</ul>
+<p><strong>解决方案</strong></p>
+<ul>
+<li><p>使用expire为锁key添加时间限定，到时不释放，放弃锁</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs shell">expire lock-key second<br>pexpire lock-key millseconds<br></code></pre></td></tr></table></figure>
+
+<p>由于操作通常都是微秒或毫秒级，因此该锁定时间不宜设置过大。具体时间需要业务测试后确认。</p>
+<ul>
+<li>例如：持有锁的操作最长执行时间127ms，最短执行时间7ms</li>
+<li>测试百万次最长执行时间对应命令的最大消耗时，测试百万次网络延迟平均耗时</li>
+<li>锁时间设定推荐：最大耗时* 120%+平均网络延迟*110%</li>
+<li>如果业务最大耗时&lt;&lt;网络平均延迟，通常为2个数量级，取其中单个耗时较长即可</li>
 </ul>
 </li>
-<li>综合对比<ol>
-<li>RDB与AOF得选择实际上是在做一种权衡，每种都有利弊</li>
-<li>如不能承受数分钟以内得数据丢失，对业务数据非常敏感，选用AOF</li>
-<li>如能承受数分钟以内数据丢失，且追求大数据集得恢复速度，选用RDB</li>
-<li>灾难恢复选用RDB</li>
-<li>双保险策略，同时开启RDB和AOF，重启后，Redis优先使用AOF来恢复数据，降低丢失数据的量</li>
-</ol>
-</li>
 </ul>
-<p><strong>持久化应用场景</strong></p>
-<p><img src="https://img-blog.csdnimg.cn/20210422211202670.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
 
             </div>
             <hr>
@@ -384,18 +411,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/04/23/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B010-%E4%BA%8B%E5%8A%A1%E4%B8%8E%E4%BA%8B%E5%8A%A1%E9%94%81/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">Redis学习笔记10 事务与事务锁</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B08-Redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8BRDB/">
-                        <span class="hidden-mobile">Redis学习笔记8 Redis持久化之RDB</span>
+                      <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B09-Redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8BAOF/">
+                        <span class="hidden-mobile">Redis学习笔记9 Redis持久化之AOF</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
