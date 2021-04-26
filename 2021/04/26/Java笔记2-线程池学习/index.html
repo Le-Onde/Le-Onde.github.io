@@ -255,7 +255,8 @@
 
 <h3 id="三、线程池的工作原理"><a href="#三、线程池的工作原理" class="headerlink" title="三、线程池的工作原理"></a>三、线程池的工作原理</h3><p>工作流程图：</p>
 <p><img src="https://img-blog.csdnimg.cn/20210426193522921.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
-<h3 id="四、线程池的参数"><a href="#四、线程池的参数" class="headerlink" title="四、线程池的参数"></a>四、线程池的参数</h3><h4 id="1-任务队列（workqueue）"><a href="#1-任务队列（workqueue）" class="headerlink" title="1.任务队列（workqueue）"></a>1.任务队列（workqueue）</h4><p>任务队列是基于阻塞队列实现的，即采用生产者消费者模式，在java中需要实现<strong>BlockingQueue</strong> 接口。但java已经提供了7种阻塞队列的实现：</p>
+<h3 id="四、线程池的参数"><a href="#四、线程池的参数" class="headerlink" title="四、线程池的参数"></a>四、线程池的参数</h3><h4 id="1-任务队列（workqueue）"><a href="#1-任务队列（workqueue）" class="headerlink" title="1.任务队列（workqueue）"></a>1.任务队列（workqueue）</h4><p><img src="https://img-blog.csdnimg.cn/20210426202610254.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p>任务队列是基于阻塞队列实现的，即采用生产者消费者模式，在java中需要实现<strong>BlockingQueue</strong> 接口。但java已经提供了7种阻塞队列的实现：</p>
 <ol>
 <li><strong>ArrayBlockingQueue</strong> ：一个由数组结构组成的有界阻塞队列（数组结构可配合指针实现一个环形队列）</li>
 <li><strong>LinkedBlockingQueue</strong> ：一个由链表结构组成的有界阻塞队列，在未指明容量时，容量默认为<strong>Integer.MAX_VALUE</strong>。</li>
