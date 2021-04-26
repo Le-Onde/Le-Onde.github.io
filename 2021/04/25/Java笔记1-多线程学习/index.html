@@ -351,7 +351,7 @@
 </ol>
 <h4 id="sleep-和yield-区别"><a href="#sleep-和yield-区别" class="headerlink" title="sleep()和yield()区别"></a>sleep()和yield()区别</h4><ol>
 <li>sleep()使当前线程进入停滞状态, 所以执行sleep()的线程在指定的时间内肯定不会被执行；yield()只是使当前线程重新回到可执行状态，所以执行yield()的线程有可能在进入到可执行状态后马上又被执行。</li>
-<li> sleep 方法使当前运行中的线程睡眼一段时间，进入不可运行状态，这段时间的长短是由程序设定的，yield 方法使当前线程让出 CPU 占有权，但让出的时间是不可设定的。实际上，yield()方法对应了如下操作：先检测当前是否有相同优先级的线程处于同可运行状态，如有，则把 CPU  的占有权交给此线程，否则，继续运行原来的线程。所以yield()方法称为“退让”，它把运行机会让给了同等优先级的其他线程</li>
+<li>sleep 方法使当前运行中的线程睡眼一段时间，进入不可运行状态，这段时间的长短是由程序设定的，yield 方法使当前线程让出 CPU 占有权，但让出的时间是不可设定的。实际上，yield()方法对应了如下操作：先检测当前是否有相同优先级的线程处于同可运行状态，如有，则把 CPU  的占有权交给此线程，否则，继续运行原来的线程。所以yield()方法称为“退让”，它把运行机会让给了同等优先级的其他线程</li>
 <li>sleep 方法允许较低优先级的线程获得运行机会,但 yield()  方法执行时，当前线程仍处在可运行状态，所以，不可能让出较低优先级的线程些时获得 CPU 占有权。在一个运行系统中，如果较高优先级的线程没有调用 sleep 方法，又没有受到 I\O 阻塞，那么，较低优先级线程只能等待所有较高优先级的线程运行结束，才有机会运行。</li>
 </ol>
 <ul>
@@ -470,6 +470,8 @@
 <h4 id="3-通过回调函数传递数据"><a href="#3-通过回调函数传递数据" class="headerlink" title="3.通过回调函数传递数据"></a>3.通过回调函数传递数据</h4><p>上面讨论的两种向线程中传递数据的方法是最常用的。但这两种方法都是main方法中主动将数据传入线程类的。这对于线程来说，是被动接收这些数据的。然而，在有些应用中需要在线程运行的过程中动态地获取数据，如在下面代码的run方法中产生了3个随机数，然后通过Work类的process方法求这三个随机数的和，并通过Data类的value将结果返回。从这个例子可以看出，在返回value之前，必须要得到三个随机数。也就是说，这个 value是无法事先就传入线程类的。 </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Data</span></span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> value = <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Work</span></span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">process</span><span class="hljs-params">(Data data,Integer ... num)</span></span>&#123;<br>        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> n : num)&#123;<br>            data.value += n;<br>        &#125;<br>    &#125;<br>&#125;<br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Threads4</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Thread</span></span>&#123;<br>    <span class="hljs-keyword">private</span> Work work;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">Threads4</span><span class="hljs-params">(Work work)</span></span>&#123;<br>        <span class="hljs-keyword">this</span>.work = work;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span></span>&#123;<br>        Random random = <span class="hljs-keyword">new</span> Random();<br>        Data data = <span class="hljs-keyword">new</span> Data();<br>        <span class="hljs-keyword">int</span> n1 = random.nextInt(<span class="hljs-number">1000</span>);<br>        <span class="hljs-keyword">int</span> n2 = random.nextInt(<span class="hljs-number">2000</span>);<br>        <span class="hljs-keyword">int</span> n3 = random.nextInt(<span class="hljs-number">3000</span>);<br>        work.process(data,n1,n2,n3);<br>        System.out.println(String.valueOf(n1) + <span class="hljs-string">&quot;+&quot;</span> + String.valueOf(n2) + <span class="hljs-string">&quot;+&quot;</span> + String.valueOf(n3) + <span class="hljs-string">&quot;=&quot;</span> + data.value);<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        Thread thread = <span class="hljs-keyword">new</span> Threads4(<span class="hljs-keyword">new</span> Work());<br>        thread.start();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
+<hr>
+<p>学习文章链接:<a target="_blank" rel="noopener" href="http://blog.csdn.net/evankaka">http://blog.csdn.net/evankaka</a></p>
 
             </div>
             <hr>
@@ -503,6 +505,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/04/26/Java%E7%AC%94%E8%AE%B02-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E5%AD%A6%E4%B9%A0/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java笔记2 线程池学习</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
