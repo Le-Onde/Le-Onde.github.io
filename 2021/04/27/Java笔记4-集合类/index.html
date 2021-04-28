@@ -366,7 +366,7 @@
 <p>Set与Collection接口中的方法基本一致，b不需进行功能上的补充。</p>
 <h6 id="1-2-1HashSet实现类"><a href="#1-2-1HashSet实现类" class="headerlink" title="1.2.1HashSet实现类"></a>1.2.1HashSet实现类</h6><p>数据结构：JDK1.8前：哈希表（数组+单向链表）；JDK1.8后：哈希表（数组+单向链表+红黑树），当链表长度超过阈值（8）时，链表将转换为红黑树。</p>
 <p><strong>特点：查询快，元素无序，元素不可重复，没有索引</strong></p>
-<p>底层分析：哈希表底层数组+单向链表实现，即使用链表处理冲突，同一Hash的值的元素都存储在一个链表里，但是当位于一个链表中的元素较多，即hash值相等的元素较多，通过key值依次查找的效率降低。JDK1.8之后，哈希表底层采用数据+单向链表+红黑树实现，当链表长度超过阈值（8）时，链表将转换为红黑树，极大缩短查询时间。</p>
+<p>底层分析：HashSet 是基于 HashMap 实现的，哈希表底层数组+单向链表实现，即使用链表处理冲突，同一Hash的值的元素都存储在一个链表里，但是当位于一个链表中的元素较多，即hash值相等的元素较多，通过key值依次查找的效率降低。JDK1.8之后，哈希表底层采用数据+单向链表+红黑树实现，当链表长度超过阈值（8）时，链表将转换为红黑树，极大缩短查询时间。</p>
 <p><em>哈希值是一个十进制的整数，是对象的地址值，是一个逻辑地址，不是实际存储的物理地址，由系统随机给出。Object类的int hashCode()方法，可以获取对象的哈希值</em>。</p>
 <h6 id="1-2-2LinkedHashSet实现类"><a href="#1-2-2LinkedHashSet实现类" class="headerlink" title="1.2.2LinkedHashSet实现类"></a>1.2.2LinkedHashSet实现类</h6><p>数据结构：JDK1.8前：哈希表（数组+双向链表）；JDK1.8后：哈希表（数组+双向链表+红黑树），当链表长度超过阈值（8）时，链表将转换为红黑树。</p>
 <p><strong>特点：查询快，元素有序，元素不可重复，没有索引；</strong></p>
@@ -478,6 +478,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/04/27/Java%E7%AC%94%E8%AE%B05-%E9%9B%86%E5%90%88%E7%B1%BB%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java笔记5 集合类的一些常见问题</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
