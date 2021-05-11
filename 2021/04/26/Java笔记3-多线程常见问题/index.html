@@ -230,7 +230,7 @@
             <div class="markdown-body">
               <h3 id="一、什么是多线程"><a href="#一、什么是多线程" class="headerlink" title="一、什么是多线程"></a>一、什么是多线程</h3><p>线程是指程序在运行的过程中，能够执行程序代码的一个执行单元。</p>
 <p>java语言中，线程有五种状态：新建、就绪、运行、阻塞、死亡。</p>
-<p><img src="https://img-blog.csdn.net/20181009142636819?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzM3ODk2MTk0/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70" srcset="/img/loading.gif" lazyload alt="img"></p>
+<p><img src="http://dl.iteye.com/upload/picture/pic/116719/7e76cc17-0ad5-3ff3-954e-1f83463519d1.jpg" srcset="/img/loading.gif" lazyload alt="img"></p>
 <h3 id="二、进程与线程的区别？"><a href="#二、进程与线程的区别？" class="headerlink" title="二、进程与线程的区别？"></a>二、进程与线程的区别？</h3><p>进程是指一段正在执行的程序。而线程有时也被成为轻量级的进程，它是程序执行的最小单元，一个进程可以有多个线程。各个线程之间共享程序的内存空间（代码段、数据段、堆空间）及一些进程级的文件（列如：打开的文件），但是各个线程拥有自己的栈空间。在操作系统级别上，程序的执行都是以进程为单位的，而每个进程中通常都会有多个线程互不影响地并发执行。 </p>
 <h3 id="三、为什么要使用多线程？"><a href="#三、为什么要使用多线程？" class="headerlink" title="三、为什么要使用多线程？"></a>三、为什么要使用多线程？</h3><ul>
 <li><strong>提高执行效率，减少程序的响应时间。</strong>因为单线程执行的过程只有一个有效的操作序列，如果某个操作很耗时（或等待网络响应），此时程序就不会响应鼠标和键盘等操作，如果使用多线程，就可以将耗时的线程分配到一个单独的线程上执行，从而使程序具备更好的交互性。</li>
@@ -250,7 +250,7 @@
 <ol>
 <li><strong>继承Thread类，重写run()方法</strong></li>
 </ol>
-<p>​     Thread本质上也是实现了Runnable接口的一个实例，它表一个线程的实例，并且启动线程的唯一方法就是通过Thread类的start()方法，start()方法是一个本地（native）方法，它将启动一个新的线程，并执行run()方法（执行的是自己重写了Thread类的run()方法），同时调用start()方法并不是执行多线程代码，而是使得该线程变为可运行状态（Runnable）,什么时候运行多线程代码由操作系统决定。 </p>
+<p>  ​ Thread本质上也是实现了Runnable接口的一个实例，它表一个线程的实例，并且启动线程的唯一方法就是通过Thread类的start()方法，start()方法是一个本地（native）方法，它将启动一个新的线程，并执行run()方法（执行的是自己重写了Thread类的run()方法），同时调用start()方法并不是执行多线程代码，而是使得该线程变为可运行状态（Runnable）,什么时候运行多线程代码由操作系统决定。 </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyThread</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Thread</span></span>&#123;<span class="hljs-comment">//创建线程类</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span></span>&#123;<br>       System.out.println(<span class="hljs-string">&quot;Thread Body&quot;</span>);<span class="hljs-comment">//线程的函数体</span><br>    &#125;<br>&#125;<br> <br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test</span></span>&#123;<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span></span>&#123;<br>     MyThread thread = <span class="hljs-keyword">new</span> Thread<br>     thread.run();<span class="hljs-comment">//开启线程</span><br>   &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 <ol start="2">
