@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.6k 字
+      3k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      30
+      36
        分钟
     </span>
   
@@ -228,7 +228,7 @@
             <h1 style="display: none">JVM学习笔记</h1>
             
             <div class="markdown-body">
-              <h3 id="JVM是什么"><a href="#JVM是什么" class="headerlink" title="JVM是什么"></a>JVM是什么</h3><h4 id="1-定义"><a href="#1-定义" class="headerlink" title="1.定义"></a>1.定义</h4><p>Java Virtual Machine ，Java 程序的<strong>运行环境</strong>（Java 二进制字节码的运行环境）。</p>
+              <h3 id="一、JVM是什么"><a href="#一、JVM是什么" class="headerlink" title="一、JVM是什么"></a>一、JVM是什么</h3><h4 id="1-定义"><a href="#1-定义" class="headerlink" title="1.定义"></a>1.定义</h4><p>Java Virtual Machine ，Java 程序的<strong>运行环境</strong>（Java 二进制字节码的运行环境）。</p>
 <h4 id="2-优点"><a href="#2-优点" class="headerlink" title="2.优点"></a>2.优点</h4><ul>
 <li>一次编译，处处执行</li>
 <li>自动的内存管理，垃圾回收机制</li>
@@ -395,8 +395,27 @@
 <p>[案例2]</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Main</span> </span>&#123;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        <span class="hljs-comment">// 此处创建字符串对象 &quot;ab&quot; ，因为串池中还没有 &quot;ab&quot; ，所以将其放入串池中</span><br>		String str3 = <span class="hljs-string">&quot;ab&quot;</span>;<br>        <span class="hljs-comment">// &quot;a&quot; &quot;b&quot; 被放入串池中，str 则存在于堆内存之中</span><br>		String str = <span class="hljs-keyword">new</span> String(<span class="hljs-string">&quot;a&quot;</span>) + <span class="hljs-keyword">new</span> String(<span class="hljs-string">&quot;b&quot;</span>);<br>        <span class="hljs-comment">// 此时因为在创建 str3 时，&quot;ab&quot; 已存在与串池中，所以放入失败，但是会返回串池中的 &quot;ab&quot; </span><br>		String str2 = str.intern();<br>        <span class="hljs-comment">// false</span><br>		System.out.println(str == str2);<br>        <span class="hljs-comment">// false</span><br>		System.out.println(str == str3);<br>        <span class="hljs-comment">// true</span><br>		System.out.println(str2 == str3);<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
+<p><strong>面试案例题</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        String s1 = <span class="hljs-string">&quot;a&quot;</span>;<br>        String s2 = <span class="hljs-string">&quot;b&quot;</span>;<br>        String s3 = <span class="hljs-string">&quot;a&quot;</span>+<span class="hljs-string">&quot;b&quot;</span>; <span class="hljs-comment">// ab</span><br>        String s4 = s1 + s2; <span class="hljs-comment">// new String(&quot;ab&quot;)</span><br>        String s5 = <span class="hljs-string">&quot;ab&quot;</span>;<br>        String s6 = s4.intern();<br><br>        <span class="hljs-comment">//=====================问======================//</span><br>        System.out.println(s3 == s4); <span class="hljs-comment">//false</span><br>        System.out.println(s3 == s5); <span class="hljs-comment">//true</span><br>        System.out.println(s3 == s6); <span class="hljs-comment">//true</span><br><br><br>        String x2 = <span class="hljs-keyword">new</span> String(<span class="hljs-string">&quot;c&quot;</span>) + <span class="hljs-keyword">new</span> String(<span class="hljs-string">&quot;d&quot;</span>);<br>        String x1 = <span class="hljs-string">&quot;cd&quot;</span>;<br>        x2.intern();<br><br>        <span class="hljs-comment">//=======问 如果调换x1，x2位置?,如果是jdk1.6?======//</span><br>        System.out.println(x1 == x2); <span class="hljs-comment">//false</span><br>    &#125;<br></code></pre></td></tr></table></figure>
 
+<p>s3为常量字符串拼接，在编译器优化为ab，此时常量池没有ab，会入池。s4为两个变量的拼接，在运行期间通过StringBulider进行拼接，最后产生新的字符串放在堆中(new String(“ab”))。 </p>
+<p><strong>String Table的位置</strong></p>
+<p>jdk1.6中 String Table在永久代中，jdk1.8 String Table在堆中</p>
+<p><strong>String Table垃圾回收</strong></p>
+<ul>
+<li>Xmx10m –&gt; 指定堆内存大小</li>
+<li>XX:+PrintStringTableStatistics –&gt;打印字符串常量池信息</li>
+<li>XX:+PrintGCDetails</li>
+<li>verbose:gc –&gt;打印 gc 的次数，耗费时间等信息</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * 演示 StringTable 垃圾回收</span><br><span class="hljs-comment"> * -Xmx10m -XX:+PrintStringTableStatistics -XX:+PrintGCDetails -verbose:gc</span><br><span class="hljs-comment"> */</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Code_05_StringTableTest</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        <span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>;<br>        <span class="hljs-keyword">try</span> &#123;<br>            <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> j = <span class="hljs-number">0</span>; j &lt; <span class="hljs-number">10000</span>; j++) &#123; <span class="hljs-comment">// j = 100, j = 10000</span><br>                String.valueOf(j).intern();<br>                i++;<br>            &#125;<br>        &#125;<span class="hljs-keyword">catch</span> (Exception e) &#123;<br>            e.printStackTrace();<br>        &#125;<span class="hljs-keyword">finally</span> &#123;<br>            System.out.println(i);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
+<p><strong>String Table内存调优</strong></p>
+<p>因为String Table是HashTable实现的，可以适当增加HashTable桶的个数，来减少字符串放入串池所需要的时间</p>
+<p>-XX:StringTableSize=桶个数（最少设置为 1009 以上）</p>
+<ul>
+<li>考虑是否需要将字符串对象入池，可以通过 intern 方法减少重复入池</li>
+</ul>
 
             </div>
             <hr>
@@ -430,6 +449,12 @@
                 <div class="post-prevnext">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2021/06/29/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">JVM学习笔记2</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">

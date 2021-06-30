@@ -180,6 +180,68 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/06/29/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/" target="_self">
+          <img src="/img/jvm.png" srcset="/img/loading.gif" lazyload alt="JVM学习笔记2">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/06/29/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/">JVM学习笔记2</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/06/29/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02/">
+          
+          
+            
+          
+          一、直接内存1.Direct Memory
+常见于NIO操作时，用于数据缓冲区
+分配回收成本较高，但读写性能高
+不受JVM内存回收管理
+
+2.直接内存的基本使用文件读写流程：
+
+java本身不具备磁盘读写的能力，需要调用操作系统的本地方法(用户态——&gt;内核态)。转换到内核态之后读取磁盘文件，会在系统内存中创建一个缓存区，将数据读到内存缓存区，最后再将系统缓存区数据复制到java堆内存中。
+这
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-06-29 10:01" pubdate>
+              2021-06-29
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Java/">Java</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/JVM/">JVM</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2021/06/10/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" target="_self">
           <img src="/img/jvm.png" srcset="/img/loading.gif" lazyload alt="JVM学习笔记">
         </a>
@@ -197,7 +259,7 @@
           
             
           
-          JVM是什么1.定义Java Virtual Machine ，Java 程序的运行环境（Java 二进制字节码的运行环境）。
+          一、JVM是什么1.定义Java Virtual Machine ，Java 程序的运行环境（Java 二进制字节码的运行环境）。
 2.优点
 一次编译，处处执行
 自动的内存管理，垃圾回收机制
@@ -207,7 +269,7 @@
 4.学习路线
 
 ClassLoader：Java 代码编译成二进制后，会经过类加载器，这样才能加载到 JVM 中运行。
-Method Area：类是放在方法区
+Method Area：类是放在方
         </a>
       </p>
 
@@ -703,72 +765,6 @@ always（每次）
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
             <time datetime="2021-04-22 15:44" pubdate>
-              2021-04-22
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Redis/">Redis</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/Redis/">Redis</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07-Jedis%E8%BF%9E%E6%8E%A5%E5%B9%B6%E6%93%8D%E4%BD%9CRedis/" target="_self">
-          <img src="/img/redis.png" srcset="/img/loading.gif" lazyload alt="Redis学习笔记7 Jedis连接并操作Redis">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07-Jedis%E8%BF%9E%E6%8E%A5%E5%B9%B6%E6%93%8D%E4%BD%9CRedis/">Redis学习笔记7 Jedis连接并操作Redis</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07-Jedis%E8%BF%9E%E6%8E%A5%E5%B9%B6%E6%93%8D%E4%BD%9CRedis/">
-          
-          
-            
-          
-          一、Jedis简介编程语言与redis
-
-Java语言连接redis服务
-Jedis
-SpringData Redis
-Lettuce
-​
-
-
-二、Jedis操作Redis准备工作
-
-基于maven导入
-12345&lt;dependency&gt;  &lt;groupId&gt;redis.clients&lt;/groupId&gt;  &lt;artifactId&gt;jedis&lt;
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-04-22 09:51" pubdate>
               2021-04-22
             </time>
           </div>
