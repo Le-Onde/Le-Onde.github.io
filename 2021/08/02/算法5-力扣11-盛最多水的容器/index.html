@@ -18,7 +18,7 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>算法4[力扣977]-有序数组的平方 - Hexo</title>
+  <title>算法5[力扣11]-盛最多水的容器 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="算法4[力扣977]-有序数组的平方">
+            <span class="h2" id="subtitle" title="算法5[力扣11]-盛最多水的容器">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-08-02 10:59" pubdate>
-        August 2, 2021 am
+      <time datetime="2021-08-02 12:30" pubdate>
+        August 2, 2021 pm
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      858 字
+      970 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      9
+      10
        分钟
     </span>
   
@@ -225,21 +225,34 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">算法4[力扣977]-有序数组的平方</h1>
+            <h1 style="display: none">算法5[力扣11]-盛最多水的容器</h1>
             
             <div class="markdown-body">
-              <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p>给你一个按 <strong>非递减顺序</strong> 排序的整数数组 nums，返回 <strong>每个数字的平方</strong> 组成的新数组，要求也按 <strong>非递减顺序</strong> 排序。</p>
-<h3 id="二、题目解析"><a href="#二、题目解析" class="headerlink" title="二、题目解析"></a>二、题目解析</h3><p>数组本身是有序的，对于一堆正数来说，平方之后顺序不会发生改变；而对于一堆负数来说，平方之后顺序发生了反转。</p>
-<p>对于夹杂着正数和负数的数组来说，里面的负数平方之后有可能变成最大数。</p>
-<p>所以，数组平方的最大值<strong>在数组的两端</strong>，不是最左边（负数）就是最右边（正数），不可能是中间的数字。</p>
-<p>这样，我们设置两个索引，分别指向数组的两端，比如 <code>left</code> 指向起始位置，<code>right</code> 指向终止位置。</p>
-<p>同时在设置一个新数组 <code>result</code> 用来存放最终的输出结果，让 <code>index</code> 指向 <code>result</code> 数组的终止位置。</p>
+              <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p>给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。</p>
+<p>找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。</p>
+<h3 id="二、题目解析"><a href="#二、题目解析" class="headerlink" title="二、题目解析"></a>二、题目解析</h3><p>一开始，我们先去考虑<strong>相距最远</strong>的两个柱子所能容纳水的面积。</p>
+<p><img src="https://leonde.oss-cn-beijing.aliyuncs.com/2021/08/0gwk7.jpg" srcset="/img/loading.gif" lazyload alt="1"></p>
+<p>接下来去思考，我们去移动哪根柱子会更加合适?</p>
+<p>这里我们需要注意一点：<strong>无论移动哪根柱子，柱子之间的宽度都是变小的</strong>。</p>
+<p><strong>移动右边那根更高的柱子？</strong></p>
+<p><img src="https://leonde.oss-cn-beijing.aliyuncs.com/2021/08/94usx.jpg" srcset="/img/loading.gif" lazyload alt="移动高柱子"></p>
+<p><img src="https://leonde.oss-cn-beijing.aliyuncs.com/2021/08/gzwnl.jpg" srcset="/img/loading.gif" lazyload alt="移动高柱字2"></p>
+<p>由于水面高度是由最短的柱子决定的，<strong>所以移动右边那根更高的柱子的时候，水面高度一定是不会增加，甚至有可能遇到更短的柱子而变小，而宽度有一定再减少，所以水的面积也一定减少</strong>。</p>
+<p><strong>移动左边那根更短的柱子？</strong></p>
+<p>这时候，水的高度是不确定的，那么面积也是不确定的，有可能比之前更大，也有可能更小或者相等。</p>
+<p>所以，我们可以得出一个结论：<strong>移动两根柱子之间更短的那根柱子，才有可能在宽度一定变小的情况下，找到一个更高的水面，从而使得面积有可能更大</strong>。</p>
+<p>那接下来这道题目的解法也就有了：</p>
+<p>1、设置两个索引，分别指向容器的两侧，即索引 <code>left</code> 指向最左边的柱子，索引 <code>right</code> 指向最右边的柱子。</p>
+<p><img src="https://leonde.oss-cn-beijing.aliyuncs.com/2021/08/opp73.jpg" srcset="/img/loading.gif" lazyload alt="移动低柱子"></p>
+<p>2、记录下此时的水的面积，可以定义为 res</p>
+<p>3、<strong>观察需要向内移动哪根柱子</strong></p>
 <ul>
-<li>如果 <code>A[left] * A[left] &lt; A[right] * A[right]</code>，说明右边数的平方大于左边数的平方，那么 <code>index</code> 存放的数字是更大的那个数 <code>A[right] * A[right]</code>，并且将 <code>right</code> 向内移动，此时，<code>index</code> 已经放置好了正确的数字，将它向前移动，判断接下来应该放那个数字</li>
-<li>如果 <code>A[left] * A[left] &gt;= A[right] * A[right]</code>，说明左边数的平方大于右边数的平方，那么 <code>index</code> 存放的数字是更大的那个数 <code>A[left] * A[left]</code>，并且将 <code>left</code> 向内移动，此时，<code>index</code> 已经放置好了正确的数字，将它向前移动，判断接下来应该放那个数字</li>
-<li>直到新数组 <code>result</code> 存放了所有的平方数</li>
+<li>1）如果移动<strong>较高</strong>的柱子，由于水的宽度在变小，而水的高度一定不会增加，所以最终水的面积不会超过之前记录的水的面积 res</li>
+<li>2）所以，只能移动较短的柱子，然后计算此时水的面积，再与之前记录的水的面积 res 进行比较，保存那个更大的值</li>
 </ul>
-<h3 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span>[] sortedSquares(<span class="hljs-keyword">int</span>[] nums) &#123;<br><br>        <span class="hljs-comment">// 我们设置两个索引，分别指向数组的两端</span><br><br>        <span class="hljs-comment">// right 指向终止位置</span><br>        <span class="hljs-keyword">int</span> right = nums.length - <span class="hljs-number">1</span>;<br><br>        <span class="hljs-comment">// left 指向起始位置</span><br>        <span class="hljs-keyword">int</span> left = <span class="hljs-number">0</span>;<br><br>        <span class="hljs-comment">// 设置一个新数组 result 用来存放最终的输出结果</span><br>        <span class="hljs-keyword">int</span>[] result = <span class="hljs-keyword">new</span> <span class="hljs-keyword">int</span>[nums.length];<br><br>        <span class="hljs-comment">// 让 index 指向 result 数组的终止位置，观察这个位置应该存放什么数字</span><br>        <span class="hljs-keyword">int</span> index = result.length - <span class="hljs-number">1</span>;<br><br>        <span class="hljs-comment">// left 向右移动，right 向左移动，当 left 大于 right 时，说明已经观察遍历了 nums 数组中的所有元素，跳出循环</span><br>        <span class="hljs-keyword">while</span> (left &lt;= right) &#123;<br><br>            <span class="hljs-comment">// 说明左边的平方数大于右边</span><br>            <span class="hljs-keyword">if</span> (nums[left] * nums[left] &gt; nums[right] * nums[right]) &#123;<br><br>                <span class="hljs-comment">// result 数组中 index 位置要存放更大的那个数，即 nums[left] * nums[left]</span><br>                result[index] = nums[left] * nums[left];<br><br>                <span class="hljs-comment">// 由于相对较大的数是在 left 位置，上一行代码已经将它赋值到 index 位置</span><br>                <span class="hljs-comment">// 所以此时 left 位置的数已经失去作用，将它向后移动</span><br>                left++;<br><br>                <span class="hljs-comment">// 此时，index 位置已经存放好数，将它向前移动，观察下一个位置应该存放哪个数</span><br>                index--;<br><br>              <span class="hljs-comment">// 说明右边的平方数大于左边</span><br>            &#125; <span class="hljs-keyword">else</span> &#123;<br><br>                <span class="hljs-comment">// result 数组中 index 位置要存放更大的那个数，即 nums[right] * nums[right]</span><br>                result[index] = nums[right] * nums[right];<br><br>                <span class="hljs-comment">// 由于相对较大的数是在 right 位置，上一行代码已经将它赋值到 index 位置</span><br>                <span class="hljs-comment">// 所以此时 right 位置的数已经失去作用，将它向前移动</span><br>                right--;<br><br>                <span class="hljs-comment">// 此时，index 位置已经存放好数，将它向前移动，观察下一个位置应该存放哪个数</span><br>                index--;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-comment">// 最后返回我们设置的结果数组即可</span><br>        <span class="hljs-keyword">return</span> result;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<p>4、再去判断应该向内移动哪根柱子</p>
+<p>5、直到 <code>left</code> 和 <code>right</code> 相遇为止</p>
+<h3 id="三、代码实现"><a href="#三、代码实现" class="headerlink" title="三、代码实现"></a>三、代码实现</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">maxArea</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] height)</span> </span>&#123;<br><br>       <span class="hljs-comment">// 设置两个索引，分别指向容器的两侧</span><br><br>       <span class="hljs-comment">// 索引 left 指向最左边的柱子</span><br>       <span class="hljs-keyword">int</span> left = <span class="hljs-number">0</span>;<br><br>       <span class="hljs-comment">// 索引 right 指向最右边的柱子</span><br>       <span class="hljs-keyword">int</span> right = height.length - <span class="hljs-number">1</span>;<br><br>       <span class="hljs-comment">// 设置一个变量用来保存当下水的最大面积</span><br>       <span class="hljs-keyword">int</span> res = <span class="hljs-number">0</span>;<br><br>       <span class="hljs-comment">// 移动 left 和 right，直到 left 和 right 相遇为止</span><br>       <span class="hljs-keyword">while</span>(left &lt; right)&#123;<br><br>           <span class="hljs-comment">// 水的宽度是 right - left</span><br>           <span class="hljs-keyword">int</span> width = right - left;<br><br>           <span class="hljs-comment">// 水的高度由两根柱子最短的那根决定</span><br>           <span class="hljs-keyword">int</span> h = Math.min(height[left],height[right]);<br><br>           <span class="hljs-comment">// 计算此时水的面积</span><br>           <span class="hljs-keyword">int</span> area = width * h;<br><br>           <span class="hljs-comment">// 如果此时水的面积大于了我们之前保存的那个值，我们需要更新一下</span><br>           <span class="hljs-keyword">if</span>(area &gt;= res)&#123;<br>               <span class="hljs-comment">// 更新 res 的值为 area，确保 res 一直都是最大的值</span><br>               res = area;<br>           &#125;<br><br>           <span class="hljs-comment">// 接下来去观察需要移动哪根柱子：必定是最短的那根柱子</span><br><br>           <span class="hljs-comment">// 如果左边的柱子更短，那么向内移动左边的柱子，因为只有这样，才有可能找到一个更高的水面</span><br>           <span class="hljs-comment">// 在宽度一定变小的情况下，水的面积才有可能增大</span><br>           <span class="hljs-keyword">if</span>(height[left] &lt; height[right])&#123;<br>               <span class="hljs-comment">// 向内移动左边的柱子</span><br>               left++;<br><br>           <span class="hljs-comment">// 如果右边的柱子更短，那么向内移动右边的柱子，因为只有这样，才有可能找到一个更高的水面</span><br>           <span class="hljs-comment">// 在宽度一定变小的情况下，水的面积才有可能增大</span><br>           &#125;<span class="hljs-keyword">else</span>&#123;<br>               <span class="hljs-comment">// 向内移动右边的柱子</span><br>               right--;<br>           &#125;<br><br>       &#125;<br><br>       <span class="hljs-comment">// 最后返回最大的面积 res 即可</span><br>       <span class="hljs-keyword">return</span> res;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
             </div>
@@ -275,18 +288,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/08/02/%E7%AE%97%E6%B3%955-%E5%8A%9B%E6%89%A311-%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">算法5[力扣11]-盛最多水的容器</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/07/31/%E7%AE%97%E6%B3%953-%E5%8A%9B%E6%89%A316-16-%E9%83%A8%E5%88%86%E6%8E%92%E5%BA%8F/">
-                        <span class="hidden-mobile">算法3[力扣16.16]-部分排序</span>
+                      <a href="/2021/08/02/%E7%AE%97%E6%B3%954-%E5%8A%9B%E6%89%A3977-%E6%9C%89%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E5%B9%B3%E6%96%B9/">
+                        <span class="hidden-mobile">算法4[力扣977]-有序数组的平方</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
