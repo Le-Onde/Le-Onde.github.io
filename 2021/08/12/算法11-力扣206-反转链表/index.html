@@ -18,7 +18,7 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>算法8[力扣155]-最小栈 - Hexo</title>
+  <title>算法11[力扣206]-反转链表 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="算法8[力扣155]-最小栈">
+            <span class="h2" id="subtitle" title="算法11[力扣206]-反转链表">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-08-05 15:25" pubdate>
-        August 5, 2021 pm
+      <time datetime="2021-08-12 14:23" pubdate>
+        August 12, 2021 pm
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      857 字
+      604 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      10
+      7
        分钟
     </span>
   
@@ -225,27 +225,24 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">算法8[力扣155]-最小栈</h1>
+            <h1 style="display: none">算法11[力扣206]-反转链表</h1>
             
             <div class="markdown-body">
-              <h3 id="一、问题描述"><a href="#一、问题描述" class="headerlink" title="一、问题描述"></a>一、问题描述</h3><p>设计一个支持 push ，pop ，top 操作，并能在<strong>常数时间</strong>内检索到最小元素的栈。</p>
+              <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p>给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。</p>
+<p>1 –&gt; 2 –&gt; 3 –&gt; 4 –&gt; 5 –&gt; null</p>
+<p>5 –&gt; 4 –&gt; 3 –&gt; 2 –&gt; 1 –&gt; null</p>
+<h3 id="二、题目解析"><a href="#二、题目解析" class="headerlink" title="二、题目解析"></a>二、题目解析</h3><p>这道题目有很多种解法，递归解法最难以理解整个过程，今天我就带大家来探究一次！</p>
+<p>先来看分析过程，这里看不懂没关系，一定要看最后的<strong>动画过程</strong>。</p>
 <ul>
-<li><code>push(x)</code> —— 将元素 x 推入栈中。</li>
-<li><code>pop()</code> —— 删除栈顶的元素。</li>
-<li><code>top()</code> —— 获取栈顶元素。</li>
-<li><code>getMin()</code> —— 检索栈中的最小元素。</li>
+<li>1、通过<strong>递归函数</strong>，一直递归到链表的最后一个结点为止，此时，<strong>该结点就是反转成功后的头结点</strong>，是最终的返回结果。</li>
+<li>2、在递归函数中，让当前节点的下一个节点的 <code>next</code> 指针指向当前节点。</li>
+<li>3、在递归函数中，让当前节点的 <code>next</code> 指针指向 <code>null</code></li>
+<li>4、通过二三步的操作，已经让递归函数中的链表实现了<strong>局部反转</strong>，将结果返回给上一层递归函数</li>
+<li>5、所有递归结束后，链表反转成功。</li>
 </ul>
-<h3 id="二、题目解析"><a href="#二、题目解析" class="headerlink" title="二、题目解析"></a>二、题目解析</h3><p>由于需要在常数时间内找到最小的元素，那么说明肯定是不能使用遍历，因为遍历是 O(n) 级别的时间，那么只能使用辅助空间进行存储，这是一种<strong>空间换时间</strong>的思想。</p>
-<p>这里我们设置两个栈：<strong>普通栈</strong>和<strong>辅助栈</strong>。</p>
-<h4 id="1、push-操作"><a href="#1、push-操作" class="headerlink" title="1、push 操作"></a>1、push 操作</h4><p>普通栈：直接添加 push 进来的值</p>
-<p>辅助栈：每次 push 一个新元素的时候，将普通栈中最小的元素 push 进辅助栈中</p>
-<h4 id="2、pop-操作"><a href="#2、pop-操作" class="headerlink" title="2、pop 操作"></a>2、pop 操作</h4><p>普通栈：直接移除普通栈中的栈顶元素</p>
-<p>辅助栈：判断<strong>普通栈</strong>中刚刚移除的栈顶元素值是否和此时<strong>辅助栈</strong>中的栈顶元素相同，如果是则将<strong>辅助栈</strong>中的栈顶元素移除，否则不执行操作，这样的目的是为了让<strong>辅助栈中的栈顶元素始终是普通栈中的最小值</strong>。</p>
-<h4 id="3、top-操作"><a href="#3、top-操作" class="headerlink" title="3、top 操作"></a>3、top 操作</h4><p>普通栈：返回<strong>普通栈</strong>的栈顶元素</p>
-<p>辅助栈：不执行操作</p>
-<h4 id="4、getMin-操作"><a href="#4、getMin-操作" class="headerlink" title="4、getMin 操作"></a>4、getMin 操作</h4><p>普通栈：不执行操作</p>
-<p>辅助栈：返回<strong>辅助栈</strong>的栈顶元素</p>
-<h3 id="三、参考代码"><a href="#三、参考代码" class="headerlink" title="三、参考代码"></a>三、参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MinStack</span> </span>&#123;<br>    <span class="hljs-comment">// 首先定义好两个栈</span><br><br>    <span class="hljs-comment">// 一个栈叫做 stack，负责栈的正常操作</span><br>    Stack&lt;Integer&gt; stack;<br>    <span class="hljs-comment">// 一个栈叫做 minStack，负责获取 stack 中的最小值，它等价于遍历 stack 中的所有元素，把升序的数字都删除掉，留下一个从栈底到栈顶降序的栈</span><br>    Stack&lt;Integer&gt; minStack;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">MinStack</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-comment">// 在这个函数中初始化两个栈，传入的参数为空，返回也为空</span><br><br>        <span class="hljs-comment">// 初始化 stack</span><br>        stack = <span class="hljs-keyword">new</span> Stack&lt;&gt;();<br><br>        <span class="hljs-comment">// 初始化 minStack</span><br>        minStack = <span class="hljs-keyword">new</span> Stack&lt;&gt;();<br><br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">push</span><span class="hljs-params">(<span class="hljs-keyword">int</span> x)</span> </span>&#123;<br>        <span class="hljs-comment">// 新添加的元素添加到 stack 中</span><br>        stack.push(x);<br><br>        <span class="hljs-comment">// 判断 minStack 是否为空，如果为空，直接同时把新添加的元素添加到 minStack 中</span><br><br>        <span class="hljs-comment">// 如果 minStack 不为空</span><br>        <span class="hljs-keyword">if</span> (!minStack.isEmpty()) &#123;<br>            <span class="hljs-comment">// 获取 minStack 的栈顶元素</span><br>            <span class="hljs-keyword">int</span> top = minStack.peek();<br>            <span class="hljs-comment">// 只有新添加的元素不大于 top 才允许添加到 minStack 中，目的是为了让 minStack 从栈底到栈顶是降序的</span><br>            <span class="hljs-keyword">if</span> (x &lt;= top) &#123;<br>                <span class="hljs-comment">// 此时，新添加的元素 x 小于 top，加入到 minStack 后依旧是从栈底到栈顶是降序的</span><br>                minStack.push(x);<br>            &#125;<br>        &#125;<span class="hljs-keyword">else</span>&#123;<br>            <span class="hljs-comment">// 此时，minStack 中没有元素，所以直接把新添加的元素添加到 minStack 中</span><br>            minStack.push(x);<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">pop</span><span class="hljs-params">()</span> </span>&#123;<br><br>        <span class="hljs-comment">// 让 stack 执行正常的 pop 操作就行</span><br>        <span class="hljs-keyword">int</span> pop = stack.pop();<br><br>        <span class="hljs-comment">// 由于 minStack 中的所有元素都是来自于 stack 中，所以 stack 删除元素后，minStack 也要考虑是否需要删除元素</span><br>        <span class="hljs-comment">// 否则的话，minStack 有可能保存一个 stack 中不存在的元素</span><br><br>        <span class="hljs-comment">// 首先，获取 minStack 的栈顶元素</span><br>        <span class="hljs-keyword">int</span> top = minStack.peek();<br>        <span class="hljs-comment">// 再判断 top 这个栈顶元素是否和 stack 移除的元素相等，如果相等，那么需要把 minStack 中的栈顶元素一并移除 </span><br>        <span class="hljs-keyword">if</span> (pop == top) &#123;<br>            <span class="hljs-comment">// 移除 minStack 的栈顶元素</span><br>            minStack.pop();<br>        &#125;<br><br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">top</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-comment">// 返回 stack 的栈顶元素</span><br>        <span class="hljs-keyword">return</span> stack.peek();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">getMin</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-comment">// 返回 minStack 的栈顶元素</span><br>        <span class="hljs-keyword">return</span> minStack.peek();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h3 id="三、参考代码"><a href="#三、参考代码" class="headerlink" title="三、参考代码"></a>三、参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> ListNode <span class="hljs-title">reverseList</span><span class="hljs-params">(ListNode head)</span> </span>&#123;<br><br>        <span class="hljs-comment">// 寻找递归终止条件</span><br>        <span class="hljs-comment">// 1、head 指向的结点为 null </span><br>        <span class="hljs-comment">// 2、head 指向的结点的下一个结点为 null </span><br>        <span class="hljs-comment">// 在这两种情况下，反转之后的结果还是它自己本身</span><br>        <span class="hljs-keyword">if</span>( head == <span class="hljs-keyword">null</span> || head.next == <span class="hljs-keyword">null</span>)  <span class="hljs-keyword">return</span> head;<br><br>        <span class="hljs-comment">// 不断的通过递归调用，直到无法递归下去，递归的最小粒度是在最后一个节点</span><br>        <span class="hljs-comment">// 因为到最后一个节点的时候，由于当前节点 head 的 next 节点是空，所以会直接返回 head</span><br>        ListNode cur = reverseList(head.next);<br><br>        <span class="hljs-comment">// 比如原链表为 1 --&gt; 2 --&gt; 3 --&gt; 4 --&gt; 5</span><br>        <span class="hljs-comment">// 第一次执行下面代码的时候，head 为 4，那么 head.next = 5</span><br>        <span class="hljs-comment">// 那么 head.next.next 就是 5.next ，意思就是去设置 5 的下一个节点</span><br>        <span class="hljs-comment">// 等号右侧为 head，意思就是设置 5 的下一个节点是 4</span><br><br>        <span class="hljs-comment">// 这里出现了两个 next</span><br>        <span class="hljs-comment">// 第一个 next 是「获取」 head 的下一节点</span><br>        <span class="hljs-comment">// 第二个 next 是「设置」 当前节点的下一节点为等号右侧的值</span><br>        head.next.next = head;<br><br><br>        <span class="hljs-comment">// head 原来的下一节点指向自己，所以 head 自己本身就不能再指向原来的下一节点了</span><br>        <span class="hljs-comment">// 否则会发生无限循环</span><br>        head.next = <span class="hljs-keyword">null</span>;<br><br>        <span class="hljs-comment">// 我们把每次反转后的结果传递给上一层</span><br>        <span class="hljs-keyword">return</span> cur;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
             </div>
             <hr>
             <div>
@@ -279,9 +276,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/08/09/%E7%AE%97%E6%B3%959-%E5%8A%9B%E6%89%A3739-%E6%AF%8F%E6%97%A5%E6%B8%A9%E5%BA%A6/">
+                      <a href="/2021/08/12/%E7%AE%97%E6%B3%9512-%E5%8A%9B%E6%89%A321-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">算法9[力扣739]-每日温度</span>
+                        <span class="hidden-mobile">算法12[力扣21]-合并两个有序链表</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -289,8 +286,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/08/05/%E7%AE%97%E6%B3%957-%E5%8A%9B%E6%89%A3232-%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/">
-                        <span class="hidden-mobile">算法7[力扣232]-用栈实现队列</span>
+                      <a href="/2021/08/09/%E7%AE%97%E6%B3%9510-%E5%8A%9B%E6%89%A3239-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/">
+                        <span class="hidden-mobile">算法10[力扣239]-滑动窗口的最大值</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
