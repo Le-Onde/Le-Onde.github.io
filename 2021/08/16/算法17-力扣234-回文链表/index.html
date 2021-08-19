@@ -18,7 +18,7 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>算法14[力扣203]-移除链表元素 - Hexo</title>
+  <title>算法17[力扣234]-回文链表 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="算法14[力扣203]-移除链表元素">
+            <span class="h2" id="subtitle" title="算法17[力扣234]-回文链表">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-08-12 17:19" pubdate>
-        August 12, 2021 pm
+      <time datetime="2021-08-16 16:43" pubdate>
+        August 16, 2021 pm
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      656 字
+      1k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
+      12
        分钟
     </span>
   
@@ -225,19 +225,13 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">算法14[力扣203]-移除链表元素</h1>
+            <h1 style="display: none">算法17[力扣234]-回文链表</h1>
             
             <div class="markdown-body">
-              <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p>给你一个链表的头节点 head 和一个整数 val ，请你删除链表中所有满足 Node.val val 的节点，并返回 <strong>新的头节点</strong> 。</p>
-<h3 id="二、题目解析"><a href="#二、题目解析" class="headerlink" title="二、题目解析"></a>二、题目解析</h3><p>移除的节点有两种情况。</p>
-<p>1、移除的是头节点</p>
-<p>2、移除的是其它节点</p>
-<p>对于<strong>移除其它节点</strong>这种情况，我们可以让它的前一个节点指向移除节点的下一节点来解决。</p>
-<p><img src="https://img-blog.csdnimg.cn/e26296f32514448686d9787357fdc663.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="1"></p>
-<p>对于<strong>移除头节点</strong>这种情况，为了让解决情况和上面的逻辑一样，我们借助一个<strong>虚拟节点</strong>来解决。</p>
-<p>我们给链表添加一个虚拟头节点作为新的头节点。</p>
-<p><img src="https://img-blog.csdnimg.cn/1cffa5517d014bf3a2d7d0a9810bd231.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="2"></p>
-<h3 id="三、参考代码"><a href="#三、参考代码" class="headerlink" title="三、参考代码"></a>三、参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> ListNode <span class="hljs-title">removeElements</span><span class="hljs-params">(ListNode head, <span class="hljs-keyword">int</span> val)</span> </span>&#123;<br><br>    <span class="hljs-comment">// 边界情况，如果链表为空，那么没有元素可以删除，直接返回空</span><br>    <span class="hljs-keyword">if</span> (head == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br><br>    <span class="hljs-comment">// 一开始设置一个虚拟节点，它的值为 -1，它的值可以设置为任何的数，因为我们根本不需要使用它的值</span><br>    <span class="hljs-comment">// 设置虚拟节点的目的是为了让原链表中所有节点就都可以按照统一的方式进行移除</span><br>    <span class="hljs-comment">// 因为如果不设置虚拟节点，如果删除的元素是原链表中的头节点，那么需要额外的做一些判断，比较繁琐</span><br>    ListNode dummy = <span class="hljs-keyword">new</span> ListNode(-<span class="hljs-number">1</span>);<br><br>    <span class="hljs-comment">// 虚拟头节点的下一节点指向 head 节点</span><br>    <span class="hljs-comment">// 如果原链表是  1 --&gt;  2 --&gt;  3</span><br>    <span class="hljs-comment">// 那么加上虚拟头节点就是  -1 --&gt;  1 --&gt;  2 --&gt;  3</span><br>    dummy.next = head;<br><br>    <span class="hljs-comment">// 设置一个指针，指向此时的虚拟节点</span><br>    <span class="hljs-comment">// pre: -1 --&gt;  1 --&gt;  2 --&gt;  3</span><br>    ListNode pre = dummy;<br><br>    <span class="hljs-comment">// 设置一个指针，指向原链表 head</span><br>    ListNode cur = head;<br><br>    <span class="hljs-comment">// 让 cur 不断的向后移动，直到移动到链表的最尾部，指向 null 的那个位置</span><br>    <span class="hljs-comment">// 此时 pre 还在指向 dummy</span><br>    <span class="hljs-comment">// 也就是说一开始 pre 落后 cur 一个节点</span><br>    <span class="hljs-keyword">while</span> (cur != <span class="hljs-keyword">null</span>) &#123;<br><br>        <span class="hljs-comment">// 移动的过程中，如果发现当前的节点值和目标值一样</span><br>        <span class="hljs-comment">// 我们就让指针 pre 所指向的节点的下一节点跳过这个值</span><br>        <span class="hljs-keyword">if</span> (cur.val == val) &#123;<br>            <span class="hljs-comment">// 让指针 pre 所指向的节点的下一节点跳过这个值</span><br>            pre.next = cur.next;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// 否则的话，pre 跟上 cur 的位置</span><br>            pre = cur;<br>        &#125;<br>        <span class="hljs-comment">// 判断完当前的节点情况后，让 cur 向后移动</span><br>        cur = cur.next;<br>    &#125;<br><br>    <span class="hljs-comment">// 最后返回 dummy 节点的下一节点</span><br>    <span class="hljs-comment">// 因为这个时候 dummy 指向的是一个我们设置的节点，它的下一节点才是原链表中的节点</span><br>    <span class="hljs-keyword">return</span> dummy.next;<br>&#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+              <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p>请判断一个链表是否为回文链表。    </p>
+<h3 id="二、参考代码"><a href="#二、参考代码" class="headerlink" title="二、参考代码"></a>二、参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">boolean</span> <span class="hljs-title">isPalindrome</span><span class="hljs-params">(ListNode head)</span> </span>&#123;<br><br>        <span class="hljs-comment">// 边界情况判断</span><br><br>        <span class="hljs-comment">// 链表为空或者只有一个节点的情况，属于回文链表</span><br>        <span class="hljs-keyword">if</span>(head == <span class="hljs-keyword">null</span> || head.next == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br><br>        <span class="hljs-comment">// 链表只有两个节点的时候，判断这两个节点值是否相等</span><br>        <span class="hljs-keyword">if</span>(head.next.next == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">return</span> head.val == head.next.val;<br><br>        <span class="hljs-comment">// 通过快慢指针寻找链表的中心点</span><br><br>        <span class="hljs-comment">// 设置一个指针，指向链表的头部</span><br>        <span class="hljs-comment">// fast 这个指针每次都向后移动两步</span><br>        ListNode fast = head;<br><br><br>        <span class="hljs-comment">// 设置一个指针，指向链表的头部</span><br>        <span class="hljs-comment">// slow 这个指针每次都向后移动一步</span><br>        ListNode slow = head;<br><br>        <span class="hljs-comment">// 让 fast 和 slow 同时向后移动</span><br>        <span class="hljs-comment">// 其中，fast 这个指针每次都向后移动两步，slow 这个指针每次都向后移动一步</span><br>        <span class="hljs-comment">// 直到 fast 这个指针指向了链表的尾节点，即 fast.next = null</span><br>        <span class="hljs-comment">// 或者 fast 这个指针指向了链表的尾节点的前一个节点，即 fast.next.next = null</span><br>        <span class="hljs-comment">// 这个时候，fast 这个指针无法向后移动两位，跳出循环，找到了中间点</span><br>        <span class="hljs-comment">// 如果链表长度为偶数，则 slow 指向了中间节点前的那个节点</span><br>        <span class="hljs-comment">// 比如链表为  1 --&gt; 2 --&gt; 3 --&gt; 4 --&gt; null</span><br><br>        <span class="hljs-comment">// 一开始，slow 和 fast 同时指向 1，slow 移动一位到 2，fast 移动两位到 3</span><br>        <span class="hljs-comment">// 由于 3.next.next 为空，所以跳出 while，此时 slow 指向了中间节点前的那个节点</span><br><br>        <span class="hljs-comment">// 如果链表长度为奇数，则 slow 指向了中间节点</span><br>        <span class="hljs-comment">// 比如链表为  1 --&gt; 2 --&gt; 3 </span><br>        <span class="hljs-comment">// 一开始，slow 和 fast 同时指向 1，slow 移动一位到 2，fast 移动两位到 3</span><br>        <span class="hljs-comment">// 由于 3.next 为空，所以跳出 while，此时 slow 指向了中间节点</span><br><br>        <span class="hljs-keyword">while</span>(fast.next != <span class="hljs-keyword">null</span> &amp;&amp; fast.next.next != <span class="hljs-keyword">null</span>)&#123;<br>            <span class="hljs-comment">// slow 这个指针每次都向后移动一步</span><br>            slow = slow.next;<br>            <span class="hljs-comment">// fast 这个指针每次都向后移动两步</span><br>            fast = fast.next.next;<br>        &#125;<br><br>        <span class="hljs-comment">// 这个时候，slow 指向的那个节点把链表划分为两个区域</span><br>        <span class="hljs-comment">// 翻转右区域的链表</span><br>        <span class="hljs-comment">// 获取右区域的链表翻转之后的头节点</span><br>        ListNode rightHead =  reverse(slow.next);<br><br>        <span class="hljs-comment">// 获取左区域的链表的头节点</span><br>        ListNode leftHead = head;<br><br>        <span class="hljs-comment">// 让 leftHead 和 rightHead 同时向后移动，直到 rightHead 指向 null 为止</span><br>        <span class="hljs-comment">// 说明比较完了所有的节点</span><br>        <span class="hljs-keyword">while</span>(rightHead != <span class="hljs-keyword">null</span>)&#123;<br>            <span class="hljs-comment">// 如果它们的节点值不一样，那么就不是回文链表</span><br>            <span class="hljs-keyword">if</span>(leftHead.val != rightHead.val)&#123;<br>                <span class="hljs-comment">// 不是回文链表，返回 false</span><br>                <span class="hljs-keyword">return</span> <span class="hljs-keyword">false</span>;<br>            &#125;<br>            <span class="hljs-comment">// 否则，让 rightHead 继续向右移动</span><br>            rightHead = rightHead.next;<br><br>            <span class="hljs-comment">// 否则，让 rightHead 继续向右移动</span><br>            leftHead = leftHead.next;<br><br>        &#125;<br><br>        <span class="hljs-comment">// 比较完所有的节点，说明是回文链表，返回 true</span><br>        <span class="hljs-keyword">return</span> <span class="hljs-keyword">true</span>;<br><br>    &#125;<br><br>    <span class="hljs-comment">// 反转链表的代码</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> ListNode <span class="hljs-title">reverse</span><span class="hljs-params">(ListNode head)</span> </span>&#123;<br>        <span class="hljs-comment">// 寻找递归终止条件</span><br>        <span class="hljs-comment">// 1、head 指向的结点为 null </span><br>        <span class="hljs-comment">// 2、head 指向的结点的下一个结点为 null </span><br>        <span class="hljs-comment">// 在这两种情况下，反转之后的结果还是它自己本身</span><br>        <span class="hljs-keyword">if</span>( head == <span class="hljs-keyword">null</span> || head.next == <span class="hljs-keyword">null</span>)  <span class="hljs-keyword">return</span> head;<br><br>        <span class="hljs-comment">// 不断的通过递归调用，直到无法递归下去，递归的最小粒度是在最后一个节点</span><br>        <span class="hljs-comment">// 因为到最后一个节点的时候，由于当前节点 head 的 next 节点是空，所以会直接返回 head</span><br>        ListNode cur = reverse(head.next);<br><br>        <span class="hljs-comment">// 比如原链表为 1 --&gt; 2 --&gt; 3 --&gt; 4 --&gt; 5</span><br>        <span class="hljs-comment">// 第一次执行下面代码的时候，head 为 4，那么 head.next = 5</span><br>        <span class="hljs-comment">// 那么 head.next.next 就是 5.next ，意思就是去设置 5 的下一个节点</span><br>        <span class="hljs-comment">// 等号右侧为 head，意思就是设置 5 的下一个节点是 4</span><br><br>        <span class="hljs-comment">// 这里出现了两个 next</span><br>        <span class="hljs-comment">// 第一个 next 是「获取」 head 的下一节点</span><br>        <span class="hljs-comment">// 第二个 next 是「设置」 当前节点的下一节点为等号右侧的值</span><br>        head.next.next = head;<br><br>        <span class="hljs-comment">// head 原来的下一节点指向自己，所以 head 自己本身就不能再指向原来的下一节点了</span><br>        <span class="hljs-comment">// 否则会发生无限循环</span><br>        head.next = <span class="hljs-keyword">null</span>;<br><br>        <span class="hljs-comment">// 我们把每次反转后的结果传递给上一层</span><br>        <span class="hljs-keyword">return</span> cur;<br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+
 
 
             </div>
@@ -273,9 +267,9 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/08/16/%E7%AE%97%E6%B3%9515-%E5%8A%9B%E6%89%A3160-%E7%9B%B8%E4%BA%A4%E9%93%BE%E8%A1%A8/">
+                      <a href="/2021/08/16/%E7%AE%97%E6%B3%9518-%E5%8A%9B%E6%89%A325-k%E4%B8%AA%E4%B8%80%E7%BB%84%E7%BF%BB%E8%BD%AC%E9%93%BE%E8%A1%A8/">
                         <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">算法15[力扣160]-相交链表</span>
+                        <span class="hidden-mobile">算法18[力扣25]-k个一组翻转链表</span>
                         <span class="visible-mobile">Previous</span>
                       </a>
                     
@@ -283,8 +277,8 @@
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/08/12/%E7%AE%97%E6%B3%9513-%E5%8A%9B%E6%89%A392-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8%E2%85%A1/">
-                        <span class="hidden-mobile">算法13[力扣92]-反转链表Ⅱ</span>
+                      <a href="/2021/08/16/%E7%AE%97%E6%B3%9516-%E5%8A%9B%E6%89%A3%E9%9D%A2%E8%AF%95%E9%A2%9802-04-%E5%88%86%E5%89%B2%E9%93%BE%E8%A1%A8/">
+                        <span class="hidden-mobile">算法16[力扣面试题02.04]-分割链表</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>

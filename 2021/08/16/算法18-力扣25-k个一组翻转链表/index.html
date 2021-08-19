@@ -1,0 +1,487 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/newcon.png">
+  <link rel="icon" href="/img/newfav.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+  <title>算法18[力扣25]-k个一组翻转链表 - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.9","typing":{"enable":true,"typeSpeed":64,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Le Onde</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                主页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                种类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://img-blog.csdnimg.cn/20210421122657715.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="算法18[力扣25]-k个一组翻转链表">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-08-16 17:44" pubdate>
+        August 16, 2021 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      1.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      13
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">算法18[力扣25]-k个一组翻转链表</h1>
+            
+            <div class="markdown-body">
+              <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p>给你一个链表，每 <em>k</em> 个节点一组进行翻转，请你返回翻转后的链表。</p>
+<p><em>k</em> 是一个正整数，它的值小于或等于链表的长度。</p>
+<p>如果节点总数不是 <em>k</em> 的整数倍，那么请将最后剩余的节点保持原有顺序。</p>
+<h3 id="二、参考代码"><a href="#二、参考代码" class="headerlink" title="二、参考代码"></a>二、参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> ListNode <span class="hljs-title">reverseKGroup</span><span class="hljs-params">(ListNode head, <span class="hljs-keyword">int</span> k)</span> </span>&#123;<br>        <span class="hljs-comment">// 一开始设置一个虚拟节点，它的值为 -1，它的值可以设置为任何的数，因为我们根本不需要使用它的值</span><br>        ListNode dummy = <span class="hljs-keyword">new</span> ListNode(-<span class="hljs-number">1</span>);<br><br>        <span class="hljs-comment">// 虚拟头节点的下一节点指向 head 节点</span><br>        <span class="hljs-comment">// 如果原链表是  1 --&gt;  2 --&gt;  3</span><br>        <span class="hljs-comment">// 那么加上虚拟头节点就是  -1 --&gt;  1 --&gt;  2 --&gt;  3</span><br><br>        dummy.next = head;<br><br>        <span class="hljs-comment">// 设置一个指针，指向此时的虚拟节点，pre 表示每次要翻转的链表的头结点的【上一个节点】</span><br>        <span class="hljs-comment">// pre: -1 --&gt;  1 --&gt;  2 --&gt;  3</span><br>        ListNode pre = dummy;<br><br>        <span class="hljs-comment">// 设置一个指针，指向此时的虚拟节点，end 表示每次要翻转的链表的尾节点</span><br>        <span class="hljs-comment">// end: -1 --&gt;  1 --&gt;  2 --&gt;  3</span><br>        ListNode end = dummy;<br><br>        <span class="hljs-comment">// 通过 while 循环，不断的找到翻转链表的尾部</span><br>        <span class="hljs-keyword">while</span>( end.next != <span class="hljs-keyword">null</span>)&#123;<br><br>            <span class="hljs-comment">// 通过 for 循环，找到【每一组翻转链表的尾部】</span><br>            <span class="hljs-comment">// 由于原链表按照 k 个一组进行划分会可能出现有一组的长度不足 k 个</span><br>            <span class="hljs-comment">// 比如原链表 1 --&gt;  2 --&gt;  3 --&gt;  4 --&gt;  5</span><br>            <span class="hljs-comment">// k = 2，划分了三组 1 --&gt;  2， 3 --&gt;  4， 5</span><br>            <span class="hljs-comment">// 所以得确保 end 不为空才去找它的 next 指针，否则 null.next 会报错</span><br>            <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span> ; i &lt; k &amp;&amp; end != <span class="hljs-keyword">null</span> ; i++)&#123;<br>                <span class="hljs-comment">// end 不断的向后移动，移动 k 次到达【每一组翻转链表的尾部】</span><br>                end = end.next ;<br>            &#125;<br><br>            <span class="hljs-comment">// 如果发现 end == null，说明此时翻转的链表的节点数小于 k ，保存原有顺序就行</span><br>            <span class="hljs-keyword">if</span>(end == <span class="hljs-keyword">null</span>)&#123;<br>                <span class="hljs-comment">// 直接跳出循环，只执行下面的翻转操作</span><br>                <span class="hljs-keyword">break</span>;<br>            &#125;<br><br><br>            <span class="hljs-comment">// next 表示【待翻转链表区域】里面的第一个节点</span><br>            ListNode next = end.next;<br><br>            <span class="hljs-comment">// 【翻转链表区域】的最尾部节点先断开</span><br>            end.next = <span class="hljs-keyword">null</span> ;<br><br>            <span class="hljs-comment">// start 表示【翻转链表区域】里面的第一个节点</span><br>            ListNode start = pre.next;<br><br><br><br>            <span class="hljs-comment">// 【翻转链表区域】的最头部节点和前面断开</span><br>            pre.next = <span class="hljs-keyword">null</span>;<br><br>            <span class="hljs-comment">// 这个时候，【翻转链表区域】的头节点是 start，尾节点是 end</span><br>            <span class="hljs-comment">// 开始执行【反转链表】操作</span><br>            <span class="hljs-comment">// 原先是 start --&gt; ...--&gt; end</span><br>            <span class="hljs-comment">// 现在变成了 end --&gt; ...--&gt; start</span><br><br>            <span class="hljs-comment">// 要翻转的链表的头结点的【上一个节点】的 next 指针指向这次翻转的结果</span><br>            pre.next = reverse(start);<br><br>            <span class="hljs-comment">// 接下来的操作是在为【待翻转链表区域】的反转做准备</span><br><br>            <span class="hljs-comment">// 原先是 start --&gt; ...--&gt; end</span><br>            <span class="hljs-comment">// 现在变成了 end --&gt; ...--&gt; start</span><br>            <span class="hljs-comment">// 【翻转链表区域】里面的尾节点的 next 指针指向【待翻转链表区域】里面的第一个节点</span><br>            start.next = next ;<br><br>            <span class="hljs-comment">// 原先是 start --&gt; ...--&gt; end</span><br>            <span class="hljs-comment">// 现在变成了 end --&gt; ...--&gt; start</span><br>            <span class="hljs-comment">// pre 表示每次要翻转的链表的头结点的【上一个节点】</span><br>            pre = start;<br><br>            <span class="hljs-comment">// 将 end 重置为【待翻转链表区域】的头结点的上一个节点。</span><br>            end = start;<br>        &#125;<br>        <span class="hljs-keyword">return</span> dummy.next;<br><br><br>    &#125;<br>    <span class="hljs-comment">// 反转链表的代码</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> ListNode <span class="hljs-title">reverse</span><span class="hljs-params">(ListNode head)</span> </span>&#123;<br>        <span class="hljs-comment">// 寻找递归终止条件</span><br>        <span class="hljs-comment">// 1、head 指向的结点为 null </span><br>        <span class="hljs-comment">// 2、head 指向的结点的下一个结点为 null </span><br>        <span class="hljs-comment">// 在这两种情况下，反转之后的结果还是它自己本身</span><br>        <span class="hljs-keyword">if</span>( head == <span class="hljs-keyword">null</span> || head.next == <span class="hljs-keyword">null</span>)  <span class="hljs-keyword">return</span> head;<br><br>        <span class="hljs-comment">// 不断的通过递归调用，直到无法递归下去，递归的最小粒度是在最后一个节点</span><br>        <span class="hljs-comment">// 因为到最后一个节点的时候，由于当前节点 head 的 next 节点是空，所以会直接返回 head</span><br>        ListNode cur = reverse(head.next);<br><br>        <span class="hljs-comment">// 比如原链表为 1 --&gt; 2 --&gt; 3 --&gt; 4 --&gt; 5</span><br>        <span class="hljs-comment">// 第一次执行下面代码的时候，head 为 4，那么 head.next = 5</span><br>        <span class="hljs-comment">// 那么 head.next.next 就是 5.next ，意思就是去设置 5 的下一个节点</span><br>        <span class="hljs-comment">// 等号右侧为 head，意思就是设置 5 的下一个节点是 4</span><br><br>        <span class="hljs-comment">// 这里出现了两个 next</span><br>        <span class="hljs-comment">// 第一个 next 是「获取」 head 的下一节点</span><br>        <span class="hljs-comment">// 第二个 next 是「设置」 当前节点的下一节点为等号右侧的值</span><br>        head.next.next = head;<br><br><br>        <span class="hljs-comment">// head 原来的下一节点指向自己，所以 head 自己本身就不能再指向原来的下一节点了</span><br>        <span class="hljs-comment">// 否则会发生无限循环</span><br>        head.next = <span class="hljs-keyword">null</span>;<br><br>        <span class="hljs-comment">// 我们把每次反转后的结果传递给上一层</span><br>        <span class="hljs-keyword">return</span> cur;<br><br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/08/17/%E7%AE%97%E6%B3%9519-%E5%89%91%E6%8C%87offer06-%E4%BB%8E%E5%B0%BE%E5%88%B0%E5%A4%B4%E6%89%93%E5%8D%B0%E9%93%BE%E8%A1%A8/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">算法19[剑指offer06]-从尾到头打印链表</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/08/16/%E7%AE%97%E6%B3%9517-%E5%8A%9B%E6%89%A3234-%E5%9B%9E%E6%96%87%E9%93%BE%E8%A1%A8/">
+                        <span class="hidden-mobile">算法17[力扣234]-回文链表</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.lazyComments('valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "99lfyqRg3CLazXoohVQjMwH3-gzGzoHsz",
+          app_key: "qx9rFQuqjhuegpH6AwJ8B0eD",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: true,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

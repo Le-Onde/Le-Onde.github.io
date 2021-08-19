@@ -18,7 +18,7 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>算法14[力扣203]-移除链表元素 - Hexo</title>
+  <title>算法24[力扣2]-两数相加 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="算法14[力扣203]-移除链表元素">
+            <span class="h2" id="subtitle" title="算法24[力扣2]-两数相加">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-08-12 17:19" pubdate>
-        August 12, 2021 pm
+      <time datetime="2021-08-19 15:26" pubdate>
+        August 19, 2021 pm
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      656 字
+      749 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      7
+      9
        分钟
     </span>
   
@@ -225,19 +225,14 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">算法14[力扣203]-移除链表元素</h1>
+            <h1 style="display: none">算法24[力扣2]-两数相加</h1>
             
             <div class="markdown-body">
-              <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p>给你一个链表的头节点 head 和一个整数 val ，请你删除链表中所有满足 Node.val val 的节点，并返回 <strong>新的头节点</strong> 。</p>
-<h3 id="二、题目解析"><a href="#二、题目解析" class="headerlink" title="二、题目解析"></a>二、题目解析</h3><p>移除的节点有两种情况。</p>
-<p>1、移除的是头节点</p>
-<p>2、移除的是其它节点</p>
-<p>对于<strong>移除其它节点</strong>这种情况，我们可以让它的前一个节点指向移除节点的下一节点来解决。</p>
-<p><img src="https://img-blog.csdnimg.cn/e26296f32514448686d9787357fdc663.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="1"></p>
-<p>对于<strong>移除头节点</strong>这种情况，为了让解决情况和上面的逻辑一样，我们借助一个<strong>虚拟节点</strong>来解决。</p>
-<p>我们给链表添加一个虚拟头节点作为新的头节点。</p>
-<p><img src="https://img-blog.csdnimg.cn/1cffa5517d014bf3a2d7d0a9810bd231.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="2"></p>
-<h3 id="三、参考代码"><a href="#三、参考代码" class="headerlink" title="三、参考代码"></a>三、参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> ListNode <span class="hljs-title">removeElements</span><span class="hljs-params">(ListNode head, <span class="hljs-keyword">int</span> val)</span> </span>&#123;<br><br>    <span class="hljs-comment">// 边界情况，如果链表为空，那么没有元素可以删除，直接返回空</span><br>    <span class="hljs-keyword">if</span> (head == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">return</span> <span class="hljs-keyword">null</span>;<br><br>    <span class="hljs-comment">// 一开始设置一个虚拟节点，它的值为 -1，它的值可以设置为任何的数，因为我们根本不需要使用它的值</span><br>    <span class="hljs-comment">// 设置虚拟节点的目的是为了让原链表中所有节点就都可以按照统一的方式进行移除</span><br>    <span class="hljs-comment">// 因为如果不设置虚拟节点，如果删除的元素是原链表中的头节点，那么需要额外的做一些判断，比较繁琐</span><br>    ListNode dummy = <span class="hljs-keyword">new</span> ListNode(-<span class="hljs-number">1</span>);<br><br>    <span class="hljs-comment">// 虚拟头节点的下一节点指向 head 节点</span><br>    <span class="hljs-comment">// 如果原链表是  1 --&gt;  2 --&gt;  3</span><br>    <span class="hljs-comment">// 那么加上虚拟头节点就是  -1 --&gt;  1 --&gt;  2 --&gt;  3</span><br>    dummy.next = head;<br><br>    <span class="hljs-comment">// 设置一个指针，指向此时的虚拟节点</span><br>    <span class="hljs-comment">// pre: -1 --&gt;  1 --&gt;  2 --&gt;  3</span><br>    ListNode pre = dummy;<br><br>    <span class="hljs-comment">// 设置一个指针，指向原链表 head</span><br>    ListNode cur = head;<br><br>    <span class="hljs-comment">// 让 cur 不断的向后移动，直到移动到链表的最尾部，指向 null 的那个位置</span><br>    <span class="hljs-comment">// 此时 pre 还在指向 dummy</span><br>    <span class="hljs-comment">// 也就是说一开始 pre 落后 cur 一个节点</span><br>    <span class="hljs-keyword">while</span> (cur != <span class="hljs-keyword">null</span>) &#123;<br><br>        <span class="hljs-comment">// 移动的过程中，如果发现当前的节点值和目标值一样</span><br>        <span class="hljs-comment">// 我们就让指针 pre 所指向的节点的下一节点跳过这个值</span><br>        <span class="hljs-keyword">if</span> (cur.val == val) &#123;<br>            <span class="hljs-comment">// 让指针 pre 所指向的节点的下一节点跳过这个值</span><br>            pre.next = cur.next;<br>        &#125; <span class="hljs-keyword">else</span> &#123;<br>            <span class="hljs-comment">// 否则的话，pre 跟上 cur 的位置</span><br>            pre = cur;<br>        &#125;<br>        <span class="hljs-comment">// 判断完当前的节点情况后，让 cur 向后移动</span><br>        cur = cur.next;<br>    &#125;<br><br>    <span class="hljs-comment">// 最后返回 dummy 节点的下一节点</span><br>    <span class="hljs-comment">// 因为这个时候 dummy 指向的是一个我们设置的节点，它的下一节点才是原链表中的节点</span><br>    <span class="hljs-keyword">return</span> dummy.next;<br>&#125;<br><br>&#125;<br></code></pre></td></tr></table></figure>
+              <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p>给你两个 <strong>非空</strong> 的链表，表示两个非负的整数。它们每位数字都是按照 <strong>逆序</strong> 的方式存储的，并且每个节点只能存储 <strong>一位</strong> 数字。</p>
+<p>请你将两个数相加，并以相同形式返回一个表示和的链表。</p>
+<p>你可以假设除了数字 0 之外，这两个数都不会以 0 开头。</p>
+<p><img src="https://img-blog.csdnimg.cn/3f6824460384408e859c1a70233eeaf2.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="1"></p>
+<h3 id="二、参考代码"><a href="#二、参考代码" class="headerlink" title="二、参考代码"></a>二、参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> ListNode <span class="hljs-title">addTwoNumbers</span><span class="hljs-params">(ListNode l1, ListNode l2)</span> </span>&#123;<br><br>        <span class="hljs-comment">// 构建一个链表用来存放 l1 和 l2 两个链表相加的结果</span><br>        <span class="hljs-comment">// 其中 dummy 这个节点为虚拟头结点</span><br>        ListNode dummy = <span class="hljs-keyword">new</span> ListNode(-<span class="hljs-number">1</span>);<br><br>        <span class="hljs-comment">// 设置一个进位，初始化为 0</span><br>        <span class="hljs-comment">// 两个个位数相加，进位只能是 1 或者 0</span><br>        <span class="hljs-comment">// 比如 7 + 8 = 15，进位是 1</span><br>        <span class="hljs-comment">// 比如 2 + 3 = 6，没有进位，或者说进位是 0</span><br>        <span class="hljs-keyword">int</span> carryBit = <span class="hljs-number">0</span>;<br><br>        <span class="hljs-comment">// l1 和 l2 有可能为空，所以先默认结果链表从虚拟头结点位置开始</span><br>        ListNode cur = dummy;<br><br>        <span class="hljs-comment">// 同时遍历 l1 和 l2</span><br>        <span class="hljs-comment">// 只要此时 l1 和 l2 两个链表中的任意链表中节点有值，就一直加下去</span><br>        <span class="hljs-comment">// 直到两个链表中的所有节点都遍历完毕为止</span><br>        <span class="hljs-keyword">while</span>(l1 != <span class="hljs-keyword">null</span> || l2 != <span class="hljs-keyword">null</span>) &#123;<br>            <span class="hljs-comment">// 获取 l1 链表中节点的值</span><br>            <span class="hljs-keyword">int</span> x;<br><br>            <span class="hljs-comment">// 观察此时 l1 中的节点是否有值</span><br>            <span class="hljs-comment">// 如果节点不存在，那么就用 0 来占位</span><br>            <span class="hljs-keyword">if</span>( l1 == <span class="hljs-keyword">null</span>)&#123;<br>                <span class="hljs-comment">// 用 0 来占位</span><br>                x = <span class="hljs-number">0</span>;<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                <span class="hljs-comment">// 否则，将 l1 的节点值赋值给 x</span><br>                x = l1.val;<br>            &#125;<br><br>            <span class="hljs-comment">// 获取 l2 链表中节点的值</span><br>            <span class="hljs-keyword">int</span> y;<br><br>            <span class="hljs-comment">// 观察此时 l2 中的节点是否有值</span><br>            <span class="hljs-comment">// 如果节点不存在，那么就用 0 来占位</span><br>            <span class="hljs-keyword">if</span>( l2 == <span class="hljs-keyword">null</span>)&#123;<br>                <span class="hljs-comment">// 用 0 来占位</span><br>                y = <span class="hljs-number">0</span>;<br>            &#125;<span class="hljs-keyword">else</span>&#123;<br>                <span class="hljs-comment">// 否则，将 l2 的节点值赋值给 y</span><br>                y = l2.val;<br>            &#125;<br><br>            <span class="hljs-comment">// 每一位计算的同时需要考虑上一位的进位情况</span><br>            <span class="hljs-keyword">int</span> sum = x + y + carryBit;<br><br>            <span class="hljs-comment">// 获取当前计算结果的十位数</span><br>            <span class="hljs-comment">// 比如 7 + 8 = 15</span><br>            <span class="hljs-comment">// 那么 sum / 10 = 1，进位为 1</span><br>            carryBit = sum / <span class="hljs-number">10</span>;<br><br>            <span class="hljs-comment">// 获取当前计算结果的个位数</span><br>            <span class="hljs-comment">// 比如 7 + 8 = 15</span><br>            <span class="hljs-comment">// 那么 sum % 10 = 5</span><br>            <span class="hljs-keyword">int</span> digit = sum % <span class="hljs-number">10</span>;<br><br>            <span class="hljs-comment">// 构建一个节点用来存放这个个位数</span><br>            ListNode digitNode = <span class="hljs-keyword">new</span> ListNode(digit);<br><br>            <span class="hljs-comment">// 把这个节点加入到结果链表中</span><br>            cur.next = digitNode;<br><br>            <span class="hljs-comment">// 移动 cur 的位置，观察后面应该存放什么节点</span><br>            cur = cur.next;<br><br>            <span class="hljs-comment">// l1 链表中还有节点未遍历完毕就继续遍历下去</span><br>            <span class="hljs-keyword">if</span>(l1 != <span class="hljs-keyword">null</span>) l1 = l1.next;<br><br>            <span class="hljs-comment">// l2 链表中还有节点未遍历完毕就继续遍历下去</span><br>            <span class="hljs-keyword">if</span>(l2 != <span class="hljs-keyword">null</span>) l2 = l2.next;<br>        &#125;<br><br>        <span class="hljs-comment">// 两个链表的尾节点相加之后，有可能产生进位的情况</span><br>        <span class="hljs-comment">// 所以，需要构建一个新的节点用来存放这个进位的结果</span><br>        <span class="hljs-keyword">if</span>(carryBit == <span class="hljs-number">1</span>) &#123;<br>            <span class="hljs-comment">// 构建一个节点用来存放这个进位</span><br>            ListNode carryBitNode = <span class="hljs-keyword">new</span> ListNode(carryBit);<br><br>            <span class="hljs-comment">// 把这个节点加入到结果链表中</span><br>            cur.next = carryBitNode;<br>        &#125;<br><br>        <span class="hljs-comment">// 最后返回结果链表的头节点就行，即虚拟头结点的下一个节点</span><br>        <span class="hljs-keyword">return</span> dummy.next;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
 
 
             </div>
@@ -273,18 +268,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/08/16/%E7%AE%97%E6%B3%9515-%E5%8A%9B%E6%89%A3160-%E7%9B%B8%E4%BA%A4%E9%93%BE%E8%A1%A8/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">算法15[力扣160]-相交链表</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/08/12/%E7%AE%97%E6%B3%9513-%E5%8A%9B%E6%89%A392-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8%E2%85%A1/">
-                        <span class="hidden-mobile">算法13[力扣92]-反转链表Ⅱ</span>
+                      <a href="/2021/08/19/%E7%AE%97%E6%B3%9523-%E5%8A%9B%E6%89%A3142-%E7%8E%AF%E5%BD%A2%E9%93%BE%E8%A1%A8%E2%85%A1/">
+                        <span class="hidden-mobile">算法23[力扣142]-环形链表Ⅱ</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
