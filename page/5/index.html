@@ -180,39 +180,31 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-Hash%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
-          <img src="/img/redis.png" srcset="/img/loading.gif" lazyload alt="Redis学习笔记2 Hash数据类型">
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9514-%E5%8A%9B%E6%89%A3203-%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0/" target="_self">
+          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法14[力扣203]-移除链表元素">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-Hash%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">Redis学习笔记2 Hash数据类型</a>
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9514-%E5%8A%9B%E6%89%A3203-%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0/">算法14[力扣203]-移除链表元素</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B02-Hash%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9514-%E5%8A%9B%E6%89%A3203-%E7%A7%BB%E9%99%A4%E9%93%BE%E8%A1%A8%E5%85%83%E7%B4%A0/">
           
           
             
           
-          一、hash类型
-新的存储需求：对一系列存储的数据进行编组，方便管理，典型应用存储对象信息。
+          一、题目描述给你一个链表的头节点 head 和一个整数 val ，请你删除链表中所有满足 Node.val val 的节点，并返回 新的头节点 。
+二、题目解析移除的节点有两种情况。
+1、移除的是头节点
+2、移除的是其它节点
+对于移除其它节点这种情况，我们可以让它的前一个节点指向移除节点的下一节点来解决。
 
-需要的存储结构：一个存储空间保存多个键值对数据
-
-hash类型：底层使用哈希表结构实现数据存储。
-
-
-
-hash存储结构优化
-
-如果field数量较少，存储结构优化为类数组结构
-如果field数量较多，存储结构使用HashMap结构
-
-二、hash类型数据的基本操作
-添加/修改数据1hset key f
+对于移除头节点这种情况，为了让解决情况和上面的逻辑一样，我们借助一个虚拟节点来解决。
+我们
         </a>
       </p>
 
@@ -220,8 +212,8 @@ hash存储结构优化
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-04-21 12:35" pubdate>
-              2021-04-21
+            <time datetime="2021-08-12 17:19" pubdate>
+              2021-08-12
             </time>
           </div>
         
@@ -229,7 +221,7 @@ hash存储结构优化
           <div class="post-meta mr-3">
             <i class="iconfont icon-category"></i>
             
-              <a href="/categories/Redis/">Redis</a>
+              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
             
           </div>
         
@@ -237,7 +229,7 @@ hash存储结构优化
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">Redis</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
             
           </div>
         
@@ -249,53 +241,28 @@ hash存储结构优化
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/04/20/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-String%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
-          <img src="/img/redis.png" srcset="/img/loading.gif" lazyload alt="Redis学习笔记1 String数据类型">
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9513-%E5%8A%9B%E6%89%A392-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8%E2%85%A1/" target="_self">
+          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法13[力扣92]-反转链表Ⅱ">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/04/20/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-String%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">Redis学习笔记1 String数据类型</a>
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9513-%E5%8A%9B%E6%89%A392-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8%E2%85%A1/">算法13[力扣92]-反转链表Ⅱ</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2021/04/20/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B01-String%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9513-%E5%8A%9B%E6%89%A392-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8%E2%85%A1/">
           
           
             
           
-          redis 数据类型
-String
-Hash
-list
-set
-sorted_set
+          一、题目描述给你单链表的头指针 head 和两个整数 left 和 right ，其中 left &lt;= right 。请你反转从位置 left 到位置 right 的链表节点，返回 反转后的链表 。
 
-String数据类型1.redis 数据存储格式
- redis自身是一个Map，其中所有的数据类型都是采用key：value的形式存储。
-
-数据类型指的是存储的数据的类型，也就是value部分的类型，key部分永远都是字符串。
-
-
-
-key
-value
-
-
-
-name
-Ruby
-
-
-age
-17
-
-
-
-
-2.s
+二、题目解析1、构建一个虚拟节点，让它指向原链表的头节点。
+2、设置两个指针，pre 指针指向以虚拟头节点为链表的头部位置，cur 指针指向原链表的头部位置。
+3、让着两个指针向前移动，直到 
         </a>
       </p>
 
@@ -303,8 +270,8 @@ age
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-04-20 18:31" pubdate>
-              2021-04-20
+            <time datetime="2021-08-12 16:12" pubdate>
+              2021-08-12
             </time>
           </div>
         
@@ -312,7 +279,7 @@ age
           <div class="post-meta mr-3">
             <i class="iconfont icon-category"></i>
             
-              <a href="/categories/Redis/">Redis</a>
+              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
             
           </div>
         
@@ -320,7 +287,7 @@ age
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/Redis/">Redis</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
             
           </div>
         
@@ -332,29 +299,25 @@ age
     
     
       <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/04/19/%E4%B8%80%E4%BA%9B%E5%A5%BD%E7%94%A8%E7%9A%84%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/" target="_self">
-          <img src="/img/avatar.png" srcset="/img/loading.gif" lazyload alt="一些好用的网站推荐">
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9512-%E5%8A%9B%E6%89%A321-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8/" target="_self">
+          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法12[力扣21]-合并两个有序链表">
         </a>
       </div>
     
     <article class="col-12 col-md-8 mx-auto index-info">
       <h1 class="index-header">
         
-        <a href="/2021/04/19/%E4%B8%80%E4%BA%9B%E5%A5%BD%E7%94%A8%E7%9A%84%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/">一些好用的网站推荐</a>
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9512-%E5%8A%9B%E6%89%A321-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8/">算法12[力扣21]-合并两个有序链表</a>
       </h1>
 
       <p class="index-excerpt">
-        <a href="/2021/04/19/%E4%B8%80%E4%BA%9B%E5%A5%BD%E7%94%A8%E7%9A%84%E7%BD%91%E7%AB%99%E6%8E%A8%E8%8D%90/">
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9512-%E5%8A%9B%E6%89%A321-%E5%90%88%E5%B9%B6%E4%B8%A4%E4%B8%AA%E6%9C%89%E5%BA%8F%E9%93%BE%E8%A1%A8/">
           
           
             
           
-          一些我平常使用的网站，个人觉得还都挺不错的，就写在上面推荐一下。
-设计类1.Canva网址：https://www.canva.cn
-这是一个在线设计的网站。各种实用模板，包括海报，PPT、微信公众号封面，LOGI等。还有一些不同的图片素材。
-
-2.Pexels网址：https://www.pexels.com/zh-cn/
-具有很丰富的高质量图片网站，不光可以免费下载高清图片，而且还可以下载视频
+          一、题目描述将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的
+二、参考代码1234567891011121314151617181920212223242526272829303132333435363738394041424344454647class Solution &#123;    public ListNode mergeTwoLists(
         </a>
       </p>
 
@@ -362,8 +325,8 @@ age
         
           <div class="post-meta mr-3">
             <i class="iconfont icon-date"></i>
-            <time datetime="2021-04-19 22:16" pubdate>
-              2021-04-19
+            <time datetime="2021-08-12 15:39" pubdate>
+              2021-08-12
             </time>
           </div>
         
@@ -371,7 +334,7 @@ age
           <div class="post-meta mr-3">
             <i class="iconfont icon-category"></i>
             
-              <a href="/categories/%E5%A5%BD%E7%94%A8%E7%9A%84%E7%BD%91%E7%AB%99/">好用的网站</a>
+              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
             
           </div>
         
@@ -379,7 +342,434 @@ age
           <div class="post-meta">
             <i class="iconfont icon-tags"></i>
             
-              <a href="/tags/%E5%AE%9E%E7%94%A8%E7%BD%91%E7%AB%99/">实用网站</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9511-%E5%8A%9B%E6%89%A3206-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/" target="_self">
+          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法11[力扣206]-反转链表">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9511-%E5%8A%9B%E6%89%A3206-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/">算法11[力扣206]-反转链表</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/08/12/%E7%AE%97%E6%B3%9511-%E5%8A%9B%E6%89%A3206-%E5%8F%8D%E8%BD%AC%E9%93%BE%E8%A1%A8/">
+          
+          
+            
+          
+          一、题目描述给你单链表的头节点 head ，请你反转链表，并返回反转后的链表。
+1 –&gt; 2 –&gt; 3 –&gt; 4 –&gt; 5 –&gt; null
+5 –&gt; 4 –&gt; 3 –&gt; 2 –&gt; 1 –&gt; null
+二、题目解析这道题目有很多种解法，递归解法最难以理解整个过程，今天我就带大家来探究一次！
+先来看分析过程，这里看不懂没关系，一定要看最后的动
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-08-12 14:23" pubdate>
+              2021-08-12
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/08/09/%E7%AE%97%E6%B3%9510-%E5%8A%9B%E6%89%A3239-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/" target="_self">
+          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法10[力扣239]-滑动窗口的最大值">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/08/09/%E7%AE%97%E6%B3%9510-%E5%8A%9B%E6%89%A3239-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/">算法10[力扣239]-滑动窗口的最大值</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/08/09/%E7%AE%97%E6%B3%9510-%E5%8A%9B%E6%89%A3239-%E6%BB%91%E5%8A%A8%E7%AA%97%E5%8F%A3%E7%9A%84%E6%9C%80%E5%A4%A7%E5%80%BC/">
+          
+          
+            
+          
+          一、题目描述给定一个数组 nums 和滑动窗口的大小 k，请找出所有滑动窗口里的最大值。
+示例:
+12输入: nums = [1,3,-1,-3,5,3,6,7], 和 k = 3输出: [3,3,5,5,6,7] 
+
+解释
+
+提示：
+
+你可以假设 k 总是有效的，在输入数组不为空的情况下，1 ≤ k ≤ 输入数组的大小。
+
+二、题目解析滑动窗口这个词包含两个概念，一个是滑动，一个是窗口。
+首先是
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-08-09 20:08" pubdate>
+              2021-08-09
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/08/09/%E7%AE%97%E6%B3%959-%E5%8A%9B%E6%89%A3739-%E6%AF%8F%E6%97%A5%E6%B8%A9%E5%BA%A6/" target="_self">
+          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法9[力扣739]-每日温度">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/08/09/%E7%AE%97%E6%B3%959-%E5%8A%9B%E6%89%A3739-%E6%AF%8F%E6%97%A5%E6%B8%A9%E5%BA%A6/">算法9[力扣739]-每日温度</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/08/09/%E7%AE%97%E6%B3%959-%E5%8A%9B%E6%89%A3739-%E6%AF%8F%E6%97%A5%E6%B8%A9%E5%BA%A6/">
+          
+          
+            
+          
+          一、问题描述根据每日 气温 列表，请重新生成一个列表，对应位置的输入是你需要再等待多久温度才会升高超过该日的天数。如果之后都不会升高，请在该位置用 0 来代替。
+例如，给定一个列表 temperatures = [73, 74, 75, 71, 69, 72, 76, 73]，你的输出应该是 [1, 1, 4, 2, 1, 1, 0, 0]。
+提示：气温 列表长度的范围是 [1, 30000]。每
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-08-09 15:08" pubdate>
+              2021-08-09
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/08/05/%E7%AE%97%E6%B3%958-%E5%8A%9B%E6%89%A3155-%E6%9C%80%E5%B0%8F%E6%A0%88/" target="_self">
+          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法8[力扣155]-最小栈">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/08/05/%E7%AE%97%E6%B3%958-%E5%8A%9B%E6%89%A3155-%E6%9C%80%E5%B0%8F%E6%A0%88/">算法8[力扣155]-最小栈</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/08/05/%E7%AE%97%E6%B3%958-%E5%8A%9B%E6%89%A3155-%E6%9C%80%E5%B0%8F%E6%A0%88/">
+          
+          
+            
+          
+          一、问题描述设计一个支持 push ，pop ，top 操作，并能在常数时间内检索到最小元素的栈。
+
+push(x) —— 将元素 x 推入栈中。
+pop() —— 删除栈顶的元素。
+top() —— 获取栈顶元素。
+getMin() —— 检索栈中的最小元素。
+
+二、题目解析由于需要在常数时间内找到最小的元素，那么说明肯定是不能使用遍历，因为遍历是 O(n) 级别的时间，那么只能使用辅助空间进行
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-08-05 15:25" pubdate>
+              2021-08-05
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/08/05/%E7%AE%97%E6%B3%957-%E5%8A%9B%E6%89%A3232-%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/" target="_self">
+          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法7[力扣232]-用栈实现队列">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/08/05/%E7%AE%97%E6%B3%957-%E5%8A%9B%E6%89%A3232-%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/">算法7[力扣232]-用栈实现队列</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/08/05/%E7%AE%97%E6%B3%957-%E5%8A%9B%E6%89%A3232-%E7%94%A8%E6%A0%88%E5%AE%9E%E7%8E%B0%E9%98%9F%E5%88%97/">
+          
+          
+            
+          
+          一、题目描述请你仅使用两个栈实现先入先出队列。
+队列应当支持一般队列支持的所有操作（push、pop、peek、empty）：
+实现 MyQueue 类：
+
+void push(int x)将元素 x 推到队列的末尾
+int pop() 从队列的开头移除并返回元素
+int peek() 返回队列开头的元素
+boolean empty()如果队列为空，返回 true ；否则，返回 false
+
+二、
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-08-05 14:42" pubdate>
+              2021-08-05
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/08/05/%E7%AE%97%E6%B3%956-%E5%8A%9B%E6%89%A320-%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/" target="_self">
+          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法6[力扣20]-有效的括号">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/08/05/%E7%AE%97%E6%B3%956-%E5%8A%9B%E6%89%A320-%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/">算法6[力扣20]-有效的括号</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/08/05/%E7%AE%97%E6%B3%956-%E5%8A%9B%E6%89%A320-%E6%9C%89%E6%95%88%E7%9A%84%E6%8B%AC%E5%8F%B7/">
+          
+          
+            
+          
+          一、题目描述给定一个只包括 ‘(‘，’)’，’{‘，’}’，’[‘，’]’ 的字符串 s ，判断字符串是否有效。
+有效字符串需满足：
+
+1、左括号必须用相同类型的右括号闭合。
+2、左括号必须以正确的顺序闭合。
+
+二、题目解析有效的括号满足以下几个条件：
+
+1、字符串的长度一定是偶数。
+2、括号的匹配遵循右括号和最近的一个左括号进行匹配，它们匹配成功才有可能是有效的括号
+
+三、参考代码1234567
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-08-05 10:35" pubdate>
+              2021-08-05
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/08/02/%E7%AE%97%E6%B3%955-%E5%8A%9B%E6%89%A311-%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/" target="_self">
+          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法5[力扣11]-盛最多水的容器">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/08/02/%E7%AE%97%E6%B3%955-%E5%8A%9B%E6%89%A311-%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/">算法5[力扣11]-盛最多水的容器</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/08/02/%E7%AE%97%E6%B3%955-%E5%8A%9B%E6%89%A311-%E7%9B%9B%E6%9C%80%E5%A4%9A%E6%B0%B4%E7%9A%84%E5%AE%B9%E5%99%A8/">
+          
+          
+            
+          
+          一、题目描述给你 n 个非负整数 a1，a2，…，an，每个数代表坐标中的一个点 (i, ai) 。在坐标内画 n 条垂直线，垂直线 i 的两个端点分别为 (i, ai) 和 (i, 0) 。
+找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+二、题目解析一开始，我们先去考虑相距最远的两个柱子所能容纳水的面积。
+
+接下来去思考，我们去移动哪根柱子会更加合适?
+这里我们需要注意一
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-08-02 12:30" pubdate>
+              2021-08-02
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
             
           </div>
         
@@ -391,7 +781,7 @@ age
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <a class="extend prev" rel="prev" href="/page/4/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="page-number current">5</span>
+      <a class="extend prev" rel="prev" href="/page/4/#board"><i class="iconfont icon-arrowleft"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/#board">3</a><a class="page-number" href="/page/4/#board">4</a><span class="page-number current">5</span><a class="page-number" href="/page/6/#board">6</a><a class="page-number" href="/page/7/#board">7</a><a class="page-number" href="/page/8/#board">8</a><a class="extend next" rel="next" href="/page/6/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 
