@@ -18,7 +18,7 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>算法54[力扣33]-搜索旋转排序数组 - Hexo</title>
+  <title>JVM学习笔记3 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="算法54[力扣33]-搜索旋转排序数组">
+            <span class="h2" id="subtitle" title="JVM学习笔记3">
               
             </span>
 
@@ -173,8 +173,8 @@
   
     <span class="post-meta">
       <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-      <time datetime="2021-09-24 16:40" pubdate>
-        September 24, 2021 pm
+      <time datetime="2021-10-11 20:47" pubdate>
+        October 11, 2021 pm
       </time>
     </span>
   
@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      912 字
+      586 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      11
+      6
        分钟
     </span>
   
@@ -225,31 +225,49 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">算法54[力扣33]-搜索旋转排序数组</h1>
+            <h1 style="display: none">JVM学习笔记3</h1>
             
             <div class="markdown-body">
-              <h3 id="一、题目描述"><a href="#一、题目描述" class="headerlink" title="一、题目描述"></a>一、题目描述</h3><p>整数数组 <code>nums</code> 按升序排列，数组中的值 <strong>互不相同</strong> 。</p>
-<p>在传递给函数之前，<code>nums</code> 在预先未知的某个下标 <code>k</code>（<code>0 &lt;= k &lt; nums.length</code>）上进行了 <strong>旋转</strong>，使数组变为 <code>[nums[k], nums[k+1], ..., nums[n-1], nums[0],nums[1], ..., nums[k-1]]</code>（下标 从 0 开始 计数）。例如， <code>[0,1,2,4,5,6,7]</code> 在下标 <code>3</code> 处经旋转后可能变为 <code>[4,5,6,7,0,1,2]</code> 。</p>
-<p>给你 <strong>旋转后</strong> 的数组 <code>nums</code> 和一个整数 <code>target</code> ，如果 <code>nums</code> 中存在这个目标值<code>target</code> ，则返回它的下标，否则返回 <code>-1</code> 。</p>
-<p><strong>示例 1：</strong></p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix">输入：<span class="hljs-attr">nums</span> = [<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>], <span class="hljs-attr">target</span> = <span class="hljs-number">0</span><br>输出：<span class="hljs-number">4</span><br><br></code></pre></td></tr></table></figure>
-
-<p><strong>示例 2：</strong></p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix">输入：<span class="hljs-attr">nums</span> = [<span class="hljs-number">4</span>,<span class="hljs-number">5</span>,<span class="hljs-number">6</span>,<span class="hljs-number">7</span>,<span class="hljs-number">0</span>,<span class="hljs-number">1</span>,<span class="hljs-number">2</span>], <span class="hljs-attr">target</span> = <span class="hljs-number">3</span><br>输出：-<span class="hljs-number">1</span><br><br></code></pre></td></tr></table></figure>
-
-<p><strong>示例 3：</strong></p>
-<figure class="highlight nix"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs nix">输入：<span class="hljs-attr">nums</span> = [<span class="hljs-number">1</span>], <span class="hljs-attr">target</span> = <span class="hljs-number">0</span><br>输出：-<span class="hljs-number">1</span><br><br></code></pre></td></tr></table></figure>
-
-<p><strong>提示</strong>：</p>
+              <h3 id="一、垃圾回收器"><a href="#一、垃圾回收器" class="headerlink" title="一、垃圾回收器"></a>一、垃圾回收器</h3><p><img src="https://img2020.cnblogs.com/other/1218593/202006/1218593-20200617151346008-1339974706.webp" srcset="/img/loading.gif" lazyload alt="垃圾收集器"></p>
+<p><strong>相关概念</strong></p>
 <ul>
-<li>1 &lt;= nums.length &lt;= 5000`</li>
-<li><code>-10^4 &lt;= nums[i] &lt;= 10^4</code></li>
-<li><code>nums</code> 中的每个值都 <strong>独一无二</strong></li>
-<li>题目数据保证 <code>nums</code> 在预先未知的某个下标上进行了旋转</li>
-<li><code>-10^4 &lt;= target &lt;= 10^4</code></li>
+<li>并行收集：指多条垃圾收集线程并行工作，但此时用户线程仍处于等待状态</li>
+<li>并发收集：指用户线程与垃圾收集线程同时工作（不一定是并行的可能会交替执行）。用户程序在继续运行，而垃圾收集程序运行在另一个CPU上</li>
+<li>吞吐量：即CPU用于运行用户代码的时间与CPU总消耗时间的比值（吞吐量 = 运行用户代码时间/（运行用户代码时间+垃圾收集时间）），也就是例如：虚拟机共运行100min，垃圾收集器花掉1min，那么吞吐量为99%。</li>
 </ul>
-<p><strong>进阶：</strong>你可以设计一个时间复杂度为 <code>O(log n)</code> 的解决方案吗？</p>
-<h3 id="二、参考代码"><a href="#二、参考代码" class="headerlink" title="二、参考代码"></a>二、参考代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Solution</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">int</span> <span class="hljs-title">search</span><span class="hljs-params">(<span class="hljs-keyword">int</span>[] nums, <span class="hljs-keyword">int</span> target)</span> </span>&#123;<br><br>        <span class="hljs-comment">// left 指向当前区间的最左边位置，所以初始化为 0</span><br>        <span class="hljs-keyword">int</span> left = <span class="hljs-number">0</span>;<br><br>        <span class="hljs-comment">// right 指向当前区间的最右边位置，所以初始化为 nums.length - 1</span><br>        <span class="hljs-keyword">int</span> right = nums.length - <span class="hljs-number">1</span>;<br><br>        <span class="hljs-comment">// 循环进行二分查找，直到左端点位置超过了右端点</span><br>        <span class="hljs-comment">// 或者在循环过程中找到了 target</span><br>        <span class="hljs-keyword">while</span>( left &lt;= right)&#123;<br><br>            <span class="hljs-comment">// 计算当前区间的中间位置，向下取整</span><br>            <span class="hljs-keyword">int</span> mid = (left + right) / <span class="hljs-number">2</span>;<br><br>            <span class="hljs-comment">// 如果中间位置数字 nums[mid] 等于目标值 target，那么说明找到了</span><br>            <span class="hljs-comment">// 返回当前的下标 mid</span><br>            <span class="hljs-keyword">if</span>(nums[mid] == target) <span class="hljs-keyword">return</span> mid;<br><br>            <span class="hljs-comment">// 否则的话需要先确定 mid 的左边还是右边为有序区间</span><br><br>            <span class="hljs-comment">// 如果当前区间最左端的值 nums[left] 小于等于 nums[mid]</span><br>            <span class="hljs-comment">// 说明从 left 到 mid 这段区间是递增的，为有序区间</span><br>            <span class="hljs-comment">// 即 mid 的左侧为有序区间，右侧为无序区间</span><br>            <span class="hljs-keyword">if</span>(nums[left] &lt;= nums[mid])&#123;<br><br>                <span class="hljs-comment">// 先去判断 target 是否在左侧有序区间内</span><br>                <span class="hljs-comment">// 如果目标值 target 大于这段有序区间的最小值 nums[left] 同时小于这段有序区间的最大值 nums[mid]</span><br>                <span class="hljs-comment">// 那么说明需要在这段有序区间去寻找 target </span><br>                <span class="hljs-keyword">if</span>(target &gt;= nums[left] &amp;&amp; target &lt;= nums[mid])&#123;<br><br>                    <span class="hljs-comment">// 所以缩小范围为 left 到 mid - 1</span><br>                    <span class="hljs-comment">// 当前区间的左侧为 left，右侧 right = mid - 1</span><br>                    right = mid - <span class="hljs-number">1</span>;<br><br>                    <span class="hljs-comment">// 否则说明需要在 mid 的右侧无序区间搜索</span><br>                &#125;<span class="hljs-keyword">else</span>&#123;<br><br>                    <span class="hljs-comment">// 所以缩小范围为 mid + 1 到 right</span><br>                    <span class="hljs-comment">// 当前区间的左侧为 left = mid + 1，右侧 right </span><br>                    left = mid + <span class="hljs-number">1</span>;<br>                &#125;<br><br>            <span class="hljs-comment">// 否则说明当前区间最左端的值 nums[left] 大于 nums[mid]</span><br>            <span class="hljs-comment">// 说明从 left 到 mid 这段区间是无序区间</span><br>            <span class="hljs-comment">// 即 mid 的左侧为无序区间，右侧为有序区间 </span><br>            &#125;<span class="hljs-keyword">else</span>&#123;<br><br>                <span class="hljs-comment">// 先去判断 target 是否在右侧有序区间内</span><br>                <span class="hljs-comment">// 如果目标值 target 大于这段有序区间的最小值 nums[mid] 同时小于这段有序区间的最大值 nums[right]</span><br>                <span class="hljs-comment">// 那么说明需要在这段有序区间去寻找 target </span><br>                <span class="hljs-keyword">if</span>(target &gt;= nums[mid] &amp;&amp; target &lt;= nums[right])&#123;<br><br>                    <span class="hljs-comment">// 所以缩小范围为 mid + 1 到 right</span><br>                    <span class="hljs-comment">// 当前区间的左侧为 left = mid + 1，右侧 right </span><br>                    left = mid + <span class="hljs-number">1</span>;<br><br>                <span class="hljs-comment">// 否则说明需要在 mid 的左侧无序区间搜索</span><br>                &#125;<span class="hljs-keyword">else</span>&#123;<br><br>                    <span class="hljs-comment">// 所以缩小范围为 left 到 mid - 1</span><br>                    <span class="hljs-comment">// 当前区间的左侧为 left，右侧 right = mid - 1</span><br>                    right = mid - <span class="hljs-number">1</span>;<br><br>                &#125;<br>            &#125;<br>        &#125;<br><br>        <span class="hljs-comment">// 目标值不存在，返回 -1</span><br>        <span class="hljs-keyword">return</span> - <span class="hljs-number">1</span>;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+<h4 id="1-串行"><a href="#1-串行" class="headerlink" title="1.串行"></a>1.串行</h4><ul>
+<li>单线程</li>
+<li>堆内存较小，适合个人电脑</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210210092812153.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl81MDI4MDU3Ng==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="并行"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">-XX:+UseSerialGC=serial + serialOld<br></code></pre></td></tr></table></figure>
+
+<p><strong>安全点</strong>： 让其他线程都在这个点停下来，以免垃圾回收时移动对象地址，使得其他线程找不到移动的对象</p>
+<p>因为是串行的，所以只有一个垃圾回收线程。并且该线程执行回收工作时，其他线程进入阻塞状态。</p>
+<p><strong>serial收集器</strong>： </p>
+<p>Serial收集器是最基本的、发展历史最悠久的收集器</p>
+<p><strong>特点</strong>：单线程、简单高效（与其他收集器相的单线程相比），采用复制算法。对于限定单个CPU环境来说，Serial收集器由于没有线程交互的开销，专心做垃圾收集自然可以获得最高的单线程收集效率。收集器进行垃圾回收时，必须暂停其他所有的工作线程，直到它结束（STW）。</p>
+<p><strong>ParNew收集器</strong></p>
+<p>ParNew收集器其实就是Serial收集器的多线程版本</p>
+<p><strong>特点</strong>：多线程、ParNew收集器默认开启的收集线程数与CPU的数量相同，在CPU非常多的环境中，可以使用-XX：ParallelGCThreads参数来限制垃圾收集的线程数。和Serial收集器一样存在STW问题。</p>
+<p><strong>Serial Old收集器</strong></p>
+<p>serial old是serial收集器的老年代版本</p>
+<p><strong>特点</strong>： 同样是单线程收集器，采用标记-整理算法。</p>
+<h4 id="2-吞吐量优先"><a href="#2-吞吐量优先" class="headerlink" title="2.吞吐量优先"></a>2.吞吐量优先</h4><ul>
+<li>多线程</li>
+<li>堆内存较大，多核cpu</li>
+<li>让单位时间内，STW的时间最短0.2 0.2 = 0.4</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210210094915306.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl81MDI4MDU3Ng==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="吞吐量优先"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">-XX：+UseParallelGC ~ -XX：+UsePrallerOldGC<br>-XX：+UseAdaptiveSizePolicy<br>-XX：GCTimeRatio=ratio <span class="hljs-comment">/*  1/（1+radio）*/</span><br>-XX：MaxGCPauseMillis=ms<span class="hljs-comment">// 200ms</span><br>-XX：ParallelGCThreads=n<br></code></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
 
 
             </div>
@@ -260,7 +278,7 @@
                   <div class="post-meta mr-3">
                     <i class="iconfont icon-category"></i>
                     
-                      <a class="hover-with-bg" href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
+                      <a class="hover-with-bg" href="/categories/Java/">Java</a>
                     
                   </div>
                 
@@ -268,7 +286,7 @@
                   <div class="post-meta">
                     <i class="iconfont icon-tags"></i>
                     
-                      <a class="hover-with-bg" href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
+                      <a class="hover-with-bg" href="/tags/JVM/">JVM</a>
                     
                   </div>
                 
@@ -285,18 +303,12 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2021/10/11/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03/">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">JVM学习笔记3</span>
-                        <span class="visible-mobile">Previous</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
                     
-                      <a href="/2021/09/24/%E7%AE%97%E6%B3%9553-%E5%8A%9B%E6%89%A334-%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/">
-                        <span class="hidden-mobile">算法53[力扣34]-在排序数组中查找元素的第一个和最后一个位置</span>
+                      <a href="/2021/09/24/%E7%AE%97%E6%B3%9554-%E5%8A%9B%E6%89%A333-%E6%90%9C%E7%B4%A2%E6%97%8B%E8%BD%AC%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84/">
+                        <span class="hidden-mobile">算法54[力扣33]-搜索旋转排序数组</span>
                         <span class="visible-mobile">Next</span>
                         <i class="iconfont icon-arrowright"></i>
                       </a>
