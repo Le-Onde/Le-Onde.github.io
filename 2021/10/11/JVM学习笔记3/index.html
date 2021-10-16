@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      586 字
+      2.2k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      6
+      24
        分钟
     </span>
   
@@ -261,14 +261,121 @@
 <p><img src="https://img-blog.csdnimg.cn/20210210094915306.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl81MDI4MDU3Ng==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="吞吐量优先"></p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java">-XX：+UseParallelGC ~ -XX：+UsePrallerOldGC<br>-XX：+UseAdaptiveSizePolicy<br>-XX：GCTimeRatio=ratio <span class="hljs-comment">/*  1/（1+radio）*/</span><br>-XX：MaxGCPauseMillis=ms<span class="hljs-comment">// 200ms</span><br>-XX：ParallelGCThreads=n<br></code></pre></td></tr></table></figure>
 
+<p><strong>Parallel Scavenge收集器</strong></p>
+<p>与吞吐量关系密切，故也称为吞吐量优先收集器</p>
+<p><strong>特点</strong>： 属于新生代收集器也是采用复制算法的收集器（用到了新生代的幸存区），又是并行的多线程收集器（与ParNew收集器类似）</p>
+<p>该收集器的目标是达到一个可控制的吞吐量。还有一个值得关注的点是：GC自适应调节策略（与ParNew收集器最重要的一个区别）</p>
+<p>GC自适应调节策略：</p>
+<p>Parallel Scavenge收集器可设置 -XX：+UseAdptiveSizePocily参数</p>
+<p>当开关打开时不需要手动设置新生代的大小（-Xmn）、Eden与Survivor区的比例（-XX：SurvivorRation）</p>
+<p>晋升老年代的对象年龄（-XX：PretenureSizeThreshold）等，虚拟机会根据系统的运行状况收集性能监控信息，动态设置这些参数以提供最优的停顿时间和最高的吞吐量，这种调节方式称为 GC的自适应调节策略。</p>
+<p>Parallel Scavenge收集器使用两个参数控制吞吐量</p>
+<ul>
+<li>XX：MaxGCPauseMillis=ms控制最大的垃圾收集停顿时间（默认200ms）</li>
+<li>XX：GCTimeRatio= ratio直接设置吞吐量大小</li>
+</ul>
+<p><strong>Parallel Old收集器</strong></p>
+<p>是Parallel Scavenge收集器的老年代版本</p>
+<p><strong>特点</strong>： 多线程，采用标记-整理算法（老年代没有幸存区）</p>
+<h4 id="3-响应时间优先"><a href="#3-响应时间优先" class="headerlink" title="3.响应时间优先"></a>3.响应时间优先</h4><ul>
+<li>多线程</li>
+<li>堆内存较大，多核CPU</li>
+<li>尽可能让STW的单词时间最短0.1 0.1 0.1 0.1 0.1 = 0.5</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210210104030390.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl81MDI4MDU3Ng==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="响应时间优先"></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs java">-XX：+UseConcMarkSweepGC ~ -XX：+UseParNewGC ~ SerialOld<br>-XX：ParallelGCThreads=n ~ -XX：ConcGCThreads=threads<br>-XX：CMSInitiatingOccupancyFraction=percent<br>-XX：+CMSScavengeBeforeRemark<br></code></pre></td></tr></table></figure>
 
+<p><strong>CMS收集器</strong></p>
+<p>Concurrent Mark Sweep，一种以获取最短回收停顿时间为目标的<strong>老年代收集器</strong></p>
+<p><strong>特点</strong>：基于标记-清理算法实现。并发收集、低停顿、但是会产生内存碎片</p>
+<p><strong>应用场景</strong>： 适用于注重服务的相应速度，希望系统停顿时间最短，给用户带来更好的体验等场景下，如web程序，b/s服务</p>
+<p><strong>CMS收集器的运行过程分为下列4步</strong><br><strong>初始标记</strong>： 标记GC Roots能直接到的对象，速度很快但是仍存在STP问题</p>
+<p><strong>并发标记</strong>： 进行GC Roots Tracing的过程，找出存活对象且用户线程可并发执行</p>
+<p><strong>重新标记</strong>： 为了修改并发标记期间因用户程序继续运行而导致标记产生变动的那一部分对象的标记记录。仍然存在STP问题</p>
+<p>并发清理：对标记的对象进行清理回收，清除过程中，可能仍然会产生新的垃圾，这些垃圾称为浮动垃圾，如果当用户需要存入一个很大的对象时，新生代放不下去，老年代由于浮动垃圾过多，就会退化为serial old收集器，将老年代的垃圾进行标记-整理，这也很消耗时间</p>
+<p>CMS收集器的内存回收过程是与用户线程一起并发执行的，可以搭配ParNew收集器（多线程、新生代、复制算法）与Serial Old收集器（单线程、老年代、标记-整理算法）使用</p>
+<h4 id="4-G1收集器"><a href="#4-G1收集器" class="headerlink" title="4.G1收集器"></a>4.G1收集器</h4><p><strong>定义</strong>： Garbage First</p>
+<p><strong>使用场景</strong>： </p>
+<ul>
+<li>同时注重吞吐量和低延迟（响应时间）</li>
+<li>超大堆内存（内存大的），会将堆内存划分为多个大小相等的区域</li>
+<li>整体上是标记-整理算法，两个区域之间是复制算法</li>
+</ul>
+<p><strong>相关参数</strong></p>
+<p>JDK8并不是默认开启的，所需要参数开启</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs java">-XX:+UseG1GC<br>-XX:G1HeapRegionSize=size<br>-XX:MaxGCPauseMillis=time<br></code></pre></td></tr></table></figure>
 
+<p><strong>G1垃圾回收阶段</strong></p>
+<p><img src="https://img-blog.csdnimg.cn/20210210114932887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl81MDI4MDU3Ng==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="G1垃圾回收阶段"></p>
+<p>Young Collection：对新生代垃圾收集</p>
+<p>Young Collection + Concurrent Mark：如果老年代内存到达一定的阈值了，新生代垃圾收集同时会执行一些并发的标记</p>
+<p>Mixed Collection：会对新生代+老年代+幸存区等进行混合收集，然后收集结束，会重新进入新生代收集</p>
+<h5 id="Young-Collection"><a href="#Young-Collection" class="headerlink" title="Young Collection"></a>Young Collection</h5><p><strong>新生代存在STW</strong>：</p>
+<p>分代是按对象的生命周期划分，分区则是将堆空间划分连续几个不同小区间，每一个小区间独立回收，可以控制回收多少个小区间，方便控制GC产生的停顿时间</p>
+<p>E：eden  S：幸存区  O：老年代</p>
+<p>新生代收集会产生STW</p>
+<p><img src="https://img-blog.csdnimg.cn/20210210122339138.gif" srcset="/img/loading.gif" lazyload alt="Young Collection"></p>
+<h5 id="Young-Collection-CM"><a href="#Young-Collection-CM" class="headerlink" title="Young Collection + CM"></a>Young Collection + CM</h5><p>在Young GC时会进行GC Root的初始化标记</p>
+<p>老年代占用堆空间比例达到阈值时，进行并发标记（不会STW），有下面的JVM参数决定</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">-XX:InitiatingHeapOccupancyPercent = percent  <span class="hljs-comment">//(默认45%)</span><br></code></pre></td></tr></table></figure>
 
+<p><img src="https://img-blog.csdnimg.cn/20210210122601873.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl81MDI4MDU3Ng==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="Young Collection + CM"></p>
+<h5 id="Mixed-Collection"><a href="#Mixed-Collection" class="headerlink" title="Mixed Collection"></a>Mixed Collection</h5><p>会对E S O进行<strong>全面的回收</strong></p>
+<ul>
+<li>最终标记会STW</li>
+<li>拷贝存活会STW</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs java">-XX:MaxGCPauseMills = xxms  <span class="hljs-comment">//用于指定最长的停顿时间</span><br></code></pre></td></tr></table></figure>
 
-
-
-
-
+<p>Q:为什么有的老年代被拷贝了，有的没有？</p>
+<p>A:因为指定了最大停顿时间，如果对所有老年代都进行回收，耗时可能过高。为了保证时间不超过设定的停顿时间，会回收最有价值的老年代（回收后，能够得到更多的内存）</p>
+<p><img src="https://img-blog.csdnimg.cn/20210210144216170.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl81MDI4MDU3Ng==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="Mixed Collection"></p>
+<h5 id="Full-GC"><a href="#Full-GC" class="headerlink" title="Full GC"></a>Full GC</h5><ul>
+<li>Serial GC<ul>
+<li>新生代内存不足发生的垃圾收集 - minor GC</li>
+<li>老年代内存不足发生的垃圾收集 - full GC</li>
+</ul>
+</li>
+<li>Parallel GC<ul>
+<li>新生代内存不足发生的垃圾收集 - minor GC</li>
+<li>老年代内存不足发生的垃圾收集 - full GC</li>
+</ul>
+</li>
+<li>CMS<ul>
+<li>新生代内存不足发生的垃圾收集 - minor GC</li>
+<li>老年代内存不足时（老年代所占内存超过阈值）<ul>
+<li>如果垃圾产生速度慢于垃圾回收速度，不会触发Full GC，还是并发地清理</li>
+<li>如果垃圾产生速度快于垃圾回收速度，便会触发Full GC，然后退化成serial Old收集器串行的收集，就会导致停顿的时候长。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>G1<ul>
+<li>新生代内存不足发生的垃圾收集 - minor GC</li>
+<li>老年代内存不足时（老年代所占内存超过阈值）<ul>
+<li>如果垃圾产生速度慢于垃圾回收速度，不会触发Full GC，还是并发地清理</li>
+<li>如果垃圾产生速度快于垃圾回收速度，便会触发Full GC，然后退化成serial Old收集器串行的收集，就会导致停顿的时候长</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="Young-Collection-跨代引用"><a href="#Young-Collection-跨代引用" class="headerlink" title="Young Collection 跨代引用"></a>Young Collection 跨代引用</h5><ul>
+<li>新生代回收的跨代引用（老年代引用新生代）问题</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210210154730275.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl81MDI4MDU3Ng==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="Young Collection跨代引用"></p>
+<ul>
+<li>卡表与Remembered Set<ul>
+<li>Remembered Set存在于E中，用于保存新生代对象对应的脏卡<ul>
+<li>脏卡：O被划分为多个区域（一个区域为512K），如果该区域引用了新生代对象，则该区域被称为脏卡</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>在引用变更时通过post -write barried + dirty card queue</li>
+<li>concurrent  refinement threads 更新 Remembered Set</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210210154940579.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl81MDI4MDU3Ng==,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload alt="跨代引用"></p>
 
             </div>
             <hr>
