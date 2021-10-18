@@ -185,7 +185,7 @@
     
     <span class="post-meta mr-2">
       <i class="iconfont icon-chart"></i>
-      2.8k 字
+      3.2k 字
     </span>
   
 
@@ -195,7 +195,7 @@
       <i class="iconfont icon-clock-fill"></i>
       
       
-      31
+      35
        分钟
     </span>
   
@@ -429,6 +429,72 @@
 </ul>
 </li>
 </ul>
+<h4 id="5-垃圾回收调优"><a href="#5-垃圾回收调优" class="headerlink" title="5.垃圾回收调优"></a>5.垃圾回收调优</h4><p>查看虚拟机参数命令</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs apache"><span class="hljs-attribute">D</span>:\JavaJDK<span class="hljs-number">1</span>.<span class="hljs-number">8</span>\bin\java -XX:+PrintFlagFinal -version | findstr <span class="hljs-string">&quot;GC&quot;</span><br></code></pre></td></tr></table></figure>
+
+<p>可以根据参数去查询具体的信息</p>
+<h5 id="1-调优领域"><a href="#1-调优领域" class="headerlink" title="1.调优领域"></a>1.调优领域</h5><ul>
+<li>内存</li>
+<li>锁竞争</li>
+<li>cpu占用</li>
+<li>io</li>
+<li>gc</li>
+</ul>
+<h5 id="2-确定目标"><a href="#2-确定目标" class="headerlink" title="2.确定目标"></a>2.确定目标</h5><p>低延迟/高吞吐量？选择合适的GC</p>
+<ul>
+<li>CMS G1 ZGC</li>
+<li>ParallelGC</li>
+<li>Zing</li>
+</ul>
+<h5 id="3-最快的GC"><a href="#3-最快的GC" class="headerlink" title="3.最快的GC"></a>3.最快的GC</h5><p>首先排除减少因为自身编写的代码而引发的内存问题</p>
+<ul>
+<li>查看Full GC前后的内存占用，考虑一下问题<ul>
+<li>数据是不是太多？<ul>
+<li>resultSet = statment executeQuery(select * from 大表 limit n)</li>
+</ul>
+</li>
+<li>数据表示是否太臃肿<ul>
+<li>对象图</li>
+<li>对象大小 16 Integer 24  int 4</li>
+</ul>
+</li>
+<li>是否存在内存泄露<ul>
+<li>static Map map = …</li>
+<li>软引用</li>
+<li>弱引用</li>
+<li>第三方缓存实现</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h5 id="4-新生代调优"><a href="#4-新生代调优" class="headerlink" title="4 新生代调优"></a>4 新生代调优</h5><ul>
+<li>新生代特点<ul>
+<li>所有的new操作分配内存都是非常廉价的<ul>
+<li>TLAB thread-local allocation buffer</li>
+</ul>
+</li>
+<li>死亡对象回收零代价</li>
+<li>大部分对象用过即死（朝生夕死）</li>
+<li>Minor GC 所用时间远小于Full GC</li>
+</ul>
+</li>
+<li>新生代内存越大越好么？<ul>
+<li>不是<ul>
+<li>新生代内存太小： 频繁出发Minor GC ，会STW，会使得吞吐量下降</li>
+<li>新生代内存太大： 老年代内存占比有所降低，会更频繁地触发Full GC。而且触发Minor GC时，清理新生代所花费的时间会更长</li>
+</ul>
+</li>
+<li>新生代内存设置为能容纳所有【并发量*（请求-相应）】的数据为宜</li>
+</ul>
+</li>
+<li>幸存区需要能够保存当前活动对象+需要晋升的对象</li>
+<li>晋升阈值配置得当，让长时间存活的对象尽快晋升</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs java">-XX:MaxTenuringThreshold=threshold<br>-XX:+PrintTenuringDistrubution<br></code></pre></td></tr></table></figure>
+
+
+
 
             </div>
             <hr>
