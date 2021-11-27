@@ -180,6 +180,140 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B05-sorted-set%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+          <img src="/img/redis.png" srcset="/img/loading.gif" lazyload alt="Redis学习笔记5 sorted_set数据类型">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B05-sorted-set%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">Redis学习笔记5 sorted_set数据类型</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B05-sorted-set%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+          
+          
+            
+          
+          sorted_set类型
+新的存储需求：数据排序有利于数据的有效显示，需要提供一种可以根据自身特征进行排序的方式
+需要的存储结构：新的存储模型，可以保存可排序的数据
+sorted_set类型：在set的存储结构基础上添加可排序字段
+
+
+sorted_set类型数据的基本操作
+添加数据
+12zadd key score1 member1 [score2 member2]
+获取全部数据
+1zrange
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-21 16:39" pubdate>
+              2021-04-21
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Redis/">Redis</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Redis/">Redis</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04-Set%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
+          <img src="/img/redis.png" srcset="/img/loading.gif" lazyload alt="Redis学习笔记4 Set数据类型">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04-Set%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">Redis学习笔记4 Set数据类型</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04-Set%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/">
+          
+          
+            
+          
+          set类型
+新的存储需求：存储大量的数据，在查询方面提供更高的效率
+
+需要的存储结构：能够保存大量数据，高效的内部存储机制，便于查询
+
+set类型：与hash存储结构完全相同，仅存储键，不存储值（nil），并且值是不允许重复的。
+
+
+
+
+set类型数据的基本操作
+添加书籍
+1sadd key member1 [member2]
+获取全部数据
+1smembers key
+删除数据
+1srem key
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-21 15:38" pubdate>
+              2021-04-21
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Redis/">Redis</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Redis/">Redis</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03-List%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
           <img src="/img/redis.png" srcset="/img/loading.gif" lazyload alt="Redis学习笔记3 List数据类型">
         </a>

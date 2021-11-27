@@ -180,6 +180,122 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/11/04/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8A%E7%AF%87-Synchronized%E5%8E%9F%E7%90%86-LockSupport%E5%8E%9F%E7%90%86-ReentrantLock%E5%8E%9F%E7%90%86/" target="_self">
+          <img src="/img/JUC.jpg" srcset="/img/loading.gif" lazyload alt="Java并发编程上篇 - (Synchronized原理,LockSupport原理,ReentrantLock原理)">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/11/04/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8A%E7%AF%87-Synchronized%E5%8E%9F%E7%90%86-LockSupport%E5%8E%9F%E7%90%86-ReentrantLock%E5%8E%9F%E7%90%86/">Java并发编程上篇 - (Synchronized原理,LockSupport原理,ReentrantLock原理)</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/11/04/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8A%E7%AF%87-Synchronized%E5%8E%9F%E7%90%86-LockSupport%E5%8E%9F%E7%90%86-ReentrantLock%E5%8E%9F%E7%90%86/">
+          
+          
+            
+          
+          一、基本概念1.进程与线程进程
+程序由指令和数据组成，但这些指令要运行，数据要读写，就必须将指令加载至CPU，数据加载至内存。在指令运行过程中还需要用到磁盘、网络等设备。进程就是用来加载指令、管理内存、管理IO的。
+当一个程序被运行，从磁盘加载这个程序的代码至内存，这就开启了一个进程
+进程就可以视为程序的一个实例。大部分程序可以同时运行多个实例进行（例如笔记本、画图、浏览器 等），也有的程序只能启
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-11-04 17:53" pubdate>
+              2021-11-04
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/JUC/">JUC</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/JUC/">JUC</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/11/01/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%AF%87-JMM-CAS%E5%8E%9F%E7%90%86-Volatile%E5%8E%9F%E7%90%86/" target="_self">
+          <img src="/img/JUC.jpg" srcset="/img/loading.gif" lazyload alt="Java并发编程中篇 - (JMM,CAS原理,Volatile原理)">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/11/01/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%AF%87-JMM-CAS%E5%8E%9F%E7%90%86-Volatile%E5%8E%9F%E7%90%86/">Java并发编程中篇 - (JMM,CAS原理,Volatile原理)</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/11/01/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%AF%87-JMM-CAS%E5%8E%9F%E7%90%86-Volatile%E5%8E%9F%E7%90%86/">
+          
+          
+            
+          
+          四、共享模型之内存1.Java内存模型（重点）
+JMM即 Java Memory Model，它从Java层面定义了主存、工作内存 抽象概念，底层对应着CPU寄存器、缓存、硬件内存、CPU指令优化等。JMM体现在以下几个方面
+原子性 - 保证指令不会受线程上下文切换的影响
+可见性 - 保证指令不会受cpu缓存的影响（JIT对热点代码的缓存优化）
+有序性 - 保证指令不会受cpu指令并行优化的影响
+
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-11-01 14:40" pubdate>
+              2021-11-01
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/JUC/">JUC</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/JUC/">JUC</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2021/10/23/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04/" target="_self">
           <img src="/img/jvm.png" srcset="/img/loading.gif" lazyload alt="JVM学习笔记4">
         </a>
@@ -615,121 +731,6 @@
             <i class="iconfont icon-date"></i>
             <time datetime="2021-09-15 22:26" pubdate>
               2021-09-15
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/09/14/%E7%AE%97%E6%B3%9548-%E5%8A%9B%E6%89%A3860-%E6%9F%A0%E6%AA%AC%E6%B0%B4%E6%89%BE%E9%9B%B6/" target="_self">
-          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法48[力扣860]-柠檬水找零">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/09/14/%E7%AE%97%E6%B3%9548-%E5%8A%9B%E6%89%A3860-%E6%9F%A0%E6%AA%AC%E6%B0%B4%E6%89%BE%E9%9B%B6/">算法48[力扣860]-柠檬水找零</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/09/14/%E7%AE%97%E6%B3%9548-%E5%8A%9B%E6%89%A3860-%E6%9F%A0%E6%AA%AC%E6%B0%B4%E6%89%BE%E9%9B%B6/">
-          
-          
-            
-          
-          一、题目描述在柠檬水摊上，每一杯柠檬水的售价为 5 美元。顾客排队购买你的产品，（按账单 bills 支付的顺序）一次购买一杯。
-每位顾客只买一杯柠檬水，然后向你付 5 美元、10 美元或 20 美元。
-你必须给每个顾客正确找零，也就是说净交易是每位顾客向你支付 5 美元。
-注意，一开始你手头没有任何零钱。
-给你一个整数数组 bills ，其中 bills[i] 是第 i 位顾客付的账。如果你能给
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-09-14 22:44" pubdate>
-              2021-09-14
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/09/14/%E7%AE%97%E6%B3%9547-%E5%8A%9B%E6%89%A3455-%E5%88%86%E5%8F%91%E9%A5%BC%E5%B9%B2/" target="_self">
-          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法47[力扣455]-分发饼干">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/09/14/%E7%AE%97%E6%B3%9547-%E5%8A%9B%E6%89%A3455-%E5%88%86%E5%8F%91%E9%A5%BC%E5%B9%B2/">算法47[力扣455]-分发饼干</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/09/14/%E7%AE%97%E6%B3%9547-%E5%8A%9B%E6%89%A3455-%E5%88%86%E5%8F%91%E9%A5%BC%E5%B9%B2/">
-          
-          
-            
-          
-          一、题目描述假设你是一位很棒的家长，想要给你的孩子们一些小饼干。但是，每个孩子最多只能给一块饼干。
-对每个孩子 i，都有一个胃口值 g[i]，这是能让孩子们满足胃口的饼干的最小尺寸；并且每块饼干 j，都有一个尺寸 s[j] 。如果 s[j] &gt;= g[i]，我们可以将这个饼干j 分配给孩子i，这个孩子会得到满足。
-你的目标是尽可能满足越多数量的孩子，并输出这个最大数值。
-二、参考代码1234
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-09-14 22:29" pubdate>
-              2021-09-14
             </time>
           </div>
         

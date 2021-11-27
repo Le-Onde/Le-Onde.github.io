@@ -1,0 +1,843 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/newcon.png">
+  <link rel="icon" href="/img/newfav.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+  <title>Java并发编程中篇 - (JMM,CAS原理,Volatile原理) - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.9","typing":{"enable":true,"typeSpeed":64,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Le Onde</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                主页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                种类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://img-blog.csdnimg.cn/20210421122657715.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="Java并发编程中篇 - (JMM,CAS原理,Volatile原理)">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-11-01 14:40" pubdate>
+        November 1, 2021 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      9.5k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      115
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">Java并发编程中篇 - (JMM,CAS原理,Volatile原理)</h1>
+            
+            <div class="markdown-body">
+              <h2 id="四、共享模型之内存"><a href="#四、共享模型之内存" class="headerlink" title="四、共享模型之内存"></a>四、共享模型之内存</h2><h3 id="1-Java内存模型（重点）"><a href="#1-Java内存模型（重点）" class="headerlink" title="1.Java内存模型（重点）"></a>1.Java内存模型（重点）</h3><ul>
+<li>JMM即 <code>Java Memory Model</code>，它从Java层面定义了主存、工作内存 抽象概念，底层对应着CPU寄存器、缓存、硬件内存、CPU指令优化等。JMM体现在以下几个方面<ul>
+<li>原子性 - 保证指令不会受<strong>线程上下文切换的影响</strong></li>
+<li>可见性 - 保证指令不会受<strong>cpu缓存的影响</strong>（JIT对热点代码的缓存优化）</li>
+<li>有序性 - 保证指令不会受<strong>cpu指令并行优化的影响</strong></li>
+</ul>
+</li>
+</ul>
+<h4 id="1-可见性（重点）"><a href="#1-可见性（重点）" class="headerlink" title="1.可见性（重点）"></a>1.可见性（重点）</h4><h5 id="1-1退不出的循环"><a href="#1-1退不出的循环" class="headerlink" title="1.1退不出的循环"></a>1.1退不出的循环</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> run = <span class="hljs-keyword">true</span>;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br><br>        Thread t1 = <span class="hljs-keyword">new</span> Thread(() -&gt; &#123;<br>            <span class="hljs-keyword">while</span>(run) &#123;<br><br>            &#125;<br>        &#125;, <span class="hljs-string">&quot;t1&quot;</span>);<br><br>        t1.start();<br><br>        <span class="hljs-keyword">try</span> &#123;<br>            Thread.sleep(<span class="hljs-number">1000</span>);<br>        &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>            e.printStackTrace();<br>        &#125;<br>        log.info(<span class="hljs-string">&quot;t1 Stop&quot;</span>);<br>        run = <span class="hljs-keyword">false</span>;<br>    &#125;<br></code></pre></td></tr></table></figure>
+
+<p><strong>为什么会出现对run变量的不可见性呢呢？分析一下</strong></p>
+<ul>
+<li>初始状态，t线程刚开始从主内存中读取值，因为主线程sleep1秒，这时候t线程循环了好多次run的值，超过了一定的阈值，JIT就会将主存中的run值读取到工作内存（相当于缓存了一份，不会从主存中读run的值了）</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/55a9700c011a4188ffdb8993f88ded28.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>因为t线程频繁从主存中读取run值，JIT即时编译器会将run的值缓存至自己工作内存中的高速缓存中，减少对主存中的run的访问以提高效率</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/e81d86ac7eea71c6f94dab875af787c7.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>1秒之后，main线程修改了run的值，并同步至内存。而t线程是从自己工作内存中的高速缓存中读取这个变量的值，<strong>结果永远是旧值</strong></li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/62f824bbb5595133018b992b326c7913.png" srcset="/img/loading.gif" lazyload></p>
+<h5 id="1-2解决方法"><a href="#1-2解决方法" class="headerlink" title="1.2解决方法"></a>1.2<strong>解决方法</strong></h5><ul>
+<li>使用volatile（易变关键字）</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Slf4j(topic = &quot;guizy.Test1&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test1</span> </span>&#123;<br>    <span class="hljs-comment">// 增加t1线程, 对主线程更改run变量的可见性</span><br>    <span class="hljs-comment">// 一开始一直不结束, 是因为无限循环, run都是true, JIT及时编译器, 会对t1线程所执行的</span><br>    <span class="hljs-comment">// run变量,进行缓存, 缓存到本地工作内存. 不去访问主存中的run. 这样可以提高性能; 也可以说是JVM打到一定阈值之后</span><br>    <span class="hljs-comment">// while(true)变成了一个热点代码, 所以一直访问的都是缓存到本地工作内存(局部)中的run. 当主线程修改主存中的run变量的时候,</span><br>    <span class="hljs-comment">// t1线程一直访问的是自己缓存的, 所以不认为run已经改为false了. 所以一直运行. 我们为主存(成员变量)进行volatile修饰, 增加</span><br>    <span class="hljs-comment">// 变量的可见性, 当主线程修改run为false, t1线程对run的值可见. 这样就可以退出循环</span><br>    <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> run = <span class="hljs-keyword">true</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        Thread t1 = <span class="hljs-keyword">new</span> Thread(() -&gt; &#123;<br>            <span class="hljs-keyword">while</span> (run) &#123;<br>                <span class="hljs-comment">// 如果打印一句话</span><br>                <span class="hljs-comment">// 此时就可以结束, 因为println方法中, 使用到了synchronized</span><br>                <span class="hljs-comment">// synchronized可以保证原子性、可见性、有序性</span><br>                <span class="hljs-comment">// System.out.println(&quot;123&quot;);</span><br>            &#125;<br>        &#125;);<br><br>        t1.start();<br>        Sleeper.sleep(<span class="hljs-number">1</span>);<br>        run = <span class="hljs-keyword">false</span>;<br>        System.out.println(run);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>使用<code>synchronized</code>解决</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Slf4j(topic = &quot;guizy.Test1&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test1</span> </span>&#123;<br>    <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> run = <span class="hljs-keyword">true</span>;<br>    <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> Object obj = <span class="hljs-keyword">new</span> Object();<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        Thread t1 = <span class="hljs-keyword">new</span> Thread(() -&gt; &#123;<br>            <span class="hljs-comment">// 1s内,一直都在无限循环获取锁. 1s后主线程抢到锁,修改为false, 此时t1线程抢到锁对象,while循环也退出</span><br>            <span class="hljs-keyword">while</span> (run) &#123;<br>                <span class="hljs-keyword">synchronized</span> (obj) &#123;<br><br>                &#125;<br>            &#125;<br>        &#125;);<br><br>        t1.start();<br>        Sleeper.sleep(<span class="hljs-number">1</span>);<br>        <span class="hljs-comment">// 当主线程获取到锁的时候, 就修改为false了</span><br>        <span class="hljs-keyword">synchronized</span> (obj) &#123;<br>            run = <span class="hljs-keyword">false</span>;<br>            System.out.println(<span class="hljs-string">&quot;false&quot;</span>);<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>注意：</p>
+<ul>
+<li>使用<code>volatile</code>（表示易变关键字的意思），它可以用来修饰<code>成员变量</code>和<code>静态成员变量</code>，它可以避免线程从自己的工作缓存中查找变量的值，必须到主存中获取它的值，线程操作 volatile 变量都是直接操作主存</li>
+<li>volatile 可以认为是一个轻量级的锁，被 volatile 修饰的变量，汇编指令会存在于一个”lock”的前缀。在CPU层面与主内存层面，通过缓存一致性协议，<strong>加锁后能够保证写的值同步到主内存，使其他线程能够获得最新的值。</strong></li>
+<li>使用<code>synchronized关键字</code>也有相同的效果, 在<code>Java内存模型</code>中，synchronized规定，线程在加锁时， <code>先清空工作内存 → 在主内存中拷贝最新变量的副本到工作内存 → 执行完代码 → 将更改后的共享变量的值刷新到主内存中 → 释放互斥锁。</code></li>
+</ul>
+<h5 id="1-3-可见性-vs-原子性"><a href="#1-3-可见性-vs-原子性" class="headerlink" title="1.3 可见性 vs 原子性"></a>1.3 可见性 vs 原子性</h5><ul>
+<li>前面例子体现的实际就是<code>可见性</code>，<strong>它保证的是在多个线程之间一个线程对volatile变量的修改对另一个线程可见，而不能保证原子性。</strong>volatile用在一个写线程，多个读线程的情况，比较合适。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java">getstatic run <span class="hljs-comment">// 线程 t 获取 run true</span><br>getstatic run <span class="hljs-comment">// 线程 t 获取 run true</span><br>getstatic run <span class="hljs-comment">// 线程 t 获取 run true</span><br>getstatic run <span class="hljs-comment">// 线程 t 获取 run true</span><br>putstatic run <span class="hljs-comment">// 线程 main 修改 run 为 false， 仅此一次</span><br>getstatic run <span class="hljs-comment">// 线程 t 获取 run false </span><br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>比较一下之前我们讲线程安全时举的例子：<strong>两个线程一个 i++ 一个 i– ，只能保证看到最新值(可见性)，不能解决指令交错(原子性)</strong></li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 假设i的初始值为0</span><br>getstatic i <span class="hljs-comment">// 线程2-获取静态变量i的值 线程内i=0</span><br>getstatic i <span class="hljs-comment">// 线程1-获取静态变量i的值 线程内i=0</span><br>iconst_1 <span class="hljs-comment">// 线程1-准备常量1</span><br>iadd <span class="hljs-comment">// 线程1-自增 线程内i=1</span><br>putstatic i <span class="hljs-comment">// 线程1-将修改后的值存入静态变量i 静态变量i=1</span><br>iconst_1 <span class="hljs-comment">// 线程2-准备常量1</span><br>isub <span class="hljs-comment">// 线程2-自减 线程内i=-1</span><br>putstatic i <span class="hljs-comment">// 线程2-将修改后的值存入静态变量i 静态变量i=-1 </span><br></code></pre></td></tr></table></figure>
+
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs markdown">注意：：synchronized 语句块既可以保证代码块的原子性，也同时保证代码块内变量的可见性。<span class="hljs-strong">**但缺点是 synchronized 是属于重量级操作，性能相对更低。**</span>  如果在前面示例的死循环中加入 System.out.println() 会发现即使不加 volatile 修饰符，线程 t 也能正确看到 对 run 变量的修改了，因为println方法里面有synchronized修饰。还有那个等烟的示例, 为啥没有出现可见性问题?和synchrozized是一个道理。<br></code></pre></td></tr></table></figure>
+
+<h5 id="1-4模式之两阶段终止"><a href="#1-4模式之两阶段终止" class="headerlink" title="1.4模式之两阶段终止"></a>1.4模式之两阶段终止</h5><ul>
+<li>当我们在执行线程一时，想要终止线程二、这就是需要使用interrupt方法来优雅的停止线程二。这是我们之前的做法</li>
+<li>使用volatile关键字来实现两阶段终止模式</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Code_02_Test</span> </span>&#123;<br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> InterruptedException </span>&#123;<br>		Monitor monitor = <span class="hljs-keyword">new</span> Monitor();<br>		monitor.start();<br>		Thread.sleep(<span class="hljs-number">3500</span>);<br>		monitor.stop();<br>	&#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Monitor</span> </span>&#123;<br><br>	Thread monitor;<br>	<span class="hljs-comment">// 设置标记，用于判断是否被终止了</span><br>	<span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">boolean</span> stop = <span class="hljs-keyword">false</span>;<br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 启动监控器线程</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">// 设置线控器线程，用于监控线程状态</span><br>		monitor = <span class="hljs-keyword">new</span> Thread() &#123;<br>			<span class="hljs-meta">@Override</span><br>			<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>&#123;<br>				<span class="hljs-comment">// 开始不停的监控</span><br>				<span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>) &#123;<br>					<span class="hljs-keyword">if</span>(stop) &#123;<br>						System.out.println(<span class="hljs-string">&quot;处理后续任务&quot;</span>);<br>						<span class="hljs-keyword">break</span>;<br>					&#125;<br>					System.out.println(<span class="hljs-string">&quot;监控器运行中...&quot;</span>);<br>					<span class="hljs-keyword">try</span> &#123;<br>						<span class="hljs-comment">// 线程休眠</span><br>						Thread.sleep(<span class="hljs-number">1000</span>);<br>					&#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>						System.out.println(<span class="hljs-string">&quot;被打断了&quot;</span>);<br>					&#125;<br>				&#125;<br>			&#125;<br>		&#125;;<br>		monitor.start();<br>	&#125;<br><br>	<span class="hljs-comment">/**</span><br><span class="hljs-comment">	 * 	用于停止监控器线程</span><br><span class="hljs-comment">	 */</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">stop</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">// 修改标记</span><br>		stop = <span class="hljs-keyword">true</span>;<br>		<span class="hljs-comment">// 打断线程</span><br>		monitor.interrupt();        <br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h5 id="1-5模式之Balking（了解）"><a href="#1-5模式之Balking（了解）" class="headerlink" title="1.5模式之Balking（了解）"></a>1.5模式之Balking（了解）</h5><ul>
+<li>定义： <code>balking（犹豫）模式</code>用在<code>一个线程发现另一个线程或本线程已经做了某一件相同的事，那么本线程就无需再做了，直接结束返回</code> 有点类似于单例</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Slf4j(topic = &quot;guizy.Test1&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test1</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> <span class="hljs-keyword">throws</span> InterruptedException </span>&#123;<br>        Monitor monitor = <span class="hljs-keyword">new</span> Monitor();<br>        monitor.start();<br>        monitor.start();<br>        monitor.start();<br>        Sleeper.sleep(<span class="hljs-number">3.5</span>);<br>        monitor.stop();<br>    &#125;<br>&#125;<br><br><span class="hljs-meta">@Slf4j(topic = &quot;guizy.Monitor&quot;)</span><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Monitor</span> </span>&#123;<br><br>    Thread monitor;<br>    <span class="hljs-comment">//设置标记，用于判断是否被终止了</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">boolean</span> stop = <span class="hljs-keyword">false</span>;<br>    <span class="hljs-comment">//设置标记，用于判断是否已经启动过了</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">boolean</span> starting = <span class="hljs-keyword">false</span>;<br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 启动监控器线程</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">start</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-comment">//上锁，避免多线程运行时出现线程安全问题</span><br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>) &#123;<br>            <span class="hljs-keyword">if</span> (starting) &#123;<br>                <span class="hljs-comment">//已被启动，直接返回</span><br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            <span class="hljs-comment">//启动监视器，改变标记</span><br>            starting = <span class="hljs-keyword">true</span>;<br>        &#125;<br>        <span class="hljs-comment">//设置线控器线程，用于监控线程状态</span><br>        monitor = <span class="hljs-keyword">new</span> Thread(() -&gt; &#123;<br>            <span class="hljs-comment">//开始不停的监控</span><br>            <span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>) &#123;<br>                <span class="hljs-keyword">if</span>(stop) &#123;<br>                    log.debug(<span class="hljs-string">&quot;处理后续儿事&quot;</span>);<br>                    <span class="hljs-keyword">break</span>;<br>                &#125;<br>                log.debug(<span class="hljs-string">&quot;监控器运行中...&quot;</span>);<br>                <span class="hljs-keyword">try</span> &#123;<br>                    <span class="hljs-comment">//线程休眠</span><br>                    Thread.sleep(<span class="hljs-number">1000</span>);<br>                &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                    log.debug(<span class="hljs-string">&quot;被打断了...&quot;</span>);<br>                &#125;<br>            &#125;<br>        &#125;);<br>        monitor.start();<br>    &#125;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * 	用于停止监控器线程</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">stop</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-comment">//打断线程</span><br>        stop = <span class="hljs-keyword">true</span>;<br>        monitor.interrupt();<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-有序性（重点）"><a href="#2-有序性（重点）" class="headerlink" title="2.有序性（重点）"></a>2.有序性（重点）</h3><p>是JIT即时编译器的优化，可能会导致指令重排。为什么要优化？因为CPU支持多级指令流水线，例如支持同时执行<code>取指令 - 指令译码 - 执行指令 - 内存访问 - 数据写回</code> 的处理器。效率快</p>
+<ul>
+<li>JVM会在不影响正确性的前提下，可以调整语句的执行顺序，是一种优化</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20201224225308100.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3OTg5OTgw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>这种特性称为 <code>指令重排</code>，多线程下指令重排会影响正确性</li>
+</ul>
+<h4 id="1-多线程下指令重排问题"><a href="#1-多线程下指令重排问题" class="headerlink" title="1.多线程下指令重排问题"></a>1.多线程下指令重排问题</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">int</span> num = <span class="hljs-number">0</span>;<br><br><span class="hljs-comment">// volatile 修饰的变量，可以禁用指令重排 volatile boolean ready = false; 可以防止变量之前的代码被重排序</span><br><span class="hljs-keyword">boolean</span> ready = <span class="hljs-keyword">false</span>; <br><span class="hljs-comment">// 线程1 执行此方法</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">actor1</span><span class="hljs-params">(I_Result r)</span> </span>&#123;<br> <span class="hljs-keyword">if</span>(ready) &#123;<br> 	r.r1 = num + num;<br> &#125; <br> <span class="hljs-keyword">else</span> &#123;<br> 	r.r1 = <span class="hljs-number">1</span>;<br> &#125;<br>&#125;<br><span class="hljs-comment">// 线程2 执行此方法</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">actor2</span><span class="hljs-params">(I_Result r)</span> </span>&#123;<br> num = <span class="hljs-number">2</span>;<br> ready = <span class="hljs-keyword">true</span>;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>线程1执行actor1方法，线程2执行actor2方法</p>
+<ul>
+<li>I_Result是一个对象，有一个属性r1用来保存结果，可能有哪几种结果？<ul>
+<li>情况1，线程1先执行，这时ready = false，所以进入else分支结果为1</li>
+<li>情况2，线程2先执行num = 2，但没来得及执行ready = true，线程1执行，进入else分支，结果为1</li>
+<li>情况3，线程2执行到ready = true，线程1执行，这回进入if分支，结果为4（因为num已经执行过了）</li>
+<li>情况4，线程2先执行ready = true，切换到线程1，进入if分支，相加为0，再切回线程2执行num = 2，结果为0</li>
+</ul>
+</li>
+<li>情况4的现象为指令重排，是JIT 编译器在运行时的一些优化，这个现象需要通过大量测试才能复现，可以使用<code>jcstress工具</code>进行测试。上面仅是从代码层面体现出了<code>有序性</code>问题，下面在讲到 <code>double-checked locking (双重检查锁)</code>问题时还会从java字节码的层面了解有序性的问题。</li>
+</ul>
+<h5 id="1-2指令重排也需要遵守一定规则："><a href="#1-2指令重排也需要遵守一定规则：" class="headerlink" title="1.2指令重排也需要遵守一定规则："></a>1.2指令重排也需要遵守一定规则：</h5><ul>
+<li>指令重排序规则不会对存在数据依赖关系的操作进行重排序。比如：a = 1；b = a；这个指令序列，由于第二个操作依赖于第一个操作，所以在编译时和处理器运行时这两个操作不会被重排序。</li>
+<li>重排序是为了优化性能，但是不管怎么重排序，<strong>单线程下程序的执行结果不能被改变</strong> 比如：a=1;b=2;c=a+b这三个操作，第一步（a=1)和第二步(b=2)由于不存在数据依赖关系，所以可能会发生重排序，但是c=a+b这个操作是不会被重排序的，因为需要保证最终的结果一定是c=a+b=3。</li>
+</ul>
+<p><strong>指令重排序 在单线程模式下是一定会保证最终结果的正确性</strong>，但是在多线程环境下，问题就出来了</p>
+<h5 id="1-3解决方法"><a href="#1-3解决方法" class="headerlink" title="1.3解决方法"></a>1.3解决方法</h5><p>用volatile修饰的变量，可以禁用指令重排</p>
+<p>注意：</p>
+<ul>
+<li>使用<code>synchronized并不能解决有序性</code>问题，<strong>但是如果是该变量整个都在synchronized代码块的保护范围内</strong>，那么变量就不会被多个线程同时操作，也不用考虑有序性问题！在这种情况下相当于解决了重排序问题！</li>
+</ul>
+<h4 id="2-volatile-原理-重点"><a href="#2-volatile-原理-重点" class="headerlink" title="2.volatile 原理(重点)"></a>2.volatile 原理(重点)</h4><ul>
+<li>volatile的底层实现原理是内存屏障。Memory Barrier（Memory Fence）<ul>
+<li>对volatile变量的<strong>写指令后</strong>会加入<strong>写屏障</strong>。（保证写屏障之前的写操作, 都能同步到主存中）</li>
+<li>对volatile变量的<strong>读指令前</strong>会加入<strong>读屏障</strong>。(保证读屏障之后的读操作, 都能读到主存的数据)</li>
+</ul>
+</li>
+</ul>
+<h5 id="2-1volatile是如何保证可见性的（重点）"><a href="#2-1volatile是如何保证可见性的（重点）" class="headerlink" title="2.1volatile是如何保证可见性的（重点）"></a>2.1volatile是如何保证可见性的（重点）</h5><ul>
+<li>写屏障（sfence）保证在该屏障之前的，对共享变量的改动，都同步到主存之中</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">actor2</span><span class="hljs-params">(I_Result r)</span> </span>&#123;<br>     num = <span class="hljs-number">2</span>;<br>     ready = <span class="hljs-keyword">true</span>; <span class="hljs-comment">// ready是被volatile修饰的 ，赋值带写屏障</span><br>     <span class="hljs-comment">// 写屏障.(在ready=true写指令之后加的, </span><br>     <span class="hljs-comment">//在该屏障之前对共享变量的改动, 都同步到主存中. 包括num)</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>读屏障（lfence）保证在该屏障之后，对共享变量的读取，加载的是主存中最新数据</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">actor1</span><span class="hljs-params">(I_Result r)</span> </span>&#123;<br>	 <span class="hljs-comment">// 读屏障</span><br>	 <span class="hljs-comment">//  ready是被volatile修饰的 ，读取值带读屏障</span><br>	 <span class="hljs-keyword">if</span>(ready) &#123;	<span class="hljs-comment">// ready, 读取的就是主存中的新值</span><br>	 	r.r1 = num + num; <span class="hljs-comment">// num, 读取的也是主存中的新值</span><br>	 &#125; <span class="hljs-keyword">else</span> &#123;<br>	 	r.r1 = <span class="hljs-number">1</span>;<br>	 &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/img_convert/b17feb2d8cc0907ddee8b08949a44d0d.png" srcset="/img/loading.gif" lazyload></p>
+<h5 id="2-2volatile是如何保证有序性（重点）"><a href="#2-2volatile是如何保证有序性（重点）" class="headerlink" title="2.2volatile是如何保证有序性（重点）"></a>2.2volatile是如何保证有序性（重点）</h5><ul>
+<li>写屏障会确保指令重排序时，不会将写屏障之前的代码排在写屏障之后</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">actor2</span><span class="hljs-params">(I_Result r)</span> </span>&#123;<br> num = <span class="hljs-number">2</span>;<br> ready = <span class="hljs-keyword">true</span>; <span class="hljs-comment">//  ready是被volatile修饰的 ， 赋值带写屏障</span><br> <span class="hljs-comment">// 写屏障</span><br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>读屏障会保证指令重排序时，不会将读屏障之后的代码排在读排序之前</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">actor1</span><span class="hljs-params">(I_Result r)</span> </span>&#123;<br>	 <span class="hljs-comment">// 读屏障</span><br>	 <span class="hljs-comment">//  ready是被volatile修饰的 ，读取值带读屏障</span><br>	 <span class="hljs-keyword">if</span>(ready) &#123;<br>	 	r.r1 = num + num;<br>	 &#125; <span class="hljs-keyword">else</span> &#123;<br>	 	r.r1 = <span class="hljs-number">1</span>;<br>	 &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://img-blog.csdnimg.cn/img_convert/98518f6441a448a9a6ef441ef2518c83.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>volatile不能解决指令交错（不能解决原子性）</strong></p>
+<ul>
+<li>写屏障仅仅是保障之后的读能够读到最新结果，但不能保证其它线程的读，跑到它前面去</li>
+<li><strong>而有序性的保证也只是保证了本线程内相关代码不被重排序</strong></li>
+</ul>
+<p>下图t2线程, 就先读取了i=0, 此时还是会出现指令交错的现象, 可以使用<code>synchronized</code>来解决原子性</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/1e8fff6923548db93e27ac4a947633e9.png" srcset="/img/loading.gif" lazyload></p>
+<h5 id="2-3-double-checked-locking-（双重检验锁）问题（重点）"><a href="#2-3-double-checked-locking-（双重检验锁）问题（重点）" class="headerlink" title="2.3 double-checked locking （双重检验锁）问题（重点）"></a>2.3 double-checked locking （双重检验锁）问题（重点）</h5><p>首先synchronized可以保证它的临界区的资源是 <code>原子性、可见性、有序性</code>的, 有序性的前提是，在synchronized代码块中的共享变量，不会在代码块外使用到，否则有序性不能被保证，只能使用volatile来保证有序性。</p>
+<ul>
+<li><p><strong>下面代码的第二个双重检查单例, 就出现了这个问题(在synchronized外使用到了INSTANCE), 此时synchronized就不能防止指令重排, 确保不了指令的有序性.</strong></p>
+</li>
+<li><p>以著名的<code>double-checked locking(双重检查锁) 单例模式</code>为例，这是volatile最常使用的地方。</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 最开始的单例模式是这样的</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>&#123; &#125;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Singleton INSTANCE = <span class="hljs-keyword">null</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>&#123;<br>	    <span class="hljs-comment">/*</span><br><span class="hljs-comment">	      多线程同时调用getInstance(), 如果不加synchronized锁, 此时两个线程同时</span><br><span class="hljs-comment">	      判断INSTANCE为空, 此时都会new Singleton(), 此时就破坏单例了.所以要加锁,</span><br><span class="hljs-comment">	      防止多线程操作共享资源,造成的安全问题</span><br><span class="hljs-comment">	     */</span><br>	    <span class="hljs-keyword">synchronized</span>(Singleton.class) &#123;<br>	    	<span class="hljs-keyword">if</span> (INSTANCE == <span class="hljs-keyword">null</span>) &#123; <span class="hljs-comment">// t1</span><br>	    		INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br>	        &#125;<br>	    &#125;<br>        <span class="hljs-keyword">return</span> INSTANCE;<br>    &#125;<br>&#125;<br><br><br><span class="hljs-comment">/*</span><br><span class="hljs-comment">	首先上面代码的效率是有问题的, 因为当我们创建了一个单例对象后, 又来一个线程获取到锁了,还是会加锁, </span><br><span class="hljs-comment">	严重影响性能,再次判断INSTANCE==null吗, 此时肯定不为null, 然后就返回刚才创建的INSTANCE;</span><br><span class="hljs-comment">	这样导致了很多不必要的判断; </span><br><span class="hljs-comment"></span><br><span class="hljs-comment">	所以要双重检查, 在第一次线程调用getInstance(), 直接在synchronized外,判断instance对象是否存在了,</span><br><span class="hljs-comment">	如果不存在, 才会去获取锁,然后创建单例对象,并返回; 第二个线程调用getInstance(), 会进行</span><br><span class="hljs-comment">	if(instance==null)的判断, 如果已经有单例对象, 此时就不会再去同步块中获取锁了. 提高效率</span><br><span class="hljs-comment">*/</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>&#123; &#125;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Singleton INSTANCE = <span class="hljs-keyword">null</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>(INSTANCE == <span class="hljs-keyword">null</span>) &#123; <span class="hljs-comment">// t2</span><br>            <span class="hljs-comment">// 首次访问会同步，而之后的使用没有 synchronized</span><br>            <span class="hljs-keyword">synchronized</span>(Singleton.class) &#123;<br>                <span class="hljs-keyword">if</span> (INSTANCE == <span class="hljs-keyword">null</span>) &#123; <span class="hljs-comment">// t1</span><br>                    INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> INSTANCE;<br>    &#125;<br>&#125;<br><span class="hljs-comment">//但是上面的if(INSTANCE == null)判断代码没有在同步代码块synchronized中，</span><br><span class="hljs-comment">// 不能享有synchronized保证的原子性、可见性、以及有序性。所以可能会导致 指令重排</span><br></code></pre></td></tr></table></figure>
+
+<p>特点：</p>
+<ul>
+<li><p>懒惰实例化</p>
+</li>
+<li><p>首次使用getInstance() 才使用 synchronized 加锁，<strong>后续使用时无需加锁 (也就是上面的第二个单例)</strong></p>
+</li>
+<li><p>有隐含的: 但很关键的一点：<code>第一个 if 使用了 INSTANCE 变量，是在同步块之外</code>, 这样会导致<code>synchronized</code>无法保证指令的<code>有序性</code>, 此时可能会导致<code>指令重排</code>问题</p>
+</li>
+</ul>
+<p>注意: 但在多线程环境下，上面的代码是有问题的，getInstance 方法对应的字节码为</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java">0: getstatic #2 // Field INSTANCE:Lcn/itcast/n5/Singleton;<br><span class="hljs-number">3</span>: ifnonnull <span class="hljs-number">37</span> <span class="hljs-comment">// 判断是否为空</span><br><span class="hljs-comment">// ldc是获得类对象</span><br>6: ldc #3 // class cn/itcast/n5/Singleton<br><span class="hljs-comment">// 复制操作数栈栈顶的值放入栈顶, 将类对象的引用地址复制了一份</span><br><span class="hljs-number">8</span>: dup<br><span class="hljs-comment">// 操作数栈栈顶的值弹出，即将对象的引用地址存到局部变量表中</span><br><span class="hljs-comment">// 将类对象的引用地址存储了一份，是为了将来解锁用</span><br><span class="hljs-number">9</span>: astore_0<br><span class="hljs-number">10</span>: monitorenter<br>11: getstatic #2 // Field INSTANCE:Lcn/itcast/n5/Singleton;<br><span class="hljs-number">14</span>: ifnonnull <span class="hljs-number">27</span><br><span class="hljs-comment">// 新建一个实例</span><br>17: new #3 // class cn/itcast/n5/Singleton<br><span class="hljs-comment">// 复制了一个实例的引用</span><br><span class="hljs-number">20</span>: dup<br><span class="hljs-comment">// 通过这个复制的引用调用它的构造方法</span><br>21: invokespecial #4 // Method &quot;&lt;init&gt;&quot;:()V<br><span class="hljs-comment">// 最开始的这个引用用来进行赋值操作</span><br>24: putstatic #2 // Field INSTANCE:Lcn/itcast/n5/Singleton;<br><span class="hljs-number">27</span>: aload_0<br><span class="hljs-number">28</span>: monitorexit<br><span class="hljs-number">29</span>: goto <span class="hljs-number">37</span><br><span class="hljs-number">32</span>: astore_1<br><span class="hljs-number">33</span>: aload_0<br><span class="hljs-number">34</span>: monitorexit<br><span class="hljs-number">35</span>: aload_1<br><span class="hljs-number">36</span>: athrow<br>37: getstatic #2 // Field INSTANCE:Lcn/itcast/n5/Singleton;<br><span class="hljs-number">40</span>: areturn<br></code></pre></td></tr></table></figure>
+
+<p><strong>其中</strong></p>
+<ul>
+<li>17 表示创建对象，将对象引用入栈 // new Singleton</li>
+</ul>
+<ul>
+<li>20 表示复制一份对象引用 // 复制了引用地址, 解锁使用</li>
+<li>21 表示利用一个对象引用，调用构造方法 // 根据复制的引用地址调用构造方法</li>
+<li>24 表示利用一个对象引用，赋值给 static INSTANCE</li>
+</ul>
+<p>可能jvm 会优化为：<code>先执行 24(赋值)，再执行 21(构造方法)</code>。如果两个线程 t1，t2 按如下时间序列执行：</p>
+<ul>
+<li>通过上面的字节码发现, 这一步<code>INSTANCE = new Singleton();</code>操作不是一个<code>原子操作</code>, 它分为<code>21, 24两个指令</code>, 此时可能就会发生<code>指令重排</code>的问题</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/702a41b984561f85cab618621b824079.png" srcset="/img/loading.gif" lazyload></p>
+<ul>
+<li>关键在于 <code>0: getstatic</code> 这行代码在 monitor 控制之外，它就像之前举例中不守规则的人，可以越过 monitor 读取 INSTANCE 变量的值</li>
+<li>这时 <code>t1 还未完全将构造方法</code>执行完毕，如果在构造方法中要执行很多初始化操作，那么 t2 拿到的是将是一个未初始化完毕的单例 <strong>对 INSTANCE 使用 volatile 修饰</strong>即可，可以<code>禁用指令重排。</code></li>
+<li>注意在 JDK 5 以上的版本的 volatile 才会真正有效</li>
+</ul>
+<h5 id="2-4-double-checked-locking关于指令重排的解决"><a href="#2-4-double-checked-locking关于指令重排的解决" class="headerlink" title="2.4 double-checked locking关于指令重排的解决"></a>2.4 double-checked locking关于指令重排的解决</h5><ul>
+<li>加volatile</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>&#123; &#125;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">volatile</span> Singleton INSTANCE = <span class="hljs-keyword">null</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-comment">// 实例没创建，才会进入内部的 synchronized代码块</span><br>        <span class="hljs-keyword">if</span> (INSTANCE == <span class="hljs-keyword">null</span>) &#123;<br>            <span class="hljs-keyword">synchronized</span> (Singleton.class) &#123; <span class="hljs-comment">// t2</span><br>                <span class="hljs-comment">// 也许有其它线程已经创建实例，所以再判断一次</span><br>                <span class="hljs-keyword">if</span> (INSTANCE == <span class="hljs-keyword">null</span>) &#123; <span class="hljs-comment">// t1</span><br>                    INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br>                &#125;<br>            &#125;<br>        &#125;<br>        <span class="hljs-keyword">return</span> INSTANCE;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>字节码上看不出来volatile指令的效果</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// -------------------------------------&gt; 加入对 INSTANCE 变量的读屏障</span><br>0: getstatic #2 // Field INSTANCE:Lcn/itcast/n5/Singleton;<br><span class="hljs-number">3</span>: ifnonnull <span class="hljs-number">37</span><br>6: ldc #3 // class cn/itcast/n5/Singleton<br><span class="hljs-number">8</span>: dup<br><span class="hljs-number">9</span>: astore_0<br><span class="hljs-number">10</span>: monitorenter -----------------------&gt; 保证原子性、可见性<br>11: getstatic #2 // Field INSTANCE:Lcn/itcast/n5/Singleton;<br><span class="hljs-number">14</span>: ifnonnull <span class="hljs-number">27</span><br>17: new #3 // class cn/itcast/n5/Singleton<br><span class="hljs-number">20</span>: dup<br>21: invokespecial #4 // Method &quot;&lt;init&gt;&quot;:()V<br>24: putstatic #2 // Field INSTANCE:Lcn/itcast/n5/Singleton;<br><span class="hljs-comment">// -------------------------------------&gt; 加入对 INSTANCE 变量的写屏障</span><br><span class="hljs-number">27</span>: aload_0<br><span class="hljs-number">28</span>: monitorexit ------------------------&gt; 保证原子性、可见性<br><span class="hljs-number">29</span>: goto <span class="hljs-number">37</span><br><span class="hljs-number">32</span>: astore_1<br><span class="hljs-number">33</span>: aload_0<br><span class="hljs-number">34</span>: monitorexit<br><span class="hljs-number">35</span>: aload_1<br><span class="hljs-number">36</span>: athrow<br>37: getstatic #2 // Field INSTANCE:Lcn/itcast/n5/Singleton;<br><span class="hljs-number">40</span>: areturn<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>如上面所注释的内容，读写volatile变量操作（即getstatic操作和putstatic操作）时会加入内存屏障（Memory Barrier）保证下面两点：<ol>
+<li>可见性<ol>
+<li>写屏障（sfence）保证该屏障之前的t1对共享变量的改动，都同步到主存中</li>
+<li>读屏障（lfence）保证该屏障之后的t2对共享变量的读取，加载的是主存中最新数据</li>
+</ol>
+</li>
+<li>有序性<ol>
+<li>写屏障会确保指令重排序时，不会将写屏障之前的代码排在写屏障之后</li>
+<li>读屏障会保证指令重排序时，不会将读屏障之后的代码排在读屏障之前</li>
+</ol>
+</li>
+<li><strong>更底层是读写变量时使用lock指令来多核cpu之间的可见性与有序性</strong></li>
+</ol>
+</li>
+</ul>
+<p>加上volatile之后，保证了指令的有序性，不会发生指令重排，21就不会跑到24之后执行了</p>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/dd32cd4090a29b5dbd4c6a0bd8945187.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>小结</strong></p>
+<ul>
+<li>synchronized即能保证<strong>原子性、有序性、可见性</strong>，其中有序性是在该共享变量完全被synchronized 所接管（包括共享变量的读写操作）。上面的例子中synchronized 外面的 if (INSTANCE == null) 中的INSTANCE读操作没有被synchronized 接管，因此无法保证INSTANCE共享变量的有序性（即不能防止指令重排）。</li>
+<li>对共享变量加<code>volatile</code>关键字可以保证<code>可见性</code>和<code>有序性</code>，但是<strong>不能保证原子性</strong>（即不能防止指令交错）。</li>
+</ul>
+<h4 id="3-happens-before-对共享变量的写操作-对其它线程的读操作可见"><a href="#3-happens-before-对共享变量的写操作-对其它线程的读操作可见" class="headerlink" title="3.happens-before (对共享变量的写操作,对其它线程的读操作可见)"></a>3.happens-before (<code>对共享变量的写操作,对其它线程的读操作可见</code>)</h4><p>下面说的变量都是指成员变量或静态成员变量</p>
+<ol>
+<li>线程解锁m之前对变量的写，对于接下来对m加锁的其他线程对改变量的读可见<ul>
+<li>synchronized锁，保证了可见性</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><code class="hljs java">	<span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> x;<br>	<br>	<span class="hljs-keyword">static</span> Object m = <span class="hljs-keyword">new</span> Object();<br>	<br>	<span class="hljs-keyword">new</span> Thread(()-&gt;&#123;<br>	    <span class="hljs-keyword">synchronized</span>(m) &#123;<br>	        x = <span class="hljs-number">10</span>;<br>	    &#125;<br>	&#125;,<span class="hljs-string">&quot;t1&quot;</span>).start();<br>	<br>	<span class="hljs-keyword">new</span> Thread(()-&gt;&#123;<br>	    <span class="hljs-keyword">synchronized</span>(m) &#123;<br>	        System.out.println(x);<br>	    &#125;<br>	&#125;,<span class="hljs-string">&quot;t2&quot;</span>).start();<br><br><span class="hljs-comment">// 10</span><br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>线程对volatile变量的写，对接下来其他线程对该变量的读可见<ul>
+<li>volatile修饰的变量，通过写屏障，共享到主存中，其他线程通过读屏障，读取主存的数据</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">volatile</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> x;<br><br><span class="hljs-keyword">new</span> Thread(()-&gt;&#123;<br> 	x = <span class="hljs-number">10</span>;<br>&#125;,<span class="hljs-string">&quot;t1&quot;</span>).start();<br><br><span class="hljs-keyword">new</span> Thread(()-&gt;&#123;<br> 	System.out.println(x);<br>&#125;,<span class="hljs-string">&quot;t2&quot;</span>).start();<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>线程start前对变量的写，对该线程开始后对该变量的读可见</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> x;<br>x = <span class="hljs-number">10</span>;<br><span class="hljs-keyword">new</span> Thread(()-&gt;&#123;<br> System.out.println(x);<br>&#125;,<span class="hljs-string">&quot;t2&quot;</span>).start();<br></code></pre></td></tr></table></figure>
+
+<ol start="4">
+<li>线程结束前对变量的写，对其它线程得知它结束后的读可见（比如其它线程调用 t1.isAlive() 或 t1.join()等待它结束）</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> x;<br>Thread t1 = <span class="hljs-keyword">new</span> Thread(()-&gt;&#123;<br> x = <span class="hljs-number">10</span>;<br>&#125;,<span class="hljs-string">&quot;t1&quot;</span>);<br>t1.start();<br>t1.join();<br>System.out.println(x);<br></code></pre></td></tr></table></figure>
+
+<ol start="5">
+<li>线程 t1 打断 t2（interrupt）前对变量的写，对于其他线程得知 t2 被打断后对变量的读可见（通过 t2.interrupted 或 t2.isInterrupted）</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> x;<br>   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>       Thread t2 = <span class="hljs-keyword">new</span> Thread(()-&gt;&#123;<br>           <span class="hljs-keyword">while</span>(<span class="hljs-keyword">true</span>) &#123;<br>               <span class="hljs-keyword">if</span>(Thread.currentThread().isInterrupted()) &#123;<br>                   System.out.println(x);<br>                   <span class="hljs-keyword">break</span>;<br>               &#125;<br>           &#125;<br>       &#125;,<span class="hljs-string">&quot;t2&quot;</span>);<br>       t2.start();<br>       <span class="hljs-keyword">new</span> Thread(()-&gt;&#123;<br>           sleep(<span class="hljs-number">1</span>);<br>           x = <span class="hljs-number">10</span>;<br>           t2.interrupt();<br>       &#125;,<span class="hljs-string">&quot;t1&quot;</span>).start();<br>       <span class="hljs-keyword">while</span>(!t2.isInterrupted()) &#123;<br>           Thread.yield();<br>       &#125;<br>       System.out.println(x);<br>   &#125;<br></code></pre></td></tr></table></figure>
+
+<ol start="6">
+<li>​<ul>
+<li>对<code>变量默认值（0，false，null）的写</code>，对其它线程对该变量的 读可见 (最基本)</li>
+<li><code>具有传递性</code>，如果 x hb-&gt; y 并且 y hb-&gt; z 那么有 x hb-&gt; z ，<strong>配合 volatile 的防指令重排，有下面的例子</strong></li>
+<li>因为<code>x加了volatile</code>, 所以在volatile static int x 代码的上面添加了<code>读屏障</code>, 保证读到的x和y的变化是可见的(包括y, 只要是读屏障下面都OK); 通过传递性, t2线程对x,y的写操作, 都是可见的</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">volatile</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> x;  <br><span class="hljs-keyword">static</span> <span class="hljs-keyword">int</span> y;  <br><span class="hljs-keyword">new</span> Thread(() -&gt; &#123;  <br>	y = <span class="hljs-number">10</span>;  <br>	x = <span class="hljs-number">20</span>;  <br>&#125;,<span class="hljs-string">&quot;t1&quot;</span>).start();  <br>	<span class="hljs-keyword">new</span> Thread(() -&gt; &#123;  <br>	<span class="hljs-comment">// x=20 对 t2 可见, 同时 y=10 也对 t2 可见  </span><br>	System.out.println(x);  <br>&#125;,<span class="hljs-string">&quot;t2&quot;</span>).start(); <br></code></pre></td></tr></table></figure>
+
+<p><strong>总结</strong></p>
+<ul>
+<li><code>volatile</code>主要用在<code>一个线程改,多个线程读时的来保证可见性</code>，和<code>double-checked locking模式中保证synchronized代码块外的共享变量的</code>指令重排序<code>问题</code></li>
+</ul>
+<h3 id="3-习题"><a href="#3-习题" class="headerlink" title="3.习题"></a>3.习题</h3><h4 id="1-balking练习题"><a href="#1-balking练习题" class="headerlink" title="1.balking练习题"></a>1.balking练习题</h4><ul>
+<li>希望doInit()方法仅被调用一次下面的实现是否有问题，为什么？</li>
+<li>有问题: volatile无法保证原子性; 当多个线程同时调用init()方法时, 此时都进入到if判断, 因为都为false, 所以都调用<code>doInit()</code>方法, 此时就调用了多次<ul>
+<li>解决方法: 对init()方法的方法体, 通过<code>synchronized</code>加锁, 防止多个线程访问共享资源导致的安全问题</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TestVolatile</span> </span>&#123;<br>    <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">boolean</span> initialized = <span class="hljs-keyword">false</span>;<br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (initialized) &#123;<br>            <span class="hljs-keyword">return</span>;<br>        &#125;<br>        doInit();<br>        initialized = <span class="hljs-keyword">true</span>;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doInit</span><span class="hljs-params">()</span> </span>&#123;<br>    &#125;<br>&#125; <br></code></pre></td></tr></table></figure>
+
+<p>修改后</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Slf4j(topic = &quot;guizy.BigRoomTest&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">BigRoomTest</span> </span>&#123;<br><br>    <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">boolean</span> initialized = <span class="hljs-keyword">false</span>;<br>    <span class="hljs-keyword">final</span> <span class="hljs-keyword">static</span> Object obj = <span class="hljs-keyword">new</span> Object();<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        <span class="hljs-keyword">new</span> Thread(() -&gt; &#123;<br>            init();<br>        &#125;, <span class="hljs-string">&quot;t1&quot;</span>).start();<br><br>        <span class="hljs-keyword">new</span> Thread(() -&gt; &#123;<br>            init();<br>        &#125;, <span class="hljs-string">&quot;t2&quot;</span>).start();<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">init</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">synchronized</span> (obj) &#123;<br>            <span class="hljs-keyword">if</span> (initialized) &#123;<br>                <span class="hljs-keyword">return</span>;<br>            &#125;<br>            doInit();<br>            initialized = <span class="hljs-keyword">true</span>;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">doInit</span><span class="hljs-params">()</span> </span>&#123;<br>        log.debug(<span class="hljs-string">&quot;init...&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h4 id="2-线程安全单例模式（重点）"><a href="#2-线程安全单例模式（重点）" class="headerlink" title="2.线程安全单例模式（重点）"></a>2.线程安全单例模式（重点）</h4><ul>
+<li>单例模式有很多实现方法，<code>饿汉、懒汉、静态内部类、枚举类</code>，试分析每种实现下获取单例对象（即调用 getInstance）时的线程安全，并思考注释中的问题<ul>
+<li><code>饿汉式</code>：<strong>类加载就会导致该单实例对象被创建</strong></li>
+<li><code>懒汉式</code>：<strong>类加载不会导致该单实例对象被创建，而是首次使用该对象时才会创建</strong></li>
+</ul>
+</li>
+</ul>
+<p>实现1：饿汉式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 问题1：为什么加 final，防止子类继承后更改</span><br><span class="hljs-comment">// 问题2：如果实现了序列化接口, 还要做什么来防止反序列化破坏单例，如果进行反序列化的时候会生成新的对象，这样跟单例模式生成的对象是不同的。要解决直接加上readResolve()方法就行了，如下所示</span><br><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Serializable</span> </span>&#123;<br>    <span class="hljs-comment">// 问题3：为什么设置为私有? 放弃其它类中使用new生成新的实例，是否能防止反射创建新的实例?不能。</span><br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>&#123;&#125;<br>    <span class="hljs-comment">// 问题4：这样初始化是否能保证单例对象创建时的线程安全?没有，这是类变量，是jvm在类加载阶段就进行了初始化，jvm保证了此操作的线程安全性</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> Singleton INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br>    <span class="hljs-comment">// 问题5：为什么提供静态方法而不是直接将 INSTANCE 设置为 public, 说出你知道的理由。</span><br>    <span class="hljs-comment">//1.提供更好的封装性；2.提供范型的支持</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> INSTANCE;<br>    &#125;<br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Object <span class="hljs-title">readResolve</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">return</span> INSTANCE;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>问题1 : 加final为了防止有子类, 因为子类可以重写父类的方法</li>
+<li>问题2 : 首先通过反序列化操作, 也是可以创建一个对象的, 破坏了单例, 可以使用readResolve方法并返回instance对象, 当反序列化的时候就会调用自己写的readResolve方法</li>
+<li>问题3 : 私有化构造器, 防止外部通过构造器来创建对象; 但不能防止反射来创建对象</li>
+<li>问题4 : 因为单例对象是static的, 静态成员变量的初始化操作是在类加载阶段完成, 由JVM保证其线程安全 (这其实是利用了ClassLoader的线程安全机制。ClassLoader的loadClass方法在加载类的时候使用了synchronized关键字。)</li>
+<li>问题5 : 通过向外提供公共方法, 体现了更好的封装性, 可以在方法内实现懒加载的单例; 可以提供泛型等</li>
+</ul>
+<p>补充 : 任何一个readObject方法，不管是显式的还是默认的，它都会返回一个新建的实例，这个新建的实例不同于该类初始化时创建的实例。</p>
+<p>实现2：饿汉式: 因为枚举的变量, 底层是通过public static final来修饰的, 类加载就创建了,所以是饿汉式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">// 问题1：枚举单例是如何限制实例个数的：创建枚举类的时候就已经定义好了，每个枚举常量其实就是枚举类的一个静态成员变量</span><br><span class="hljs-comment">// 问题2：枚举单例在创建时是否有并发问题：没有，这是静态成员变量</span><br><span class="hljs-comment">// 问题3：枚举单例能否被反射破坏单例：不能</span><br><span class="hljs-comment">// 问题4：枚举单例能否被反序列化破坏单例：枚举类默认实现了序列化接口，枚举类已经考虑到此问题，无需担心破坏单例</span><br><span class="hljs-comment">// 问题5：枚举单例属于懒汉式还是饿汉式：饿汉式</span><br><span class="hljs-comment">// 问题6：枚举单例如果希望加入一些单例创建时的初始化逻辑该如何做：加构造方法就行了</span><br><span class="hljs-class"><span class="hljs-keyword">enum</span> <span class="hljs-title">Singleton</span> </span>&#123;<br> INSTANCE;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs markdown"><span class="hljs-bullet">-</span> 问题1 : 枚举类中, 只有一个INSTANCE, 就确保了它是单例的<br><span class="hljs-bullet">-</span> 问题2 : 没有并发问题, 是线程安全的, 因为枚举单例底层是一个静态成员变量, 它是通过类加载器的加载而创建的, 确保了线程安全<br><span class="hljs-bullet">-</span> 问题3 : 反射无法破坏枚举单例, 主要通过反射, newInstance的时候, 会在该方法中作判断, 如果检查是枚举类型, 就会抛出异常。<br><span class="hljs-bullet">  -</span> if ((this.clazz.getModifiers() &amp; 16384) != 0)<br><span class="hljs-code">    throw new IllegalArgumentException(“Cannot       reflectively create enum objects”);</span><br><span class="hljs-code">- 问题4 : 反序列化不能破坏, 枚举类默认也实习了序列号接口. 但枚举类考虑到了这个问题, 不会破坏单例. 通过反序列化得到的并不是同一个单例对象; 除此之外, 还可以写上readResolve方法,</span><br><span class="hljs-code">- 问题 5 : 属于饿汉式, 静态成员变量, 通过类加载器的时候就加载了。</span><br><span class="hljs-code">- 问题 6 : 加构造方法</span><br></code></pre></td></tr></table></figure>
+
+<p>实现3：懒汉式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>&#123; &#125;<br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> Singleton INSTANCE = <span class="hljs-keyword">null</span>;<br>    <span class="hljs-comment">// 分析这里的线程安全, 并说明有什么缺点：synchronized加载静态方法上，可以保证线程安全。缺点就是锁的范围过大.</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">synchronized</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">if</span>( INSTANCE != <span class="hljs-keyword">null</span> )&#123;<br>            <span class="hljs-keyword">return</span> INSTANCE;<br>        &#125;<br>        INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br>        <span class="hljs-keyword">return</span> INSTANCE;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<p>上面是一个懒汉式的单例, 代码存在性能问题: 当单例对象已经创建好了, 多个线程访问<code>getInstance()</code>方法, 仍然会获取锁, 同步操作, 性能很低, 此时出现<code>重复判断</code>, 因此要使用<code>双重检查</code></p>
+<p>实现4：DCL 懒汉式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-keyword">public</span> <span class="hljs-keyword">final</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Singleton</span> </span>&#123;<br>    <span class="hljs-function"><span class="hljs-keyword">private</span> <span class="hljs-title">Singleton</span><span class="hljs-params">()</span> </span>&#123; &#125;<br>    <span class="hljs-comment">// 问题1：解释为什么要加 volatile ?为了防止重排序问题</span><br>    <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">volatile</span> Singleton INSTANCE = <span class="hljs-keyword">null</span>;<br><br>    <span class="hljs-comment">// 问题2：对比实现3, 说出这样做的意义：提高了效率</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> Singleton <span class="hljs-title">getInstance</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">if</span> (INSTANCE != <span class="hljs-keyword">null</span>) &#123;<br>            <span class="hljs-keyword">return</span> INSTANCE;<br>        &#125;<br>        <span class="hljs-keyword">synchronized</span> (Singleton.class) &#123;<br>            <span class="hljs-comment">// 问题3：为什么还要在这里加为空判断, 之前不是判断过了吗？这是为了第一次判断时的并发问题。</span><br>            <span class="hljs-keyword">if</span> (INSTANCE != <span class="hljs-keyword">null</span>) &#123; <span class="hljs-comment">// t2</span><br>                <span class="hljs-keyword">return</span> INSTANCE;<br>            &#125;<br>            INSTANCE = <span class="hljs-keyword">new</span> Singleton();<br>            <span class="hljs-keyword">return</span> INSTANCE;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>问题1 : 因为在synchronized外部使用到了共享变量INSTANCE, 所以synchronized无法保证instance的有序性, 又因为instance = new Singleton()不是一个原子操作, 可分为多个指令. 此时通过指令重排, 可能会造成INSTANCE还未初始化, 就赋值的现象, 所以要给共享变量INSTANCE加上volatile,禁止指令重排</li>
+<li>问题2 : 增加了双重判断, 如果存在了单例对象, 别的线程再进来就无需加锁判断, 大大提高性能</li>
+<li>问题3 : 防止多线程并发导致不安全的问题:防止单例对象被重复创建. 当t1,t2线程都调用getInstance()方法, 它们都判断单例对象为空, 还没有创建;<ul>
+<li>此时t1先获取到锁对象, 进入到synchronized中, 此时创建对象, 返回单例对象, 释放锁;</li>
+<li>这时候t2获得了锁对象, 如果在代码块中没有if判断, 则线程2认为没有单例对象, 因为在代码块外判断的时候就没有, 所以t2就还是会创建单例对象. 此时就重复创建了</li>
+</ul>
+</li>
+</ul>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>本章重点讲解了 JMM 中的</p>
+<ul>
+<li>可见性 - 由 JVM 缓存优化引起; <code>(JIT即时编译器, 通过对热点代码的优化)</code></li>
+<li>有序性 - 由 JVM <code>指令重排序优化</code>引起; <code>(提高指令的执行效率, 类似流水线系统)</code></li>
+</ul>
+<ul>
+<li>happens-before 规则; <code>(happens-before 规定了对共享变量的写操作对其它线程的读操作可见，它是可见性与有序性的一套规则总结。)</code></li>
+</ul>
+<p>原理方面</p>
+<ul>
+<li>volatile (读写屏障)</li>
+</ul>
+<p>模式方面</p>
+<ul>
+<li>两阶段终止模式的 volatile 改进</li>
+<li>同步模式之 balking (犹豫模式)</li>
+</ul>
+<h2 id="五、共享模型之无锁"><a href="#五、共享模型之无锁" class="headerlink" title="五、共享模型之无锁"></a>五、共享模型之无锁</h2><ul>
+<li>Java中 <strong>synchronized</strong> 和 <strong>ReentrantLock</strong> 等 独占锁 就是 <strong>悲观锁</strong> 思想的实现</li>
+</ul>
+<ul>
+<li>在Java中<strong>java.util.concurrent.atomic包下面的原子变量类</strong>就是使用了<code>乐观锁</code>的一种实现方式 <strong>CAS</strong> 实现的</li>
+</ul>
+<ul>
+<li>管程即<code>monitor</code>是<code>阻塞式的悲观锁</code>实现<code>并发控制</code>，这章我们将通过<code>非阻塞式的乐观锁</code>的来实现<code>并发控制</code></li>
+</ul>
+<h3 id="1-问题提出"><a href="#1-问题提出" class="headerlink" title="1.问题提出"></a>1.问题提出</h3><ul>
+<li>有如下需求，保证<code>account.withdraw取款方法</code>的线程安全, 下面使用<code>synchronized</code>保证线程安全</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-comment">/**</span><br><span class="hljs-comment"> * Description: 使用重量级锁synchronized来保证多线程访问共享资源发生的安全问题</span><br><span class="hljs-comment"> *</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@author</span> guizy</span><br><span class="hljs-comment"> * <span class="hljs-doctag">@date</span> 2020/12/27 16:23</span><br><span class="hljs-comment"> */</span><br><span class="hljs-meta">@Slf4j(topic = &quot;guizy.Test1&quot;)</span><br><span class="hljs-keyword">public</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Test1</span> </span>&#123;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">(String[] args)</span> </span>&#123;<br>        Account.demo(<span class="hljs-keyword">new</span> AccountUnsafe(<span class="hljs-number">10000</span>));<br>        Account.demo(<span class="hljs-keyword">new</span> AccountCas(<span class="hljs-number">10000</span>));<br>    &#125;<br>&#125;<br><br><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AccountUnsafe</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Account</span> </span>&#123;<br>    <span class="hljs-keyword">private</span> Integer balance;<br><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">AccountUnsafe</span><span class="hljs-params">(Integer balance)</span> </span>&#123;<br>        <span class="hljs-keyword">this</span>.balance = balance;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> Integer <span class="hljs-title">getBalance</span><span class="hljs-params">()</span> </span>&#123;<br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>) &#123;<br>            <span class="hljs-keyword">return</span> balance;<br>        &#125;<br>    &#125;<br><br>    <span class="hljs-meta">@Override</span><br>    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">withdraw</span><span class="hljs-params">(Integer amount)</span> </span>&#123;<br>        <span class="hljs-comment">// 通过这里加锁就可以实现线程安全，不加就会导致线程安全问题</span><br>        <span class="hljs-keyword">synchronized</span> (<span class="hljs-keyword">this</span>) &#123;<br>            balance -= amount;<br>        &#125;<br>    &#125;<br>&#125;<br><br><br><span class="hljs-class"><span class="hljs-keyword">interface</span> <span class="hljs-title">Account</span> </span>&#123;<br>    <span class="hljs-comment">// 获取余额</span><br>    <span class="hljs-function">Integer <span class="hljs-title">getBalance</span><span class="hljs-params">()</span></span>;<br><br>    <span class="hljs-comment">// 取款</span><br>    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">withdraw</span><span class="hljs-params">(Integer amount)</span></span>;<br><br>    <span class="hljs-comment">/**</span><br><span class="hljs-comment">     * Java8之后接口新特性, 可以添加默认方法</span><br><span class="hljs-comment">     * 方法内会启动 1000 个线程，每个线程做 -10 元 的操作</span><br><span class="hljs-comment">     * 如果初始余额为 10000 那么正确的结果应当是 0</span><br><span class="hljs-comment">     */</span><br>    <span class="hljs-function"><span class="hljs-keyword">static</span> <span class="hljs-keyword">void</span> <span class="hljs-title">demo</span><span class="hljs-params">(Account account)</span> </span>&#123;<br>        List&lt;Thread&gt; ts = <span class="hljs-keyword">new</span> ArrayList&lt;&gt;();<br>        <span class="hljs-keyword">long</span> start = System.nanoTime();<br>        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; <span class="hljs-number">1000</span>; i++) &#123;<br>            ts.add(<span class="hljs-keyword">new</span> Thread(() -&gt; &#123;<br>                account.withdraw(<span class="hljs-number">10</span>);<br>            &#125;));<br>        &#125;<br>        ts.forEach(thread -&gt; thread.start());<br>        ts.forEach(t -&gt; &#123;<br>            <span class="hljs-keyword">try</span> &#123;<br>                t.join();<br>            &#125; <span class="hljs-keyword">catch</span> (InterruptedException e) &#123;<br>                e.printStackTrace();<br>            &#125;<br>        &#125;);<br>        <span class="hljs-keyword">long</span> end = System.nanoTime();<br>        System.out.println(account.getBalance()<br>                + <span class="hljs-string">&quot; cost: &quot;</span> + (end - start) / <span class="hljs-number">1000_000</span> + <span class="hljs-string">&quot; ms&quot;</span>);<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="2-解决思路-无锁"><a href="#2-解决思路-无锁" class="headerlink" title="2.解决思路-无锁"></a>2.解决思路-无锁</h3><ul>
+<li>上面的代码中使用<code>synchronized加锁</code>操作来<code>保证线程安全</code>，但是 **synchronized加锁操作太耗费资源 (因为底层使用了操作系统mutex指令, 造成内核态和用户态的切换)**，这里我们使用 <strong>无锁</strong> 来解决此问题</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AccountCas</span> <span class="hljs-keyword">implements</span> <span class="hljs-title">Account</span> </span>&#123;<br>	<span class="hljs-comment">//使用原子整数: 底层使用CAS+重试的机制</span><br>	<span class="hljs-keyword">private</span> AtomicInteger balance;<br><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">AccountCas</span><span class="hljs-params">(<span class="hljs-keyword">int</span> balance)</span> </span>&#123;<br>		<span class="hljs-keyword">this</span>.balance = <span class="hljs-keyword">new</span> AtomicInteger(balance);<br>	&#125;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> Integer <span class="hljs-title">getBalance</span><span class="hljs-params">()</span> </span>&#123;<br>		<span class="hljs-comment">//得到原子整数的值</span><br>		<span class="hljs-keyword">return</span> balance.get();<br>	&#125;<br><br>	<span class="hljs-meta">@Override</span><br>	<span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">withdraw</span><span class="hljs-params">(Integer amount)</span> </span>&#123;<br>		<span class="hljs-keyword">while</span>(<span class="hljs-keyword">true</span>) &#123;<br>			<span class="hljs-comment">//获得修改前的值</span><br>			<span class="hljs-keyword">int</span> prev = balance.get();<br>			<span class="hljs-comment">//获得修改后的值</span><br>			<span class="hljs-keyword">int</span> next = prev - amount;<br>			<span class="hljs-comment">//比较并设置值</span><br>			<span class="hljs-comment">/*</span><br><span class="hljs-comment">				此时的prev为共享变量的值, 如果prev被别的线程改了.也就是说: 自己读到的共享变量的值 和 共享变量最新值 不匹配,</span><br><span class="hljs-comment">				就继续where(true),如果匹配上了, 将next值设置给共享变量.</span><br><span class="hljs-comment">				</span><br><span class="hljs-comment">				AtomicInteger中value属性, 被volatile修饰, 就是为了确保线程之间共享变量的可见性.</span><br><span class="hljs-comment">			*/</span><br>			<span class="hljs-keyword">if</span>(balance.compareAndSet(prev, next)) &#123;<br>				<span class="hljs-keyword">break</span>;<br>			&#125;<br>		&#125;<br>	&#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<h3 id="3-CAS与volatile（重点）"><a href="#3-CAS与volatile（重点）" class="headerlink" title="3. CAS与volatile（重点）"></a>3. CAS与volatile（重点）</h3><p>使用原子操作来保证线程访问共享资源的安全性，cas + 重试的机制来确保（乐观锁思想），相对于悲观锁的思想的synchronized，reentrantLock来说，cas的方式效率会更好</p>
+<h4 id="3-1cas-重试的原理"><a href="#3-1cas-重试的原理" class="headerlink" title="3.1cas + 重试的原理"></a>3.1cas + 重试的原理</h4><ul>
+<li>前面看到的Atomic Integer的解决方法，内部并没有用锁来保护共享变量的线程安全。那么它是如何实现的？</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><code class="hljs java"><span class="hljs-meta">@Override</span><br><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">withdraw</span><span class="hljs-params">(Integer amount)</span> </span>&#123;<br>    <span class="hljs-comment">// 核心代码</span><br>    <span class="hljs-comment">// 需要不断尝试，直到成功为止</span><br>    <span class="hljs-keyword">while</span> (<span class="hljs-keyword">true</span>)&#123;<br>        <span class="hljs-comment">// 比如拿到了旧值 1000</span><br>        <span class="hljs-keyword">int</span> prev = balance.get();<br>        <span class="hljs-comment">// 在这个基础上 1000-10 = 990</span><br>        <span class="hljs-keyword">int</span> next = prev - amount;<br>        <span class="hljs-comment">/*</span><br><span class="hljs-comment">         compareAndSet 保证操作共享变量安全性的操作:</span><br><span class="hljs-comment">         ① 线程A首先获取balance.get(),拿到当前的balance值prev</span><br><span class="hljs-comment">         ② 根据这个prev值 - amount值 = 修改后的值next</span><br><span class="hljs-comment">         ③ 调用compareAndSet方法, 首先会判断当初拿到的prev值,是否和现在的balance值相同;</span><br><span class="hljs-comment">         	3.1、如果相同,表示其他线程没有修改balance的值, 此时就可以将next值</span><br><span class="hljs-comment">         		设置给balance属性</span><br><span class="hljs-comment">         	3.2、如果不相同,表示其他线程也修改了balance值, 此时就设置next值失败, </span><br><span class="hljs-comment">				然后一直重试, 重新获取balance.get()的值,计算出next值,</span><br><span class="hljs-comment">				并判断本次的prev和balnce的值是否相同...重复上面操作</span><br><span class="hljs-comment">		*/</span><br>        <span class="hljs-keyword">if</span> (atomicInteger.compareAndSet(prev,next))&#123;<br>            <span class="hljs-keyword">break</span>;<br>        &#125;<br>    &#125;<br>&#125;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>其中的关键是compareAndSwap（比较并设置值），它的简称就是CAS（也有Compare And Swap的说法），它必须是<code>原子操作</code></li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/img_convert/436a166f7e783537464879edf14ccc0c.png" srcset="/img/loading.gif" lazyload></p>
+<p><strong>流程</strong></p>
+<ul>
+<li>当一个线程要去修改<code>Account对象</code>中的值时，<code>先获取值prev(调用get方法)</code>，然后再将其设置为新的值<code>next</code>(调用cas方法)。在调用cas方法时，会将<code>prev</code>与<code>Account中的余额</code>进行比较<ul>
+<li>如果两者相等，就说明该值还未被其他线程修改，此时便可以进行修改操作</li>
+<li>如果不相等，就不设置值，重新获取值prev(调用get方法)；然后再将其设置为新的值next(调用cas方法)，直到修改成功为止</li>
+</ul>
+</li>
+</ul>
+<p><strong>注意 :</strong></p>
+<ul>
+<li>其实CAS底层是<strong>lock cmpxchg指令</strong>（X86架构），在单核CPU和多核CPU下都能够保证<code>[比较 - 交换]的原子性</code></li>
+<li>在多核状态下，某个核执行到带lock的指令时，<strong>CPU会让总线锁住，当这个核把此指令执行完，在开启总线。这个过程中不会被线程的调度机制所打断，保证了多个线程对内存操作的准确性，是原子的</strong></li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20210202190842397.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L20wXzM3OTg5OTgw,size_16,color_FFFFFF,t_70" srcset="/img/loading.gif" lazyload></p>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/JUC/">JUC</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/JUC/">JUC</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/11/04/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8A%E7%AF%87-Synchronized%E5%8E%9F%E7%90%86-LockSupport%E5%8E%9F%E7%90%86-ReentrantLock%E5%8E%9F%E7%90%86/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">Java并发编程上篇 - (Synchronized原理,LockSupport原理,ReentrantLock原理)</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/10/23/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04/">
+                        <span class="hidden-mobile">JVM学习笔记4</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.lazyComments('valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "99lfyqRg3CLazXoohVQjMwH3-gzGzoHsz",
+          app_key: "qx9rFQuqjhuegpH6AwJ8B0eD",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: true,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
