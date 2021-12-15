@@ -180,6 +180,263 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B09-Redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8BAOF/" target="_self">
+          <img src="/img/redis.png" srcset="/img/loading.gif" lazyload alt="Redis学习笔记9 Redis持久化之AOF">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B09-Redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8BAOF/">Redis学习笔记9 Redis持久化之AOF</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B09-Redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8BAOF/">
+          
+          
+            
+          
+          一、AOF概念
+AOF(append only file)持久化：以独立日志的方式记录每次写命令，重启时再重新执行AOF文件中命令，达到恢复数据的目的。与RDB相比可以简单描述为改记录数据为记录数据产生的过程
+AOF的主要作用时解决了数据持久化的实时性，目前已经是Redis持久化的主流方式
+
+二、AOF写数据过程
+三、AOF写数据三种策略（appendfsync）
+always（每次）
+每次写入操
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-22 19:42" pubdate>
+              2021-04-22
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Redis/">Redis</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Redis/">Redis</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B08-Redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8BRDB/" target="_self">
+          <img src="/img/redis.png" srcset="/img/loading.gif" lazyload alt="Redis学习笔记8 Redis持久化之RDB">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B08-Redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8BRDB/">Redis学习笔记8 Redis持久化之RDB</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B08-Redis%E6%8C%81%E4%B9%85%E5%8C%96%E4%B9%8BRDB/">
+          
+          
+            
+          
+          一、持久化简介1.什么是持久化利用永久性存储介质将数据进行保存，在特定的时间将保存的数据进行恢复的工作机制称为持久化。
+2.为什么要进行持久化防止数据的意外丢失，确保数据安全性
+3.持久化过程保存什么
+将当前数据状态进行保存，快照形式，存储数据结果，存储格式简单，关注点在数据。
+
+将数据的操作过程进行保存，日志形式，存储操作过程，存储格式复杂，关注点在数据的操作过程。
+
+​
+
+
+二、RDB1.RD
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-22 15:44" pubdate>
+              2021-04-22
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Redis/">Redis</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Redis/">Redis</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07-Jedis%E8%BF%9E%E6%8E%A5%E5%B9%B6%E6%93%8D%E4%BD%9CRedis/" target="_self">
+          <img src="/img/redis.png" srcset="/img/loading.gif" lazyload alt="Redis学习笔记7 Jedis连接并操作Redis">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07-Jedis%E8%BF%9E%E6%8E%A5%E5%B9%B6%E6%93%8D%E4%BD%9CRedis/">Redis学习笔记7 Jedis连接并操作Redis</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/04/22/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B07-Jedis%E8%BF%9E%E6%8E%A5%E5%B9%B6%E6%93%8D%E4%BD%9CRedis/">
+          
+          
+            
+          
+          一、Jedis简介编程语言与redis
+
+Java语言连接redis服务
+Jedis
+SpringData Redis
+Lettuce
+​
+
+
+二、Jedis操作Redis准备工作
+
+基于maven导入
+12345&lt;dependency&gt;  &lt;groupId&gt;redis.clients&lt;/groupId&gt;  &lt;artifactId&gt;jedis&lt;
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-22 09:51" pubdate>
+              2021-04-22
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Redis/">Redis</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Redis/">Redis</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B06-key%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E9%80%9A%E7%94%A8%E6%8C%87%E4%BB%A4/" target="_self">
+          <img src="/img/redis.png" srcset="/img/loading.gif" lazyload alt="Redis学习笔记6 key和数据库通用指令">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B06-key%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E9%80%9A%E7%94%A8%E6%8C%87%E4%BB%A4/">Redis学习笔记6 key和数据库通用指令</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B06-key%E5%92%8C%E6%95%B0%E6%8D%AE%E5%BA%93%E9%80%9A%E7%94%A8%E6%8C%87%E4%BB%A4/">
+          
+          
+            
+          
+          一、key通用操作1.key特征
+key是一个字符串，通过key获取redis中保存的数据
+
+2.key设计的操作
+对于key自身状态的相关操作，例如：删除，判定存在，获取类型等
+对于key有效性控制相关操作，例如：有效期设定，判定是否有效，有效状态的切换等
+对于key快速查询操作，例如：按指定策略查询key
+
+3.key基本操作
+删除指定key
+1del key
+获取key是否存在
+1exist
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-04-21 20:48" pubdate>
+              2021-04-21
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/Redis/">Redis</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/Redis/">Redis</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2021/04/21/Redis%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B05-sorted-set%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B/" target="_self">
           <img src="/img/redis.png" srcset="/img/loading.gif" lazyload alt="Redis学习笔记5 sorted_set数据类型">
         </a>
