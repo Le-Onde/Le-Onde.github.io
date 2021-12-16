@@ -18,7 +18,7 @@
   <meta name="author" content="John Doe">
   <meta name="keywords" content="">
   
-  <title>JVM学习笔记 - Hexo</title>
+  <title>JVM学习笔记1 - Hexo</title>
 
   <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
 
@@ -163,7 +163,7 @@
       <div class="full-bg-img">
         <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
           <div class="page-header text-center fade-in-up">
-            <span class="h2" id="subtitle" title="JVM学习笔记">
+            <span class="h2" id="subtitle" title="JVM学习笔记1">
               
             </span>
 
@@ -225,7 +225,7 @@
         <div class="py-5" id="board">
           <article class="post-content mx-auto">
             <!-- SEO header -->
-            <h1 style="display: none">JVM学习笔记</h1>
+            <h1 style="display: none">JVM学习笔记1</h1>
             
             <div class="markdown-body">
               <h3 id="一、JVM是什么"><a href="#一、JVM是什么" class="headerlink" title="一、JVM是什么"></a>一、JVM是什么</h3><h4 id="1-定义"><a href="#1-定义" class="headerlink" title="1.定义"></a>1.定义</h4><p>Java Virtual Machine ，Java 程序的<strong>运行环境</strong>（Java 二进制字节码的运行环境）。</p>
@@ -306,23 +306,22 @@
 </ol>
 <p><img src="https://leonde.oss-cn-beijing.aliyuncs.com/49MBC%25%60QS%7BYDUK%7EZ822J%7BQH.png" srcset="/img/loading.gif" lazyload alt="栈内存溢出1"></p>
 <ol start="2">
-<li><p>栈帧过大导致内存溢出</p>
-<p><img src="https://leonde.oss-cn-beijing.aliyuncs.com/2021/05/06/B6EFD%5DJ6XL1S%5DFF184YQK%281.png" srcset="/img/loading.gif" lazyload alt="栈内存溢出2"></p>
-<p>栈帧过大、过多、或者第三方类库操作，都有可能造成栈内存溢出 java.lang.stackOverflowError ，使用 -Xss256k 指定栈内存大小</p>
-<h4 id="4-线程运行诊断"><a href="#4-线程运行诊断" class="headerlink" title="4.线程运行诊断"></a>4.线程运行诊断</h4><p>[案例1]：CPU占用太多</p>
-<p>Linux 环境下运行某些程序的时候，可能导致 CPU 的占用过高，这时需要定位占用 CPU 过高的线程</p>
-<p><strong>解决方法</strong></p>
+<li> 栈帧过大导致内存溢出</li>
+</ol>
+<p>   <img src="https://leonde.oss-cn-beijing.aliyuncs.com/2021/05/06/B6EFD%5DJ6XL1S%5DFF184YQK%281.png" srcset="/img/loading.gif" lazyload alt="栈内存溢出2"></p>
+<p>   栈帧过大、过多、或者第三方类库操作，都有可能造成栈内存溢出 java.lang.stackOverflowError ，使用 -      Xss256k 指定栈内存大小</p>
+<h5 id="4-线程运行诊断"><a href="#4-线程运行诊断" class="headerlink" title="4.线程运行诊断"></a>4.线程运行诊断</h5><p>   [案例1]：CPU占用太多</p>
+<p>   Linux 环境下运行某些程序的时候，可能导致 CPU 的占用过高，这时需要定位占用 CPU 过高的线程</p>
+<p>   <strong>解决方法</strong></p>
 <ul>
 <li>top 命令，查看是哪个进程占用 CPU 过高</li>
 <li>ps H -eo pid, tid（线程id）, %cpu | grep 刚才通过 top 查到的进程号 通过 ps 命令进一步查看是哪个线程占用 CPU 过高</li>
 <li>jstack 进程 id 通过查看进程中的线程的 nid ，刚才通过 ps 命令看到的 tid 来对比定位，注意 jstack 查找出的线程 id 是 16 进制的，需要转换。</li>
 </ul>
-<p>[案例2]：程序运行很长时间没有结果</p>
-<p>多个线程发生死锁</p>
-<p><img src="https://leonde.oss-cn-beijing.aliyuncs.com/2021/06/P%5DYL2PNK%25WQ0W4D_8%5D%60%28%29FT.png" srcset="/img/loading.gif" lazyload alt="死锁"></p>
-<p>​</p>
-</li>
-</ol>
+<p>   [案例2]：程序运行很长时间没有结果</p>
+<p>   多个线程发生死锁</p>
+<p>   <img src="https://leonde.oss-cn-beijing.aliyuncs.com/2021/06/P%5DYL2PNK%25WQ0W4D_8%5D%60%28%29FT.png" srcset="/img/loading.gif" lazyload alt="死锁"></p>
+<p>   ​</p>
 <h4 id="Ⅲ-本地方法栈"><a href="#Ⅲ-本地方法栈" class="headerlink" title="Ⅲ.本地方法栈"></a>Ⅲ.本地方法栈</h4><p>一些带有 native 关键字的方法就是需要 JAVA 去调用本地的C或者C++方法，因为 JAVA 有时候没法直接和操作系统底层交互，所以需要用到本地方法栈，服务于带 native 关键字的方法。</p>
 <h4 id="Ⅳ-堆"><a href="#Ⅳ-堆" class="headerlink" title="Ⅳ.堆"></a>Ⅳ.堆</h4><h5 id="1-定义-2"><a href="#1-定义-2" class="headerlink" title="1.定义"></a>1.定义</h5><p>Heap 堆</p>
 <ul>
