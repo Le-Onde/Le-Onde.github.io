@@ -180,6 +180,433 @@
     
     
       <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2022/01/15/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%EF%BC%89/" target="_self">
+          <img src="/img/mysql.png" srcset="/img/loading.gif" lazyload alt="MySQL数据库高级 - （主从复制）">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/01/15/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%EF%BC%89/">MySQL数据库高级 - （主从复制）</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2022/01/15/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%EF%BC%89/">
+          
+          
+            
+          
+          主从复制复制基本原理
+MySQL复制过程分为三步
+
+Master将改变记录到二进制日志（Binary Log）。这些记录过程叫做二进制日志事件，Binary Log Events;
+Slave将Master的Binary Log Events拷贝到它的中继日志（Replay Log）；
+Slave重做中继日志中的事件，将改变应用到自己的数据库中。MySQL复制是异步且串行化的
+
+复制基本原则
+每个
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-01-15 18:21" pubdate>
+              2022-01-15
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/MySQL/">MySQL</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2022/01/13/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E3%80%81%E8%A1%A8%E8%A1%8C%E9%94%81%EF%BC%89/" target="_self">
+          <img src="/img/mysql.png" srcset="/img/loading.gif" lazyload alt="MySQL数据库高级 - （查询优化、表行锁）">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/01/13/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E3%80%81%E8%A1%A8%E8%A1%8C%E9%94%81%EF%BC%89/">MySQL数据库高级 - （查询优化、表行锁）</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2022/01/13/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E3%80%81%E8%A1%A8%E8%A1%8C%E9%94%81%EF%BC%89/">
+          
+          
+            
+          
+          查询优化1.小表驱动大表优化原则：对于MySQL数据库而言， 永远都是小表驱动大表
+1234567891011121314151617&#x2F;*** 举个例子：可以使用嵌套的for循环来理解小表驱动大表。* 以下两个循环结果都是一样的，但是对于MySQL来说不一样，* 第一种可以理解为，和MySQL建立5次连接每次查询1000次。* 第一种可以理解为，和MySQL建立1000次连接每次查询5次
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-01-13 22:21" pubdate>
+              2022-01-13
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/MySQL/">MySQL</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2022/01/11/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96%EF%BC%89/" target="_self">
+          <img src="/img/mysql.png" srcset="/img/loading.gif" lazyload alt="MySQL数据库高级 - （索引优化）">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/01/11/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96%EF%BC%89/">MySQL数据库高级 - （索引优化）</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2022/01/11/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E7%B4%A2%E5%BC%95%E4%BC%98%E5%8C%96%EF%BC%89/">
+          
+          
+            
+          
+          索引分析优化1.单表索引分析优化数据准备
+123456789101112131415161718DROP TABLE IF EXISTS &#96;article&#96;;CREATE TABLE IF NOT EXISTS &#96;article&#96; (    &#96;id&#96;          INT(10) UNSIGNED NOT NULL PRIMARY KEY AUT
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-01-11 18:33" pubdate>
+              2022-01-11
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/MySQL/">MySQL</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2022/01/04/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E3%80%81%E7%B4%A2%E5%BC%95%EF%BC%89/" target="_self">
+          <img src="/img/mysql.png" srcset="/img/loading.gif" lazyload alt="MySQL数据库高级 - （存储引擎、索引）">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2022/01/04/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E3%80%81%E7%B4%A2%E5%BC%95%EF%BC%89/">MySQL数据库高级 - （存储引擎、索引）</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2022/01/04/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E3%80%81%E7%B4%A2%E5%BC%95%EF%BC%89/">
+          
+          
+            
+          
+          MySQL逻辑架构和其他数据库相比，MySQL有点与众不同，主要体现在存储引擎的架构上， 插件式的存储引擎架构将查询处理和其他的系统任务以及数据的存储提取相分离。 这种架构可以根据业务的需求和实际需求选择合适的存储引擎
+逻辑架构分层
+
+
+连接层： 最上层是一些客户端和连接服务，包含本地sock通信和大多数基于客户端/服务端工具实现的类似于tcp/ip的通信。主要完成一些类似于连接处理、授权认证、及
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2022-01-04 20:08" pubdate>
+              2022-01-04
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/MySQL/">MySQL</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/12/22/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%EF%BC%88%E5%A4%9A%E8%A1%A8%E6%93%8D%E4%BD%9C%E3%80%81%E5%87%BD%E6%95%B0%E3%80%81%E8%A7%86%E5%9B%BE%E3%80%81%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E3%80%81%E8%A7%A6%E5%8F%91%E5%99%A8%EF%BC%89/" target="_self">
+          <img src="/img/mysql.png" srcset="/img/loading.gif" lazyload alt="MySQL数据库基本操作 - （多表操作、函数、视图、存储过程、触发器）">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/12/22/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%EF%BC%88%E5%A4%9A%E8%A1%A8%E6%93%8D%E4%BD%9C%E3%80%81%E5%87%BD%E6%95%B0%E3%80%81%E8%A7%86%E5%9B%BE%E3%80%81%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E3%80%81%E8%A7%A6%E5%8F%91%E5%99%A8%EF%BC%89/">MySQL数据库基本操作 - （多表操作、函数、视图、存储过程、触发器）</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/12/22/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%EF%BC%88%E5%A4%9A%E8%A1%A8%E6%93%8D%E4%BD%9C%E3%80%81%E5%87%BD%E6%95%B0%E3%80%81%E8%A7%86%E5%9B%BE%E3%80%81%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E3%80%81%E8%A7%A6%E5%8F%91%E5%99%A8%EF%BC%89/">
+          
+          
+            
+          
+          MySQL的多表操作1. 多表关系（1）介绍
+实际开发中，一个项目通常需要很多张表才能完成。例如：一个商城项目就需要分类表(category)、商品表(products)、订单表(orders)等多张表。且这些表的数据之间存在一定的关系，接下来我们将在单表的基础上，一起学习多表方面的知识。
+
+（2）多表关系
+
+一对一关系
+一个学生只有一张身份证
+一张身份证只能对应一学生
+在任一表中添加唯一外键，指
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-12-22 17:50" pubdate>
+              2021-12-22
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/MySQL/">MySQL</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/12/17/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%EF%BC%88DML%E3%80%81MySQL%E7%BA%A6%E6%9D%9F%E3%80%81DQL%EF%BC%89/" target="_self">
+          <img src="/img/mysql.png" srcset="/img/loading.gif" lazyload alt="MySQL数据库基本操作 - （DML、MySQL约束、DQL）">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/12/17/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%EF%BC%88DML%E3%80%81MySQL%E7%BA%A6%E6%9D%9F%E3%80%81DQL%EF%BC%89/">MySQL数据库基本操作 - （DML、MySQL约束、DQL）</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/12/17/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%EF%BC%88DML%E3%80%81MySQL%E7%BA%A6%E6%9D%9F%E3%80%81DQL%EF%BC%89/">
+          
+          
+            
+          
+          MySQL数据库基本操作 - DMLⅠ.基本介绍DML是指数据操作语言，英文全称是Data Manipulation Language，对数据库中表的数据记录进行更新
+关键字：
+
+插入 insert
+删除 delete
+更新 update
+
+Ⅱ.数据插入1234-- 向表中插入某些列insert into 表 (列名1,列名2,列名3...) values (值1,值2,值3...)； -- 向表
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-12-17 17:04" pubdate>
+              2021-12-17
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/MySQL/">MySQL</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
+        <a href="/2021/12/16/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-DDL/" target="_self">
+          <img src="/img/mysql.png" srcset="/img/loading.gif" lazyload alt="MySQL数据库基本操作 - DDL">
+        </a>
+      </div>
+    
+    <article class="col-12 col-md-8 mx-auto index-info">
+      <h1 class="index-header">
+        
+        <a href="/2021/12/16/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-DDL/">MySQL数据库基本操作 - DDL</a>
+      </h1>
+
+      <p class="index-excerpt">
+        <a href="/2021/12/16/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-DDL/">
+          
+          
+            
+          
+          MySQL数据库基本操作 - DDLⅠ.DDL解释DDL（Data Definition Language），数据定义语言，该语言包括以下部分
+
+对数据库的操作
+对表结构的常用操作
+修改表操作
+
+
+Ⅱ.对数据库的常用操作
+
+
+功能
+SQL
+
+
+
+查看所有的数据库
+show databases;
+
+
+创建数据库
+create database[if not exists] mybd1 [charse
+        </a>
+      </p>
+
+      <div class="index-btm post-metas">
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-date"></i>
+            <time datetime="2021-12-16 18:10" pubdate>
+              2021-12-16
+            </time>
+          </div>
+        
+        
+          <div class="post-meta mr-3">
+            <i class="iconfont icon-category"></i>
+            
+              <a href="/categories/MySQL/">MySQL</a>
+            
+          </div>
+        
+        
+          <div class="post-meta">
+            <i class="iconfont icon-tags"></i>
+            
+              <a href="/tags/MySQL/">MySQL</a>
+            
+          </div>
+        
+      </div>
+    </article>
+  </div>
+
+  <div class="row mx-auto index-card">
+    
+    
+      <div class="col-12 col-md-4 m-auto index-img">
         <a href="/2021/12/13/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8B%E7%AF%87-%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E9%9B%86%E5%90%88%E7%B1%BB%E3%80%81linkedblockingqueue%E5%8E%9F%E7%90%86%EF%BC%89/" target="_self">
           <img src="/img/JUC.jpg" srcset="/img/loading.gif" lazyload alt="Java并发编程下篇 - (线程安全集合类、linkedblockingqueue原理）">
         </a>
@@ -356,422 +783,11 @@ AQS核心思想是，如果被请求的共享资源空闲，则将当前请求�
     </article>
   </div>
 
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/12/04/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%AF%87-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E3%80%81ThreadPoolExecutor%E3%80%81ScheduledExecutorService%E3%80%81Fork-Join/" target="_self">
-          <img src="/img/JUC.jpg" srcset="/img/loading.gif" lazyload alt="Java并发编程中篇 - (线程池、ThreadPoolExecutor、ScheduledExecutorService、Fork/Join)">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/12/04/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%AF%87-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E3%80%81ThreadPoolExecutor%E3%80%81ScheduledExecutorService%E3%80%81Fork-Join/">Java并发编程中篇 - (线程池、ThreadPoolExecutor、ScheduledExecutorService、Fork/Join)</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/12/04/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%AF%87-%E7%BA%BF%E7%A8%8B%E6%B1%A0%E3%80%81ThreadPoolExecutor%E3%80%81ScheduledExecutorService%E3%80%81Fork-Join/">
-          
-          
-            
-          
-          一、共享模型值工具1.线程池（重点）
-池化技术有很多，比如线程池、数据库连接池、HTTP连接池等等都是对这个思想的应用。池化技术的思想主要是为了减少每次获取资源的消耗，提高对资源的利用率。
-
-线程池提供了一种限制和管理资源（包括执行一个任务）。每个线程池还维护一些基本统计信息，例如已完成任务的数量。
-线程池的好处
-
-降低资源消耗。通过重复利用已创建的线程降低线程创建和销毁造成的消耗。（创建的线程，
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-12-04 18:16" pubdate>
-              2021-12-04
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/JUC/">JUC</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/JUC/">JUC</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/11/04/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8A%E7%AF%87-Synchronized%E5%8E%9F%E7%90%86-LockSupport%E5%8E%9F%E7%90%86-ReentrantLock%E5%8E%9F%E7%90%86/" target="_self">
-          <img src="/img/JUC.jpg" srcset="/img/loading.gif" lazyload alt="Java并发编程上篇 - (Synchronized原理,LockSupport原理,ReentrantLock原理)">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/11/04/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8A%E7%AF%87-Synchronized%E5%8E%9F%E7%90%86-LockSupport%E5%8E%9F%E7%90%86-ReentrantLock%E5%8E%9F%E7%90%86/">Java并发编程上篇 - (Synchronized原理,LockSupport原理,ReentrantLock原理)</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/11/04/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8A%E7%AF%87-Synchronized%E5%8E%9F%E7%90%86-LockSupport%E5%8E%9F%E7%90%86-ReentrantLock%E5%8E%9F%E7%90%86/">
-          
-          
-            
-          
-          一、基本概念1.进程与线程进程
-程序由指令和数据组成，但这些指令要运行，数据要读写，就必须将指令加载至CPU，数据加载至内存。在指令运行过程中还需要用到磁盘、网络等设备。进程就是用来加载指令、管理内存、管理IO的。
-当一个程序被运行，从磁盘加载这个程序的代码至内存，这就开启了一个进程
-进程就可以视为程序的一个实例。大部分程序可以同时运行多个实例进行（例如笔记本、画图、浏览器 等），也有的程序只能启
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-11-04 17:53" pubdate>
-              2021-11-04
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/JUC/">JUC</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/JUC/">JUC</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/11/01/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8A%E7%AF%87-JMM-CAS%E5%8E%9F%E7%90%86-Volatile%E5%8E%9F%E7%90%86/" target="_self">
-          <img src="/img/JUC.jpg" srcset="/img/loading.gif" lazyload alt="Java并发编程上篇 - (JMM,CAS原理,Volatile原理)">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/11/01/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8A%E7%AF%87-JMM-CAS%E5%8E%9F%E7%90%86-Volatile%E5%8E%9F%E7%90%86/">Java并发编程上篇 - (JMM,CAS原理,Volatile原理)</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/11/01/Java%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B%E4%B8%8A%E7%AF%87-JMM-CAS%E5%8E%9F%E7%90%86-Volatile%E5%8E%9F%E7%90%86/">
-          
-          
-            
-          
-          四、共享模型之内存1.Java内存模型（重点）
-JMM即 Java Memory Model，它从Java层面定义了主存、工作内存 抽象概念，底层对应着CPU寄存器、缓存、硬件内存、CPU指令优化等。JMM体现在以下几个方面
-原子性 - 保证指令不会受线程上下文切换的影响
-可见性 - 保证指令不会受cpu缓存的影响（JIT对热点代码的缓存优化）
-有序性 - 保证指令不会受cpu指令并行优化的影响
-
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-11-01 14:40" pubdate>
-              2021-11-01
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/JUC/">JUC</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/JUC/">JUC</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/10/23/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04/" target="_self">
-          <img src="/img/jvm.png" srcset="/img/loading.gif" lazyload alt="JVM学习笔记4">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/10/23/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04/">JVM学习笔记4</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/10/23/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B04/">
-          
-          
-            
-          
-          字节码技术一.字节码指令1.javap工具java中提供了javap工具来反编译class文件
-1javap -v D:Demo.class
-
-2.图解方法执行流程12345678public class Demo3_1&#123;  public static void main(String[] args)&#123;    int a = 10;    int b = Short.MAX_V
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-10-23 17:58" pubdate>
-              2021-10-23
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Java/">Java</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/JVM/">JVM</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/10/11/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03/" target="_self">
-          <img src="/img/jvm.png" srcset="/img/loading.gif" lazyload alt="JVM学习笔记3">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/10/11/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03/">JVM学习笔记3</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/10/11/JVM%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B03/">
-          
-          
-            
-          
-          一、垃圾回收器
-相关概念
-
-并行收集：指多条垃圾收集线程并行工作，但此时用户线程仍处于等待状态
-并发收集：指用户线程与垃圾收集线程同时工作（不一定是并行的可能会交替执行）。用户程序在继续运行，而垃圾收集程序运行在另一个CPU上
-吞吐量：即CPU用于运行用户代码的时间与CPU总消耗时间的比值（吞吐量 = 运行用户代码时间/（运行用户代码时间+垃圾收集时间）），也就是例如：虚拟机共运行100min，垃
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-10-11 20:47" pubdate>
-              2021-10-11
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/Java/">Java</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/JVM/">JVM</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/09/24/%E7%AE%97%E6%B3%9554-%E5%8A%9B%E6%89%A333-%E6%90%9C%E7%B4%A2%E6%97%8B%E8%BD%AC%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84/" target="_self">
-          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法54[力扣33]-搜索旋转排序数组">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/09/24/%E7%AE%97%E6%B3%9554-%E5%8A%9B%E6%89%A333-%E6%90%9C%E7%B4%A2%E6%97%8B%E8%BD%AC%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84/">算法54[力扣33]-搜索旋转排序数组</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/09/24/%E7%AE%97%E6%B3%9554-%E5%8A%9B%E6%89%A333-%E6%90%9C%E7%B4%A2%E6%97%8B%E8%BD%AC%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84/">
-          
-          
-            
-          
-          一、题目描述整数数组 nums 按升序排列，数组中的值 互不相同 。
-在传递给函数之前，nums 在预先未知的某个下标 k（0 &lt;= k &lt; nums.length）上进行了 旋转，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0],nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-09-24 16:40" pubdate>
-              2021-09-24
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
-  <div class="row mx-auto index-card">
-    
-    
-      <div class="col-12 col-md-4 m-auto index-img">
-        <a href="/2021/09/24/%E7%AE%97%E6%B3%9553-%E5%8A%9B%E6%89%A334-%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/" target="_self">
-          <img src="/img/leetcode.jpg" srcset="/img/loading.gif" lazyload alt="算法53[力扣34]-在排序数组中查找元素的第一个和最后一个位置">
-        </a>
-      </div>
-    
-    <article class="col-12 col-md-8 mx-auto index-info">
-      <h1 class="index-header">
-        
-        <a href="/2021/09/24/%E7%AE%97%E6%B3%9553-%E5%8A%9B%E6%89%A334-%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/">算法53[力扣34]-在排序数组中查找元素的第一个和最后一个位置</a>
-      </h1>
-
-      <p class="index-excerpt">
-        <a href="/2021/09/24/%E7%AE%97%E6%B3%9553-%E5%8A%9B%E6%89%A334-%E5%9C%A8%E6%8E%92%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E6%9F%A5%E6%89%BE%E5%85%83%E7%B4%A0%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E5%92%8C%E6%9C%80%E5%90%8E%E4%B8%80%E4%B8%AA%E4%BD%8D%E7%BD%AE/">
-          
-          
-            
-          
-          一、题目描述给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
-如果数组中不存在目标值 target，返回 [-1, -1]。
-进阶：
-
-你可以设计并实现时间复杂度为 O(log n) 的算法解决此问题吗？
-
-示例 1：
-123输入：nums = [5,7,7,8,8,10], target = 8输出：[3,4]
-
-示例 2：
-12
-        </a>
-      </p>
-
-      <div class="index-btm post-metas">
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-date"></i>
-            <time datetime="2021-09-24 15:46" pubdate>
-              2021-09-24
-            </time>
-          </div>
-        
-        
-          <div class="post-meta mr-3">
-            <i class="iconfont icon-category"></i>
-            
-              <a href="/categories/%E7%AE%97%E6%B3%95/">算法</a>
-            
-          </div>
-        
-        
-          <div class="post-meta">
-            <i class="iconfont icon-tags"></i>
-            
-              <a href="/tags/%E7%AE%97%E6%B3%95/">算法</a>
-            
-          </div>
-        
-      </div>
-    </article>
-  </div>
-
 
 
   <nav aria-label="navigation">
     <span class="pagination" id="pagination">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/#board">8</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/#board">2</a><a class="page-number" href="/page/3/#board">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/#board">9</a><a class="extend next" rel="next" href="/page/2/#board"><i class="iconfont icon-arrowright"></i></a>
     </span>
   </nav>
 

@@ -1,0 +1,620 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/newcon.png">
+  <link rel="icon" href="/img/newfav.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+  <title>MySQL数据库高级 - （索引优化） - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.9","typing":{"enable":true,"typeSpeed":64,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Le Onde</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                主页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                种类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://img-blog.csdnimg.cn/20210421122657715.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="MySQL数据库高级 - （索引优化）">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2022-01-11 18:33" pubdate>
+        January 11, 2022 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      3.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      45
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MySQL数据库高级 - （索引优化）</h1>
+            
+            <div class="markdown-body">
+              <h2 id="索引分析优化"><a href="#索引分析优化" class="headerlink" title="索引分析优化"></a>索引分析优化</h2><h3 id="1-单表索引分析优化"><a href="#1-单表索引分析优化" class="headerlink" title="1.单表索引分析优化"></a>1.单表索引分析优化</h3><p><strong>数据准备</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><code class="hljs mysql">DROP TABLE IF EXISTS &#96;article&#96;;<br><br>CREATE TABLE IF NOT EXISTS &#96;article&#96; (<br>    &#96;id&#96;          INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT &#39;主键&#39;,<br>    &#96;author_id&#96;   INT(10) UNSIGNED NOT NULL COMMENT &#39;作者id&#39;,<br>    &#96;category_id&#96; INT(10) UNSIGNED NOT NULL COMMENT &#39;分类id&#39;,<br>    &#96;views&#96;       INT(10) UNSIGNED NOT NULL COMMENT &#39;被查看的次数&#39;,<br>    &#96;comments&#96;    INT(10) UNSIGNED NOT NULL COMMENT &#39;回帖的备注&#39;,<br>    &#96;title&#96;       VARCHAR(255)     NOT NULL COMMENT &#39;标题&#39;,<br>    &#96;content&#96;     VARCHAR(255)     NOT NULL COMMENT &#39;正文内容&#39;<br>) COMMENT &#39;文章&#39;;<br><br>INSERT INTO &#96;article&#96;(&#96;author_id&#96;, &#96;category_id&#96;, &#96;views&#96;, &#96;comments&#96;, &#96;title&#96;, &#96;content&#96;)<br>VALUES (1, 1, 1, 1, &#39;1&#39;, &#39;1&#39;),<br>       (2, 2, 2, 2, &#39;2&#39;, &#39;2&#39;),<br>       (3, 3, 3, 3, &#39;3&#39;, &#39;3&#39;),<br>       (1, 1, 3, 3, &#39;3&#39;, &#39;3&#39;),<br>       (1, 1, 4, 4, &#39;4&#39;, &#39;4&#39;);<br></code></pre></td></tr></table></figure>
+
+<p><strong>案例</strong>：查询<code>category_id</code>为1且<code>comments</code>大于1的情况下，<code>views</code>最多的<code>article_id</code>。</p>
+<ol>
+<li>编写SQL语句并查看SQL执行计划</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs mysql"># 1、sql语句<br>SELECT id,author_id FROM article <br>WHERE category_id &#x3D; 1 AND comments &gt; 1 ORDER BY views DESC LIMIT 1;<br><br># 2、sql执行计划<br>mysql&gt; EXPLAIN SELECT id,author_id FROM article <br>WHERE category_id &#x3D; 1 AND comments &gt; 1 ORDER BY views DESC LIMIT 1\G<br>*************************** 1. row ***************************<br>           id: 1<br>  select_type: SIMPLE<br>        table: article<br>   partitions: NULL<br>         type: ALL<br>possible_keys: NULL<br>          key: NULL<br>      key_len: NULL<br>          ref: NULL<br>         rows: 5<br>     filtered: 20.00<br>        Extra: Using where; Using filesort  # 产生了文件内排序，需要优化SQL<br>1 row in set, 1 warning (0.00 sec)<br></code></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>创建索引<code>idx_article_ccv</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">CREATE INDEX idx_article_ccv ON article(category_id,comments,views);<br></code></pre></td></tr></table></figure>
+
+<ol start="3">
+<li>查看当前索引</li>
+</ol>
+<p><img src="https://www.yuque.com/api/filetransfer/images?url=https://img-blog.csdnimg.cn/20200803134154162.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1JyaW5nb18=,size_16,color_FFFFFF,t_70&sign=c3a7fed45eaf02b3415bbb98e679aea1a8ad391aa5f91ba28ec71b8a8be6364a&x-oss-process=image/resize,w_750,limit_0" srcset="/img/loading.gif" lazyload></p>
+<ol start="4">
+<li>查看现在SQL语句的执行计划</li>
+</ol>
+<p><img src="https://www.yuque.com/api/filetransfer/images?url=https://img-blog.csdnimg.cn/20200803134549914.png&sign=bd8fc8df9148b2102076828b274f48e7bd5f69bc1825822b222496d11810923c&x-oss-process=image/resize,w_750,limit_0" srcset="/img/loading.gif" lazyload></p>
+<p>我们发现，创建符合索引<code>idx_article_ccv</code>之后，虽然解决了全表扫描的问题，但是在<code>order by</code>排序的时候没有用到索引，MySQL居然还是用的<code>Using filesort</code>，为什么？</p>
+<ol start="5">
+<li>我们试试修改SQL，看看SQL的执行计划</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT id,author_id FROM article <br>WHERE category_id &#x3D; 1 AND comments &#x3D; 1 ORDER BY views DESC LIMIT 1;<br></code></pre></td></tr></table></figure>
+
+<p><img src="https://www.yuque.com/api/filetransfer/images?url=https://img-blog.csdnimg.cn/20200803135228945.png&sign=8c3fa4cb3616b419ba3e12e0b25683ff8c13bb5ae52609e572669311e2a633bf&x-oss-process=image/resize,w_750,limit_0" srcset="/img/loading.gif" lazyload></p>
+<p>推论：当<code>comments &gt; 1</code>的时候<code>order by</code>排序<code>views</code>字段索引就用不上，但是当<code>comments = 1</code>的时候<code>order by</code>排序<code>views</code>字段索引就可以用上！！！<strong>所以，范围之后的索引会失效！！</strong></p>
+<ol start="6">
+<li>我们现在知道<strong>范围之后的索引会失效</strong>，原来的索引<code>idx_article_ccv</code>最后一个字段<code>views</code>会失效，那么我们如果删除这个索引，创建<code>idx_article_cv</code>索引</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">&#x2F;* 创建索引 idx_article_cv *&#x2F;<br>CREATE INDEX idx_article_cv ON article(category_id,views);<br></code></pre></td></tr></table></figure>
+
+<p>查看当前的索引</p>
+<p><img src="https://www.yuque.com/api/filetransfer/images?url=https://img-blog.csdnimg.cn/20200803140542912.png&sign=24a853da93b67ce23158c4f77e505c90db79868d64da8f9ddf4a9d0f588f08df&x-oss-process=image/resize,w_750,limit_0" srcset="/img/loading.gif" lazyload></p>
+<ol start="7">
+<li>当前索引是<code>idx_article_cv</code>，来看一下SQL执行计划。</li>
+</ol>
+<p><img src="https://www.yuque.com/api/filetransfer/images?url=https://img-blog.csdnimg.cn/20200803140951803.png&sign=9fdd90a68bf50da7a7e730417b2b263597dbe6b623f178a0734b5f356fbc16e8&x-oss-process=image/resize,w_750,limit_0" srcset="/img/loading.gif" lazyload></p>
+<h3 id="2-两表索引分析优化"><a href="#2-两表索引分析优化" class="headerlink" title="2.两表索引分析优化"></a>2.两表索引分析优化</h3><p><strong>数据准备</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs mysql">DROP TABLE IF EXISTS &#96;class&#96;;<br>DROP TABLE IF EXISTS &#96;book&#96;;<br><br>CREATE TABLE IF NOT EXISTS &#96;class&#96;(<br>&#96;id&#96; INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT &#39;主键&#39;,<br>&#96;card&#96; INT(10) UNSIGNED NOT NULL COMMENT &#39;分类&#39; <br>) COMMENT &#39;商品类别&#39;;<br><br>CREATE TABLE IF NOT EXISTS &#96;book&#96;(<br>&#96;bookid&#96; INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT &#39;主键&#39;,<br>&#96;card&#96; INT(10) UNSIGNED NOT NULL COMMENT &#39;分类&#39;<br>) COMMENT &#39;书籍&#39;;<br></code></pre></td></tr></table></figure>
+
+<p><strong>两表连接查询的SQL执行计划</strong></p>
+<ol>
+<li>不创建索引的情况下，SQL的执行计划。</li>
+</ol>
+<p><img src="https://www.yuque.com/api/filetransfer/images?url=https://img-blog.csdnimg.cn/20200803143557187.png&sign=5b292223c4b553fe60927d353848abf5daf114f393b6b1fa32b434808c41f912&x-oss-process=image/resize,w_750,limit_0" srcset="/img/loading.gif" lazyload></p>
+<p><code>book</code>和<code>class</code>两张表都是没有使用索引，全表扫描，那么如果进行优化，索引是创建在<code>book</code>表还是创建在<code>class</code>表呢？下面进行大胆的尝试！</p>
+<ol start="2">
+<li><p>左表(<code>book</code>表)创建索引</p>
+<p>创建索引<code>idx_book_card</code></p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">&#x2F;* 在book表创建索引 *&#x2F;<br>CREATE INDEX idx_book_card ON book(card);<br></code></pre></td></tr></table></figure>
+
+<p>在<code>book</code>表中有<code>idx_book_card</code>索引的情况下，查看SQL执行计划</p>
+<p><img src="https://www.yuque.com/api/filetransfer/images?url=https://img-blog.csdnimg.cn/20200803144429349.png&sign=5586ed86d244a1b6359d6cad406827a4fe0d52f2e9156a736f9c86467fe30e9a&x-oss-process=image/resize,w_750,limit_0" srcset="/img/loading.gif" lazyload></p>
+<ol start="3">
+<li><p>删除<code>book</code>表的索引，右表(<code>class</code>表)创建索引。</p>
+<p>创建索引<code>idx_class_card</code></p>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">&#x2F;* 在class表创建索引 *&#x2F;<br>CREATE INDEX idx_class_card ON class(card);<br></code></pre></td></tr></table></figure>
+
+<p>在<code>class</code>表中有<code>idx_class_card</code>索引的情况下，查看SQL执行计划</p>
+<p><img src="https://www.yuque.com/api/filetransfer/images?url=https://img-blog.csdnimg.cn/20200803145030597.png&sign=e411b06f982eadc4779dad636df1bd21d63e57bdc8a31783aed8998d82e6fce3&x-oss-process=image/resize,w_750,limit_0" srcset="/img/loading.gif" lazyload></p>
+<p><strong>由此可见，左连接将索引创建在右表上更合适，右连接将索引创建在左表上更合适</strong>。</p>
+<h3 id="3-三表索引分析优化"><a href="#3-三表索引分析优化" class="headerlink" title="3.三表索引分析优化"></a>3.三表索引分析优化</h3><p><strong>数据准备</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">DROP TABLE IF EXISTS &#96;phone&#96;;<br><br>CREATE TABLE IF NOT EXISTS &#96;phone&#96;(<br>&#96;phone_id&#96; INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT &#39;主键&#39;,<br>&#96;card&#96; INT(10) UNSIGNED NOT NULL COMMENT &#39;分类&#39; <br>) COMMENT &#39;手机&#39;;<br></code></pre></td></tr></table></figure>
+
+<p><strong>三表连接查询SQL优化</strong></p>
+<ol>
+<li>不加任何索引，查看SQL执行计划。</li>
+</ol>
+<p><img src="https://www.yuque.com/api/filetransfer/images?url=https://img-blog.csdnimg.cn/20200803160631786.png&sign=05fc13a7efbcf495c82b91dcd5a502b47854630076fbe48b9c908d033a8548a9&x-oss-process=image/resize,w_750,limit_0" srcset="/img/loading.gif" lazyload></p>
+<ol start="2">
+<li>根据两表查询优化的经验，左连接需要在右表上添加索引，所以尝试在<code>book</code>表和<code>phone</code>表上添加索引。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">&#x2F;* 在book表创建索引 *&#x2F;<br>CREATE INDEX idx_book_card ON book(card);<br><br>&#x2F;* 在phone表上创建索引 *&#x2F;<br>CREATE INDEX idx_phone_card ON phone(card);<br></code></pre></td></tr></table></figure>
+
+<p>再次执行SQL的执行计划</p>
+<p><img src="https://www.yuque.com/api/filetransfer/images?url=https://img-blog.csdnimg.cn/20200803161013880.png&sign=b9d163c2f7cc672c38d40ee9804d82f260e53bf92cda328e02266378a9192c1f&x-oss-process=image/resize,w_750,limit_0" srcset="/img/loading.gif" lazyload></p>
+<p>后两个都是ref且总row优化很好，效果不错。因此索引最好设置再需要经常查询的字段中。</p>
+<h3 id="4-索引失效"><a href="#4-索引失效" class="headerlink" title="4. 索引失效"></a>4. 索引失效</h3><h4 id="索引失效的情况"><a href="#索引失效的情况" class="headerlink" title="索引失效的情况"></a>索引失效的情况</h4><ol>
+<li>全值匹配我最爱</li>
+<li>最佳左前缀法则，（查询从索引的最左前列开始并且不跳过索引中的列）</li>
+<li>不在索引列上做任何操作计算、函数、(自动or手动)类型转换），会导致索引失效而转向全表扫描。</li>
+<li>索引中范围条件右边的字段会全部失效。</li>
+<li>尽量使用覆盖索引（指访问索引的查询，索引列和查询列一致），减少<code>SELECT *</code>。</li>
+<li>MySQL在使用<code>!=</code>或者<code>&lt;&gt;</code>的时候无法使用索引会导致全表扫描。</li>
+<li><code>is null</code>、<code>is not null</code>也无法使用索引</li>
+<li><code>like</code>以通配符开头<code>%abc</code>索引失效会变成全表扫描（使用覆盖索引就不会全表扫描了）。</li>
+<li>字符串不加单引号索引失效。</li>
+<li>少用<code>or</code>，用它来连接时会索引失效。</li>
+</ol>
+<h4 id="面试题分析"><a href="#面试题分析" class="headerlink" title="面试题分析"></a>面试题分析</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><code class="hljs MySQL">&#x2F;* 创建表 *&#x2F;<br>CREATE TABLE &#96;test03&#96;(<br>&#96;id&#96; INT PRIMARY KEY NOT NULL AUTO_INCREMENT,<br>&#96;c1&#96; CHAR(10),<br>&#96;c2&#96; CHAR(10),<br>&#96;c3&#96; CHAR(10),<br>&#96;c4&#96; CHAR(10),<br>&#96;c5&#96; CHAR(10)<br>);<br><br>&#x2F;* 插入数据 *&#x2F;<br>INSERT INTO &#96;test03&#96;(&#96;c1&#96;,&#96;c2&#96;,&#96;c3&#96;,&#96;c4&#96;,&#96;c5&#96;) VALUES(&#39;a1&#39;,&#39;a2&#39;,&#39;a3&#39;,&#39;a4&#39;,&#39;a5&#39;);<br>INSERT INTO &#96;test03&#96;(&#96;c1&#96;,&#96;c2&#96;,&#96;c3&#96;,&#96;c4&#96;,&#96;c5&#96;) VALUES(&#39;b1&#39;,&#39;b22&#39;,&#39;b3&#39;,&#39;b4&#39;,&#39;b5&#39;);<br>INSERT INTO &#96;test03&#96;(&#96;c1&#96;,&#96;c2&#96;,&#96;c3&#96;,&#96;c4&#96;,&#96;c5&#96;) VALUES(&#39;c1&#39;,&#39;c2&#39;,&#39;c3&#39;,&#39;c4&#39;,&#39;c5&#39;);<br>INSERT INTO &#96;test03&#96;(&#96;c1&#96;,&#96;c2&#96;,&#96;c3&#96;,&#96;c4&#96;,&#96;c5&#96;) VALUES(&#39;d1&#39;,&#39;d2&#39;,&#39;d3&#39;,&#39;d4&#39;,&#39;d5&#39;);<br>INSERT INTO &#96;test03&#96;(&#96;c1&#96;,&#96;c2&#96;,&#96;c3&#96;,&#96;c4&#96;,&#96;c5&#96;) VALUES(&#39;e1&#39;,&#39;e2&#39;,&#39;e3&#39;,&#39;e4&#39;,&#39;e5&#39;);<br><br>&#x2F;* 创建复合索引 *&#x2F;<br>CREATE INDEX idx_test03_c1234 ON &#96;test03&#96;(&#96;c1&#96;,&#96;c2&#96;,&#96;c3&#96;,&#96;c4&#96;);<br></code></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><code class="hljs MySQL">&#x2F;* 最好索引怎么创建的，就怎么用，按照顺序使用，避免让MySQL再自己去翻译一次 *&#x2F;<br><br>&#x2F;* 1.全值匹配 用到索引c1 c2 c3 c4全字段 *&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c2&#96; &#x3D; &#39;a2&#39; AND &#96;c3&#96; &#x3D; &#39;a3&#39; AND &#96;c4&#96; &#x3D; &#39;a4&#39;;<br><br>&#x2F;* 2.用到索引c1 c2 c3 c4全字段 MySQL的查询优化器会优化SQL语句的顺序*&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c2&#96; &#x3D; &#39;a2&#39; AND &#96;c4&#96; &#x3D; &#39;a4&#39; AND &#96;c3&#96; &#x3D; &#39;a3&#39;;<br><br>&#x2F;* 3.用到索引c1 c2 c3 c4全字段 MySQL的查询优化器会优化SQL语句的顺序*&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c4&#96; &#x3D; &#39;a4&#39; AND &#96;c3&#96; &#x3D; &#39;a3&#39; AND &#96;c2&#96; &#x3D; &#39;a2&#39; AND &#96;c1&#96; &#x3D; &#39;a1&#39;;<br><br>&#x2F;* 4.用到索引c1 c2 c3字段，c4字段失效，范围之后全失效 type：range*&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c2&#96; &#x3D; &#39;a2&#39; AND &#96;c3&#96; &gt; &#39;a3&#39; AND &#96;c4&#96; &#x3D; &#39;a4&#39;;<br><br>&#x2F;* 5.用到索引c1 c2 c3 c4全字段 MySQL的查询优化器会优化SQL语句的顺序 type：range*&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c2&#96; &#x3D; &#39;a2&#39; AND &#96;c4&#96; &gt; &#39;a4&#39; AND &#96;c3&#96; &#x3D; &#39;a3&#39;;<br><br>&#x2F;* 6.用到了索引c1 c2 c3三个字段, c1和c2两个字段用于查找,  <br>   	 c3字段用于排序了但是没有统计到key_len中，c4字段失效*&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c2&#96; &#x3D; &#39;a2&#39; AND &#96;c4&#96; &#x3D; &#39;a4&#39; ORDER BY &#96;c3&#96;;<br><br>&#x2F;* 7.用到了索引c1 c2 c3三个字段，c1和c2两个字段用于查找, <br>		 c3字段用于排序了但是没有统计到key_len中*&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c2&#96; &#x3D; &#39;a2&#39; ORDER BY &#96;c3&#96;;<br><br>&#x2F;* 8.用到了索引c1 c2两个字段，c4失效，c1和c2两个字段用于查找，<br>		 c4字段排序产生了 Using filesort 说明排序没有用到c4字段 *&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c2&#96; &#x3D; &#39;a2&#39; ORDER BY &#96;c4&#96;;<br><br>&#x2F;* 9.用到了索引c1 c2 c3三个字段，c1用于查找，c2和c3用于排序 *&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c5&#96; &#x3D; &#39;a5&#39; ORDER BY &#96;c2&#96;, &#96;c3&#96;;<br><br>&#x2F;* 10.用到了c1一个字段，c1用于查找，c3和c2两个字段索引失效，产生了Using filesort *&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c5&#96; &#x3D; &#39;a5&#39; ORDER BY &#96;c3&#96;, &#96;c2&#96;;<br><br>&#x2F;* 11.用到了c1 c2 c3三个字段，c1 c2用于查找，c2 c3用于排序 *&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND  &#96;c2&#96; &#x3D; &#39;a2&#39; ORDER BY c2, c3;<br><br>&#x2F;* 12.用到了c1 c2 c3三个字段，c1 c2用于查找，c2 c3用于排序 *&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND  &#96;c2&#96; &#x3D; &#39;a2&#39; AND &#96;c5&#96; &#x3D; &#39;a5&#39; ORDER BY c2, c3;<br><br>&#x2F;* 13.用到了c1 c2 c3三个字段，c1 c2用于查找，c2 c3用于排序 没有产生Using filesort <br>      因为之前c2这个字段已经确定了是&#39;a2&#39;了，这是一个常量，<br>      再去ORDER BY c3,c2 这时候c2已经不用排序了！<br>      所以没有产生Using filesort 和(10)进行对比学习！*&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; <br>WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c2&#96; &#x3D; &#39;a2&#39; AND &#96;c5&#96; &#x3D; &#39;a5&#39; ORDER BY c3, c2;<br><br><br>&#x2F;* GROUP BY 表面上是叫做分组，但是分组之前必定排序。 *&#x2F;<br><br>&#x2F;* 14.用到c1 c2 c3三个字段，c1用于查找，c2 c3用于排序，c4失效 *&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c4&#96; &#x3D; &#39;a4&#39; GROUP BY &#96;c2&#96;,&#96;c3&#96;;<br><br>&#x2F;* 15.用到c1这一个字段，c4失效，c2和c3排序失效产生了Using filesort Using temporary <br>			5.7之后这种不是分组函数和GROUP BY出现的字段不能select*&#x2F;<br>EXPLAIN SELECT * FROM &#96;test03&#96; WHERE &#96;c1&#96; &#x3D; &#39;a1&#39; AND &#96;c4&#96; &#x3D; &#39;a4&#39; GROUP BY &#96;c3&#96;,&#96;c2&#96;;<br></code></pre></td></tr></table></figure>
+
+<p> <code>Group by</code>基本上都需要进行排序，索引优化几乎和<code>ORDER BY</code> 一致，但是<code>GROUP BY</code>会有临时表产生</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>索引优化的一般建议：</p>
+<ul>
+<li>对于单值索引，尽量选择针对当前<code>query</code>过滤性更好的索引</li>
+<li>在选择复合索引的时候，当前<code>query</code>中过滤性最好的字段在索引字段顺序中，位置越靠前（左）越好。</li>
+<li>在选择复合索引的时候，尽量选择可以能够包含当前<code>query</code>中的<code>where</code>子句中更多字段的索引。</li>
+<li>尽可能通过分析统计信息和调整<code>query</code>的写法来达到选择合适索引的目的。</li>
+</ul>
+<p>口诀</p>
+<p><strong>带头大哥不能死。</strong></p>
+<p><strong>中间兄弟不能断。</strong></p>
+<p><strong>索引列上不计算。</strong></p>
+<p><strong>范围之后全失效。</strong></p>
+<p><strong>覆盖索引尽量用。</strong></p>
+<p><strong>不等有时会失效。</strong></p>
+<p><strong>like百分加右边。</strong></p>
+<p><strong>字符要加单引号。</strong></p>
+<p><strong>一般SQL少用or。</strong></p>
+<h4 id="分析慢SQL的步骤"><a href="#分析慢SQL的步骤" class="headerlink" title="分析慢SQL的步骤"></a>分析慢SQL的步骤</h4><p><strong>分析</strong></p>
+<ol>
+<li>观察，至少跑1天，看看生产的慢SQL情况</li>
+<li>开启慢查询日志，设置阈值，比如超过5秒钟的就是慢SQL，并将它抓取出来</li>
+<li>explain + 慢SQL分析</li>
+<li>show Profile</li>
+<li>运维经理OR DBA，进行MySQL数据库服务器的而参数调优</li>
+</ol>
+<p><strong>总结</strong></p>
+<ol>
+<li>慢查询的开启并捕获</li>
+<li>explain + 慢SQL分析</li>
+<li>show Profile 查询SQL在MySQL数据库中的执行细节和生命周期情况</li>
+<li>MySQL数据库服务器的参数调优</li>
+</ol>
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/MySQL/">MySQL</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/MySQL/">MySQL</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2022/01/13/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E6%9F%A5%E8%AF%A2%E4%BC%98%E5%8C%96%E3%80%81%E8%A1%A8%E8%A1%8C%E9%94%81%EF%BC%89/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">MySQL数据库高级 - （查询优化、表行锁）</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2022/01/04/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E9%AB%98%E7%BA%A7-%EF%BC%88%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E%E3%80%81%E7%B4%A2%E5%BC%95%EF%BC%89/">
+                        <span class="hidden-mobile">MySQL数据库高级 - （存储引擎、索引）</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.lazyComments('valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "99lfyqRg3CLazXoohVQjMwH3-gzGzoHsz",
+          app_key: "qx9rFQuqjhuegpH6AwJ8B0eD",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: true,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>

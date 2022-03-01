@@ -1,0 +1,1031 @@
+
+
+<!DOCTYPE html>
+<html lang="en" data-default-color-scheme=&#34;auto&#34;>
+
+
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="apple-touch-icon" sizes="76x76" href="/img/newcon.png">
+  <link rel="icon" href="/img/newfav.png">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  
+  <meta name="theme-color" content="#2f4154">
+  <meta name="description" content="">
+  <meta name="author" content="John Doe">
+  <meta name="keywords" content="">
+  
+  <title>MySQL数据库基本操作 - （DML、MySQL约束、DQL） - Hexo</title>
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" />
+
+
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css" />
+  <link  rel="stylesheet" href="/lib/hint/hint.min.css" />
+
+  
+    
+    
+      
+      <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@10.4.0/styles/github-gist.min.css" />
+    
+  
+
+  
+    <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+  
+
+
+
+<!-- 主题依赖的图标库，不要自行修改 -->
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1749284_ba1fz6golrf.css">
+
+
+
+<link rel="stylesheet" href="//at.alicdn.com/t/font_1736178_kmeydafke9r.css">
+
+
+<link  rel="stylesheet" href="/css/main.css" />
+
+<!-- 自定义样式保持在最底部 -->
+
+
+  <script id="fluid-configs">
+    var Fluid = window.Fluid || {};
+    var CONFIG = {"hostname":"example.com","root":"/","version":"1.8.9","typing":{"enable":true,"typeSpeed":64,"cursorChar":"_","loop":false},"anchorjs":{"enable":true,"element":"h1,h2,h3,h4,h5,h6","placement":"right","visible":"hover","icon":""},"progressbar":{"enable":true,"height_px":3,"color":"#29d","options":{"showSpinner":false,"trickleSpeed":100}},"copy_btn":true,"image_zoom":{"enable":true},"toc":{"enable":true,"headingSelector":"h1,h2,h3,h4,h5,h6","collapseDepth":0},"lazyload":{"enable":true,"loading_img":"/img/loading.gif","onlypost":false,"offset_factor":2},"web_analytics":{"enable":false,"baidu":null,"google":null,"gtag":null,"tencent":{"sid":null,"cid":null},"woyaola":null,"cnzz":null,"leancloud":{"app_id":null,"app_key":null,"server_url":null}}};
+  </script>
+  <script  src="/js/utils.js" ></script>
+  <script  src="/js/color-schema.js" ></script>
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+
+<body>
+  <header style="height: 70vh;">
+    <nav id="navbar" class="navbar fixed-top  navbar-expand-lg navbar-dark scrolling-navbar">
+  <div class="container">
+    <a class="navbar-brand"
+       href="/">&nbsp;<strong>Le Onde</strong>&nbsp;</a>
+
+    <button id="navbar-toggler-btn" class="navbar-toggler" type="button" data-toggle="collapse"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <div class="animated-icon"><span></span><span></span><span></span></div>
+    </button>
+
+    <!-- Collapsible content -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto text-center">
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/">
+                <i class="iconfont icon-home-fill"></i>
+                主页
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/archives/">
+                <i class="iconfont icon-archive-fill"></i>
+                归档
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/categories/">
+                <i class="iconfont icon-category-fill"></i>
+                种类
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/tags/">
+                <i class="iconfont icon-tags-fill"></i>
+                标签
+              </a>
+            </li>
+          
+        
+          
+          
+          
+          
+            <li class="nav-item">
+              <a class="nav-link" href="/about/">
+                <i class="iconfont icon-user-fill"></i>
+                关于
+              </a>
+            </li>
+          
+        
+        
+          <li class="nav-item" id="search-btn">
+            <a class="nav-link" data-toggle="modal" data-target="#modalSearch">&nbsp;<i
+                class="iconfont icon-search"></i>&nbsp;</a>
+          </li>
+        
+        
+          <li class="nav-item" id="color-toggle-btn">
+            <a class="nav-link" href="javascript:">&nbsp;<i
+                class="iconfont icon-dark" id="color-toggle-icon"></i>&nbsp;</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    <div class="banner" id="banner" parallax=true
+         style="background: url('https://img-blog.csdnimg.cn/20210421122657715.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dlaXhpbl80NzYxMzEwNQ==,size_16,color_FFFFFF,t_70') no-repeat center center;
+           background-size: cover;">
+      <div class="full-bg-img">
+        <div class="mask flex-center" style="background-color: rgba(0, 0, 0, 0.3)">
+          <div class="page-header text-center fade-in-up">
+            <span class="h2" id="subtitle" title="MySQL数据库基本操作 - （DML、MySQL约束、DQL）">
+              
+            </span>
+
+            
+              <div class="mt-3">
+  
+  
+    <span class="post-meta">
+      <i class="iconfont icon-date-fill" aria-hidden="true"></i>
+      <time datetime="2021-12-17 17:04" pubdate>
+        December 17, 2021 pm
+      </time>
+    </span>
+  
+</div>
+
+<div class="mt-1">
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-chart"></i>
+      6.1k 字
+    </span>
+  
+
+  
+    
+    <span class="post-meta mr-2">
+      <i class="iconfont icon-clock-fill"></i>
+      
+      
+      79
+       分钟
+    </span>
+  
+
+  
+  
+</div>
+
+            
+          </div>
+
+          
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    
+      
+
+<div class="container-fluid nopadding-x">
+  <div class="row nomargin-x">
+    <div class="d-none d-lg-block col-lg-2"></div>
+    <div class="col-lg-8 nopadding-x-md">
+      <div class="container nopadding-x-md" id="board-ctn">
+        <div class="py-5" id="board">
+          <article class="post-content mx-auto">
+            <!-- SEO header -->
+            <h1 style="display: none">MySQL数据库基本操作 - （DML、MySQL约束、DQL）</h1>
+            
+            <div class="markdown-body">
+              <h2 id="MySQL数据库基本操作-DML"><a href="#MySQL数据库基本操作-DML" class="headerlink" title="MySQL数据库基本操作 - DML"></a>MySQL数据库基本操作 - DML</h2><h3 id="Ⅰ-基本介绍"><a href="#Ⅰ-基本介绍" class="headerlink" title="Ⅰ.基本介绍"></a>Ⅰ.基本介绍</h3><p>DML是指数据操作语言，英文全称是Data Manipulation Language，对数据库中表的数据记录进行更新</p>
+<p>关键字：</p>
+<ul>
+<li>插入 insert</li>
+<li>删除 delete</li>
+<li>更新 update</li>
+</ul>
+<h3 id="Ⅱ-数据插入"><a href="#Ⅱ-数据插入" class="headerlink" title="Ⅱ.数据插入"></a>Ⅱ.数据插入</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 向表中插入某些列<br>insert into 表 (列名1,列名2,列名3...) values (值1,值2,值3...)； <br>-- 向表中插入所有列<br>insert into 表 values (值1,值2,值3...);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>例子</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 插入指定列<br>insert into student(sid,name,gender,age,birth,address,score)<br>               values(1001,&#39;男&#39;,18,&#39;1996-12-23&#39;,&#39;北京&#39;,83.5);<br>-- 给所有列赋值               <br>insert into student values(1001,&#39;男&#39;,18,&#39;1996-12-23&#39;,&#39;北京&#39;,83.5);<br>-- 插入多行<br>insert into student(sid,name,gender,age,birth,address,score)<br>               values(1001,&#39;男&#39;,18,&#39;1996-12-23&#39;,&#39;北京&#39;,83.5),<br>               values(1002,&#39;女&#39;,20,&#39;1999-10-25&#39;,&#39;上海&#39;,90.5);<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅲ-数据修改"><a href="#Ⅲ-数据修改" class="headerlink" title="Ⅲ.数据修改"></a>Ⅲ.数据修改</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">update 表名 set 字段名&#x3D;值,字段名&#x3D;值...;<br>update 表名 set 字段名&#x3D;值,字段名&#x3D;值... where 条件;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>例子</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 将所有学生的地址修改为重庆 <br>update student set address &#x3D; &#39;重庆&#39;;<br>-- 讲id为1004的学生的地址修改为北京 <br>update student set address &#x3D; &#39;北京&#39; where id &#x3D; 1004;<br>-- 讲id为1005的学生的地址修改为北京，成绩修成绩修改为100 <br>update student set address &#x3D; &#39;广州&#39;,score&#x3D;100 where id &#x3D; 1005;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅳ-数据删除"><a href="#Ⅳ-数据删除" class="headerlink" title="Ⅳ.数据删除"></a>Ⅳ.数据删除</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">delete from 表名 [where 条件];<br>truncate table  表名 或者 truncate 表名<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>例子</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 1.删除sid为1004的学生数据<br>delete from student where sid  &#x3D; 1004;<br>-- 2.删除表所有数据<br>delete from student;<br>-- 3.清空表数据<br>truncate table student;<br>truncate student;<br></code></pre></td></tr></table></figure>
+
+<p><strong>注意：delete和truncate原理不同，delete只删除内容，而truncate类似于drop table，可以理解为是将整个表删除，然后在创建该表</strong></p>
+<h2 id="MySQL约束"><a href="#MySQL约束" class="headerlink" title="MySQL约束"></a>MySQL约束</h2><h3 id="Ⅰ-介绍"><a href="#Ⅰ-介绍" class="headerlink" title="Ⅰ.介绍"></a>Ⅰ.介绍</h3><p><strong>（1）概念</strong></p>
+<ul>
+<li>约束英文：constraint</li>
+<li>约束实际上就是表中数据的限制条件</li>
+</ul>
+<p><strong>（2）作用</strong></p>
+<ul>
+<li>表在设计的时候加入约束的目的就是为了保证表中的记录完整性和有效性，比如用户表有些列的值（手机号）不能为空，有些列的值（身份证号）不能重复。</li>
+</ul>
+<p><strong>（3）分类</strong></p>
+<ul>
+<li>主键约束(primary key) PK</li>
+<li>自增长约束(auto_increment)</li>
+<li>非空约束(not null)</li>
+<li>唯一性约束(unique)</li>
+<li>默认约束(default)</li>
+<li>零填充约束(zerofill)</li>
+<li>外键约束(foreign key) FK</li>
+</ul>
+<h3 id="Ⅱ-主键约束"><a href="#Ⅱ-主键约束" class="headerlink" title="Ⅱ.主键约束"></a>Ⅱ.主键约束</h3><p><strong>（1）概念</strong></p>
+<ul>
+<li>MySQL主键约束是一个列或者多个列的组合，其值能唯一地标识表中的每一行，方便在RDBMS中尽快的找到某一行</li>
+<li>主键约束相当于唯一约束+非空约束的组合，主键约束不能重复，不能出现空值</li>
+<li>每个表最多只允许一个主键</li>
+<li>主键约束的关键字是：primary key</li>
+<li>当创建主键的约束时，系统默认会在所在的列和列组合上建立对应的唯一索引。</li>
+</ul>
+<p><strong>（2）操作</strong></p>
+<ul>
+<li>添加单列主键</li>
+</ul>
+<ul>
+<li>添加多列联合主键</li>
+<li>删除主键</li>
+</ul>
+<p><strong>（3）添加单列主键</strong></p>
+<p>创建单列主键有两种方式，一种是在定义字段的同时指定主键，一种是定义完字段之后指定主键</p>
+<ul>
+<li>方式1 - 语法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 在 create table 语句中，通过 PRIMARY KEY 关键字来指定主键。<br>--在定义字段的同时指定主键，语法格式如下：<br>create table 表名(<br>   ...<br>   &lt;字段名&gt; &lt;数据类型&gt; primary key <br>   ...<br>)<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>方式1 - 实现</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table emp1(<br>    eid int primay key,<br>    name VARCHAR(20),<br>    deptId int,<br>    salary double<br>);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>方式2 -  语法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">--在定义字段之后再指定主键，语法格式如下：<br>create table 表名(<br>   ...<br>   [constraint &lt;约束名&gt;] primary key [字段名]<br>);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>方式2 - 实现</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table emp2(<br>    eid INT,<br>    name VARCHAR(20),<br>    deptId INT,<br>    salary double,<br>    constraint  pk1 primary key(id)<br> );<br></code></pre></td></tr></table></figure>
+
+<p><strong>（4）添加多列主键（联合主键）</strong></p>
+<p>所谓的联合主键，就是这个主键是由一张表中多个字段组成的。注意：</p>
+<ol>
+<li>当主键是由多个字段组成时，不能直接在字段名后面声明主键约束</li>
+<li>一张表只能有一个主键，联合主键也是一个主键</li>
+</ol>
+<ul>
+<li>语法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table 表名(<br>   ...<br>   primary key （字段1，字段2，…,字段n)<br>);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>实现</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table emp3( <br>  name varchar(20), <br>  deptId int, <br>  salary double, <br>  primary key(name,deptId) <br>);<br></code></pre></td></tr></table></figure>
+
+<p><strong>（5）通过修改表结构添加主键</strong></p>
+<p>主键约束不仅可以在创建表的同时创建，也可以在修改表时添加</p>
+<ul>
+<li>语法</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table 表名(<br>   ...<br>);<br>alter table &lt;表名&gt; add primary key（字段列表);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>实现</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 添加单列主键<br>create table emp4(<br>  eid int, <br>  name varchar(20), <br>  deptId int, <br>  salary double, <br>);<br>alter table emp4 add primary key（eid);<br></code></pre></td></tr></table></figure>
+
+<p><strong>（6）删除主键约束</strong></p>
+<p>一个表中不需要主键约束时，就需要从表中将其删除。删除主键约束的方法要比创建主键约束容易的多。</p>
+<ul>
+<li>格式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">alter table &lt;数据表名&gt; drop primary key;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>实现</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 删除单列主键 <br>alter table emp1 drop primary key;<br>-- 删除联合主键 <br>alter table emp5 drop primary key;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅲ-自增长约束"><a href="#Ⅲ-自增长约束" class="headerlink" title="Ⅲ.自增长约束"></a>Ⅲ.自增长约束</h3><p><strong>（1）概念</strong></p>
+<ul>
+<li>在 MySQL 中，当主键定义为自增长后，这个主键的值就不再需要用户输入数据了，而由数据库系统根据定义自动赋值。每增加一条记录，主键会自动以相同的步长进行增长。</li>
+<li>通过给字段添加auto_increment属性来实现主键自增长</li>
+</ul>
+<p><strong>（2）语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">字段名 数据类型 auto_increment<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table t_user1( <br>  id int primary key auto_increment, <br>  name varchar(20) <br>);<br></code></pre></td></tr></table></figure>
+
+<p><strong>（3）特点</strong></p>
+<ul>
+<li>默认情况下，auto_increment的初始值是 1，每新增一条记录，字段值自动加 1</li>
+<li>一个表中只能有一个字段使用 auto_increment约束，且该字段必须有唯一索引，以避免序号重复（即为主键或主键的一部分）</li>
+<li>auto_increment约束的字段必须具备 NOT NULL 属性</li>
+<li>auto_increment约束的字段只能是整数类型（TINYINT、SMALLINT、INT、BIGINT 等</li>
+<li>auto_increment约束字段的最大值受该字段的数据类型约束，如果达到上限，auto_increment就会失效</li>
+</ul>
+<p><strong>（4）指定自增字段初始值</strong></p>
+<p>如果第一条记录设置了该字段的初始值，那么新增加的记录就从这个初始值开始自增。例如，如果表中插入的第一条记录的 id 值设置为 5，那么再插入记录时，id 值就会从 5 开始往上增加</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 方式1，创建表时指定<br>create table t_user2 ( <br>  id int primary key auto_increment, <br>  name varchar(20)<br>)auto_increment&#x3D;100;<br></code></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 方式2，创建表之后指定<br>create table t_user3 ( <br>  id int primary key auto_increment, <br>  name varchar(20)<br>);<br> <br>alter table t_user2 auto_increment&#x3D;100;<br></code></pre></td></tr></table></figure>
+
+<p><strong>（5）delete和truncate在删除后自增列的变化</strong></p>
+<ul>
+<li>delete 数据之后自动增长从断点开始</li>
+<li>truncate 数据之后自动增长从默认起始值开始</li>
+</ul>
+<h3 id="Ⅳ-非空约束（not-null）"><a href="#Ⅳ-非空约束（not-null）" class="headerlink" title="Ⅳ.非空约束（not null）"></a>Ⅳ.非空约束（not null）</h3><p><strong>（1）概念</strong></p>
+<p>MySQL非空约束（not null）指字段的值不能为空。对于使用了非空约束的字段，如果用户在添加数据时没有指定值，数据库系统就会报错</p>
+<p><strong>（2）语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">方式1：&lt;字段名&gt;&lt;数据类型&gt; not null;<br>方式2：alter table 表名 modify 字段 类型 not null;<br></code></pre></td></tr></table></figure>
+
+<p><strong>（3）添加非空约束-方式1</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 方式1，创建表时指定<br>create table t_user6 ( <br>  id int , <br>  name varchar(20) not null, <br>  address varchar(20) not null <br>);<br></code></pre></td></tr></table></figure>
+
+<p><strong>（4）添加非空约束-方式2</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table t_user7 ( <br>  id int , <br>  name varchar(20) , -- 指定非空约束 <br>  address varchar(20) -- 指定非空约束 <br>); <br>alter table t_user7 modify name varchar(20) not null; <br>alter table t_user7 modify address varchar(20) not null;<br></code></pre></td></tr></table></figure>
+
+<p><strong>（5）删除非空约束</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- alter table 表名 modify 字段 类型 <br>alter table t_user7 modify name varchar(20); <br>alter table t_user7 modify address varchar(20);<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅴ-唯一约束（unique）"><a href="#Ⅴ-唯一约束（unique）" class="headerlink" title="Ⅴ.唯一约束（unique）"></a>Ⅴ.唯一约束（unique）</h3><p><strong>（1）概念</strong></p>
+<p>唯一约束是指所有记录中字段的值不能重复出现。例如，为id字段加上唯一性约束后，每条记录的id值都是唯一的，不能出现重复的情况</p>
+<p>在 MySQL 中 NULL 和任何值都不相同，包括自己（NULL ≠ NULL）</p>
+<p><strong>（2）语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">方式1：&lt;字段名&gt; &lt;数据类型&gt; unique<br>方式2： alter table 表名 add constraint 约束名 unique(列);<br></code></pre></td></tr></table></figure>
+
+<p> <strong>（3）添加唯一约束 - 方式1</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 创建表时指定<br>create table t_user8 ( <br> id int , <br> name varchar(20) , <br> phone_number varchar(20) unique -- 指定唯一约束 <br>);<br></code></pre></td></tr></table></figure>
+
+<p><strong>（4）添加唯一约束 - 方式2</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table t_user9 ( <br>  id int , <br>  name varchar(20) , <br>  phone_number varchar(20) -- 指定唯一约束 <br>); <br>alter table t_user9 add constraint unique_ph unique(phone_number);<br></code></pre></td></tr></table></figure>
+
+<p><strong>（5）删除唯一约束</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- alter table &lt;表名&gt; drop index &lt;唯一约束名&gt;;<br>alter table t_user9 drop index unique_ph;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅵ-默认约束（default）"><a href="#Ⅵ-默认约束（default）" class="headerlink" title="Ⅵ.默认约束（default）"></a>Ⅵ.默认约束（default）</h3><p><strong>（1）概念</strong></p>
+<p>MySQL 默认值约束用来指定某列的默认值</p>
+<p><strong>（2）语法</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">方式1： &lt;字段名&gt; &lt;数据类型&gt; default &lt;默认值&gt;;<br>方式2: alter table 表名 modify 列名 类型 default 默认值; <br></code></pre></td></tr></table></figure>
+
+<p> <strong>（3）添加默认约束 - 方式1</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table t_user10 ( <br>  id int , <br>  name varchar(20) , <br>  address varchar(20) default ‘北京’ -- 指定默认约束 <br>);<br></code></pre></td></tr></table></figure>
+
+<p> <strong>（4）添加默认约束 - 方式2</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- alter table 表名 modify 列名 类型 default 默认值; <br>create table t_user11 ( <br>  id int , <br>  name varchar(20) , <br>  address varchar(20)  <br>);<br>alter table t_user11 modify address varchar(20) default  ‘北京’;<br></code></pre></td></tr></table></figure>
+
+<p><strong>（5）删除默认约束</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- alter table &lt;表名&gt; modify column &lt;字段名&gt; &lt;类型&gt; default null; <br>alter table t_user11 modify column address varchar(20) default null;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅶ-零填充约束（zerofill）"><a href="#Ⅶ-零填充约束（zerofill）" class="headerlink" title="Ⅶ.零填充约束（zerofill）"></a>Ⅶ.零填充约束（zerofill）</h3><p><strong>(1)概念</strong></p>
+<ul>
+<li>插入数据时，当该字段的值的长度小于定义的长度时，会在该值的前面补上相应的0</li>
+<li>zerofill默认为int(10)</li>
+<li>当使用zerofill时，默认会自动加unsigned（无符号）属性，使用unsigned属性后，数值范围是原值的2倍，例如，有符号为-128 ~ +127，无符号为0 ~ 256</li>
+</ul>
+<p><strong>（2）操作</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">create table t_user12 ( <br>  id int zerofill , -- 零填充约束<br>  name varchar(20)   <br>);<br></code></pre></td></tr></table></figure>
+
+<p><strong>（3）删除</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">alter table t_user12 modify id int;<br></code></pre></td></tr></table></figure>
+
+<h2 id="MySQL数据库基本操作-DQL"><a href="#MySQL数据库基本操作-DQL" class="headerlink" title="MySQL数据库基本操作 - DQL"></a>MySQL数据库基本操作 - DQL</h2><h3 id="Ⅰ-概念"><a href="#Ⅰ-概念" class="headerlink" title="Ⅰ.概念"></a>Ⅰ.概念</h3><ul>
+<li>数据库管理系统一个重要功能就是数据查询，数据查询不应只是简单返回数据库中存储的数据，还应该根据需要对数据进行筛选以及确定数据以什么样的格式显示。</li>
+<li>MySQL提供了功能强大、灵活的语句来实现这些操作。</li>
+<li>MySQL数据库使用select语句来查询数据。</li>
+</ul>
+<h3 id="Ⅱ-语法格式"><a href="#Ⅱ-语法格式" class="headerlink" title="Ⅱ.语法格式"></a>Ⅱ.语法格式</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select <br>  [all|distinct]<br>  &lt;目标列的表达式1&gt; [别名],<br>  &lt;目标列的表达式2&gt; [别名]...<br>from &lt;表名或视图名&gt; [别名],&lt;表名或视图名&gt; [别名]...<br>[where&lt;条件表达式&gt;]<br>[group by &lt;列名&gt; <br>[having &lt;条件表达式&gt;]]<br>[order by &lt;列名&gt; [asc|desc]]<br>[limit &lt;数字或者列表&gt;];<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅲ-简化版语法"><a href="#Ⅲ-简化版语法" class="headerlink" title="Ⅲ.简化版语法"></a>Ⅲ.简化版语法</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select *| 列名 from 表 where 条件<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅳ-数据准备"><a href="#Ⅳ-数据准备" class="headerlink" title="Ⅳ.数据准备"></a>Ⅳ.数据准备</h3><ul>
+<li>创建数据库和表</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 创建数据库<br>create database if not exist mydb2;<br>use mydb2;<br>-- 创建商品表：<br>create table product(<br> pid int primary key auto_increment, -- 商品编号<br> pname varchar(20) not null , -- 商品名字<br> price double,  -- 商品价格<br> category_id varchar(20) -- 商品所属分类<br>);<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>添加数据</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><code class="hljs mysql">insert into product values(null,&#39;海尔洗衣机&#39;,5000,&#39;c001&#39;);<br>insert into product values(null,&#39;美的冰箱&#39;,3000,&#39;c001&#39;);<br>insert into product values(null,&#39;格力空调&#39;,5000,&#39;c001&#39;);<br>insert into product values(null,&#39;九阳电饭煲&#39;,200,&#39;c001&#39;);<br>insert into product values(null,&#39;啄木鸟衬衣&#39;,300,&#39;c002&#39;);<br> <br>insert into product values(null,&#39;恒源祥西裤&#39;,800,&#39;c002&#39;);<br>insert into product values(null,&#39;花花公子夹克&#39;,440,&#39;c002&#39;);<br>insert into product values(null,&#39;劲霸休闲裤&#39;,266,&#39;c002&#39;);<br>insert into product values(null,&#39;海澜之家卫衣&#39;,180,&#39;c002&#39;);<br>insert into product values(null,&#39;杰克琼斯运动裤&#39;,430,&#39;c002&#39;);<br> <br>insert into product values(null,&#39;兰蔻面霜&#39;,300,&#39;c003&#39;);<br>insert into product values(null,&#39;雅诗兰黛精华水&#39;,200,&#39;c003&#39;);<br>insert into product values(null,&#39;香奈儿香水&#39;,350,&#39;c003&#39;);<br>insert into product values(null,&#39;SK-II神仙水&#39;,350,&#39;c003&#39;);<br>insert into product values(null,&#39;资生堂粉底液&#39;,180,&#39;c003&#39;);<br> <br>insert into product values(null,&#39;老北京方便面&#39;,56,&#39;c004&#39;);<br>insert into product values(null,&#39;良品铺子海带丝&#39;,17,&#39;c004&#39;);<br>insert into product values(null,&#39;三只松鼠坚果&#39;,88,null);<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅴ-简单查询"><a href="#Ⅴ-简单查询" class="headerlink" title="Ⅴ.简单查询"></a>Ⅴ.简单查询</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 1.查询所有的商品.  <br>select *  from product;<br>-- 2.查询商品名和商品价格. <br>select pname,price from product;<br>-- 3.别名查询.使用的关键字是as（as可以省略的）.  <br>-- 3.1表别名: <br>select * from product as p;<br>-- 3.2列别名：<br>select pname as pn from product; <br>-- 4.去掉重复值.  <br>select distinct price from product;<br>-- 5.查询结果是表达式（运算查询）：将所有商品的价格+10元进行显示.<br>select pname,price+10 from product;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅵ-运算符"><a href="#Ⅵ-运算符" class="headerlink" title="Ⅵ.运算符"></a>Ⅵ.运算符</h3><p><strong>（1）简介</strong></p>
+<ul>
+<li>数据库中的表结构确立后，表中的数据代表的意义就以及确定。通过MySQL运算符进行计算，就可以获取到表结构以外的另一种数据。</li>
+<li>例如，学生表中存在一个birth字段，这个字段表示学生的出生年份。而运用MySQL的算术运算符用当前的年份减学生出生的年份，那么得到的就是这个学生的实际年龄数据</li>
+</ul>
+<p><strong>（2）MySQL支持4种运算符</strong></p>
+<ul>
+<li>算术运算符</li>
+<li>比较运算符</li>
+<li>逻辑运算符</li>
+<li>位运算符</li>
+</ul>
+<p><strong>（3）算数运算符</strong></p>
+<ul>
+<li>+，-，*，/，%</li>
+</ul>
+<p><strong>（4）比较运算符</strong></p>
+<table>
+<thead>
+<tr>
+<th align="center">比较运算符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">=</td>
+<td>等于</td>
+</tr>
+<tr>
+<td align="center">&lt; 和 &lt;=</td>
+<td>小于和小于等于</td>
+</tr>
+<tr>
+<td align="center">&gt; 和 &gt;=</td>
+<td>大于和大于等于</td>
+</tr>
+<tr>
+<td align="center">&lt;=&gt;</td>
+<td>安全的等于，两个操作码均为NULL时，其所得值为1；而当一个操作码为NULL时，其所得值为0</td>
+</tr>
+<tr>
+<td align="center">&lt;&gt; 或!=</td>
+<td>不等于</td>
+</tr>
+<tr>
+<td align="center">IS NULL 或 ISNULL</td>
+<td>判断一个值是否为 NULL</td>
+</tr>
+<tr>
+<td align="center">IS NOT NULL</td>
+<td>判断一个值是否不为 NULL</td>
+</tr>
+<tr>
+<td align="center">LEAST</td>
+<td>当有两个或多个参数时，返回最小值</td>
+</tr>
+<tr>
+<td align="center">GREATEST</td>
+<td>当有两个或多个参数时，返回最大值</td>
+</tr>
+<tr>
+<td align="center">BETWEEN AND</td>
+<td>判断一个值是否落在两个值之间</td>
+</tr>
+<tr>
+<td align="center">IN</td>
+<td>判断一个值是IN列表中的任意一个值</td>
+</tr>
+<tr>
+<td align="center">NOT IN</td>
+<td>判断一个值不是IN列表中的任意一个值</td>
+</tr>
+<tr>
+<td align="center">LIKE</td>
+<td>通配符匹配</td>
+</tr>
+<tr>
+<td align="center">REGEXP</td>
+<td>正则表达式匹配</td>
+</tr>
+</tbody></table>
+<p><strong>(5)逻辑运算符</strong></p>
+<table>
+<thead>
+<tr>
+<th>逻辑运算符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NOT或者！</td>
+<td>逻辑非</td>
+</tr>
+<tr>
+<td>AND或者&amp;&amp;</td>
+<td>逻辑与</td>
+</tr>
+<tr>
+<td>OR或者||</td>
+<td>逻辑或</td>
+</tr>
+<tr>
+<td>XOR</td>
+<td>逻辑异或</td>
+</tr>
+</tbody></table>
+<p><strong>（6）位运算符</strong></p>
+<table>
+<thead>
+<tr>
+<th>位运算符</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>|</td>
+<td>按位或</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>按位与</td>
+</tr>
+<tr>
+<td>^</td>
+<td>按位异或</td>
+</tr>
+<tr>
+<td>&lt;&lt;</td>
+<td>按位左移</td>
+</tr>
+<tr>
+<td>&gt;&gt;</td>
+<td>按位右移</td>
+</tr>
+<tr>
+<td>~</td>
+<td>按位取反</td>
+</tr>
+</tbody></table>
+<p>位运算符是在二进制数上进行计算的运算符。位运算会先将操作数变成二进制数，进行位运算。然后再将计算结果从二进制数变回十进制数。</p>
+<p><strong>（7）运算符操作 - 算术运算符</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select 6 + 2;<br>select 6 - 2;<br>select 6 * 2;<br>select 6 &#x2F; 2;<br>select 6 % 2;<br> <br>-- 将每件商品的价格加10<br>select name,price + 10 as new_price from product;<br>-- 将所有商品的价格上调10%<br>select pname,price * 1.1 as new_price from product;<br></code></pre></td></tr></table></figure>
+
+<p><strong>（8）运算符操作 - 条件查询</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 查询商品名称为“海尔洗衣机”的商品所有信息：<br>select * from product where pname &#x3D; &#39;海尔洗衣机&#39;;<br> <br>-- 查询价格为800商品<br>select * from product where price &#x3D; 800;<br> <br>-- 查询价格不是800的所有商品<br>select * from product where price !&#x3D; 800;<br>select * from product where price &lt;&gt; 800;<br>select * from product where not(price &#x3D; 800);<br> <br>-- 查询商品价格大于60元的所有商品信息<br>select * from product where price &gt; 60;<br> <br> <br>-- 查询商品价格在200到1000之间所有商品<br>select * from product where price &gt;&#x3D; 200 and price &lt;&#x3D;1000;<br>select * from product where price between 200 and 1000;<br> <br>-- 使用least求最小值<br>select least(10, 20, 30); -- 10<br>select least(10, null , 30); -- null<br> <br>-- 使用greatest求最大值<br>select greatest(10, 20, 30);<br>select greatest(10, null, 30); -- null<br></code></pre></td></tr></table></figure>
+
+<p><strong>（9）运算符操作 - 位运算符（了解）</strong></p>
+<p>位运算符是在二进制数上进行计算的运算符。位运算会先将操作数变成二进制数，进行位运算。然后再将计算结果从二进制数变回十进制数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select 3&amp;5; -- 位与<br>select 3|5; -- 位或<br>select 3^5; -- 位异或<br>select 3&gt;&gt;1; -- 位左移<br>select 3&lt;&lt;1; -- 位右移<br>select ~3;   -- 位取反<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅶ-排序查询"><a href="#Ⅶ-排序查询" class="headerlink" title="Ⅶ.排序查询"></a>Ⅶ.排序查询</h3><p><strong>（1）介绍</strong></p>
+<ul>
+<li>如果我们需要对读取的数据进行排序，我们就可以使用MySQL的order by子句来设定想按哪个字段哪种方式来排序，再返回搜索结果</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select <br> 字段名1，字段名2，……<br>from 表名<br>order by 字段名1 [asc|desc]，字段名2[asc|desc]……<br></code></pre></td></tr></table></figure>
+
+<p><strong>（2）特点</strong></p>
+<ul>
+<li>asc代表升序，desc代表降序，如果不写默认升序</li>
+<li>order by用于子句中可以支持单个字段，多个字段，表达式，函数，别名</li>
+<li>order by子句，放在查询语句的最后面。LIMIT子句除外</li>
+</ul>
+<p><strong>（3）操作</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 1.使用价格排序(降序)<br>select * from product order by price desc;<br>-- 2.在价格排序(降序)的基础上，以分类排序(降序)<br>select * from product order by price desc,category_id asc;<br>-- 3.显示商品的价格(去重复)，并排序(降序)<br>select distinct price from product order by price desc;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅷ-聚合查询"><a href="#Ⅷ-聚合查询" class="headerlink" title="Ⅷ.聚合查询"></a>Ⅷ.聚合查询</h3><p><strong>简介</strong></p>
+<ul>
+<li>之前我们做的查询都是横向查询，它们都是根据条件一行一行的进行判断，而使用聚合函数查询是纵向查询，它是对一列的值进行计算，然后返回一个单一的值；另外聚合函数会忽略空值</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>聚合函数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>count()</td>
+<td>统计指定列不为NULL</td>
+</tr>
+<tr>
+<td>sum()</td>
+<td>计算指定列的数值和，如果指定列类型不是数值类型，那么计算结果为0</td>
+</tr>
+<tr>
+<td>max()</td>
+<td>计算指定列的最大值，如果指定列是字符串类型，那么使用字符串排序运算</td>
+</tr>
+<tr>
+<td>min()</td>
+<td>计算指定列的最小值，如果指定列是字符串类型，那么使用字符串排序运算</td>
+</tr>
+<tr>
+<td>avg()</td>
+<td>计算指定列的平均值，如果指定列类型不是数值类型，那么计算结果为0</td>
+</tr>
+</tbody></table>
+<p><strong>（2）操作</strong></p>
+<ul>
+<li>介绍<ul>
+<li>count函数对null值的处理 如果count函数的参数为星号（*），则统计所有记录的个数。而如果参数为某字段，不统计含null值的记录个数</li>
+<li>sum和avg函数对null值的处理 这两个函数忽略null的存在，就好像该条记录不存在一样</li>
+<li>max和min函数对null值的处理 max和min两个函数同样忽略null值的存在</li>
+</ul>
+</li>
+<li>操作</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 创建表<br>create table test_null( <br> c1 varchar(20), <br> c2 int <br>);<br> <br>-- 插入数据<br>insert into test_null values(&#39;aaa&#39;,3);<br>insert into test_null values(&#39;bbb&#39;,3);<br>insert into test_null values(&#39;ccc&#39;,null);<br>insert into test_null values(&#39;ddd&#39;,6);<br> <br>-- 测试<br>select count(*), count(1), count(c2) from test_null;<br>select sum(c2),max(c2),min(c2),avg(c2) from test_null;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅸ-分组查询（group-by）"><a href="#Ⅸ-分组查询（group-by）" class="headerlink" title="Ⅸ.分组查询（group by）"></a>Ⅸ.分组查询（group by）</h3><p><strong>（1）简介</strong></p>
+<p>分组查询是指使用group by字句对查询信息进行分组</p>
+<ul>
+<li>格式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select 字段1,字段2… from 表名 group by 分组字段 having 分组条件;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>操作</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 1 统计各个分类商品的个数<br>select category_id ,count(*) from product group by category_id ;<br></code></pre></td></tr></table></figure>
+
+<p><strong>如果要进行分组的话，则SELECT字句之后，只能出现分组的字段和统计函数，其他的字段不能出现</strong></p>
+<p><strong>（2）分组之后的条件筛选（having）</strong></p>
+<ul>
+<li>特点<ul>
+<li>分组之后对统计结果进行筛选的话必须使用having，不能用where</li>
+<li>where子句筛选FROM子句中指定的操作所产生的行</li>
+<li>group by子句用来分组WHER 子句的输出</li>
+<li>having子句用来从分组的结果中筛选行</li>
+</ul>
+</li>
+<li>格式</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">select 字段1,字段2… from 表名 group by 分组字段 having 分组条件;<br></code></pre></td></tr></table></figure>
+
+<ul>
+<li>操作</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 2.统计各个分类商品的个数,且只显示个数大于4的信息<br>select category_id ,count(*) from product group by category_id having count(*) &gt; 1;<br></code></pre></td></tr></table></figure>
+
+<h3 id="Ⅹ-分页查询（limit）"><a href="#Ⅹ-分页查询（limit）" class="headerlink" title="Ⅹ.分页查询（limit）"></a>Ⅹ.分页查询（limit）</h3><p><strong>（1）简介</strong></p>
+<p>分页查询在项目开发中常见，由于数据量很大，显示屏长度有限，因此对数据需要采取分页显示方式。例如数据共有30条，每页显示5条，第一页显示1-5条，第二页显示6-10条</p>
+<p><strong>（2）格式</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 方式1-显示前n条<br>select 字段1，字段2... from 表明 limit n<br>-- 方式2-分页显示<br>select 字段1，字段2... from 表明 limit m,n<br>m: 整数，表示从第几条索引开始，计算方式 （当前页-1）*每页显示条数<br>n: 整数，表示查询多少条数据<br></code></pre></td></tr></table></figure>
+
+<p><strong>（3）操作</strong></p>
+<p><strong>要求目标表Table2必须存在</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- 查询product表的前5条记录 <br>select * from product limit 5 <br> <br>-- 从第4条开始显示，显示5条 <br>select * from product limit 3,5<br></code></pre></td></tr></table></figure>
+
+<p>**我 **</p>
+<h3 id="Ⅺ-INSERT-INTO-SELECT-语句"><a href="#Ⅺ-INSERT-INTO-SELECT-语句" class="headerlink" title="Ⅺ.INSERT INTO SELECT 语句"></a>Ⅺ.INSERT INTO SELECT 语句</h3><p><strong>（1）简介</strong></p>
+<p>将一张表的数据导入另一张表中，可以使用INSERT INTO SELECT语句</p>
+<p><strong>（2）格式</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs mysql">insert into Table2(field1,field2,…) select value1,value2,… from Table1 或者：<br>insert into Table2 select * from Table1<br></code></pre></td></tr></table></figure>
+
+<p>要求目标表Table2必须存在</p>
+<h3 id="Ⅻ-SELECT-INTO-FROM-语句"><a href="#Ⅻ-SELECT-INTO-FROM-语句" class="headerlink" title="Ⅻ.SELECT INTO FROM 语句"></a>Ⅻ.SELECT INTO FROM 语句</h3><p><strong>（1）简介</strong></p>
+<p>将一张表的数据导入到另一张表中，有两种选择 SELECT INTO 和 INSERT INTO SELECT</p>
+<p><strong>（2）格式</strong></p>
+<p><strong>要求目标表Table2不存在，因为在插入时会自动创建表Table2，并将Table1中指定字段数据复制到Table2中</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs mysql">SELECT value1，value2 INTO Table2 FROM Table1<br></code></pre></td></tr></table></figure>
+
+<h3 id="XⅢ-正则表达式"><a href="#XⅢ-正则表达式" class="headerlink" title="XⅢ. 正则表达式"></a>XⅢ. 正则表达式</h3><p><strong>（1）介绍</strong></p>
+<p>正则表达式(regular expression)描述了一种字符串匹配的规则，正则表达式本身就是一个字符串，使用这个字符串来描述、用来定义匹配规则，匹配一系列符合某个句法规则的字符串。在开发中，正则表达式通常被用来检索、替换那些符合某个规则的文本。</p>
+<p>MySQL通过REGEXP关键字支持正则表达式进行字符串匹配。<br><strong>（2）格式</strong></p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>^</td>
+<td>匹配输入字符串的开始位置。</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配输入字符串的结束位置。</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配除 “\n” 之外的任何单个字符。</td>
+</tr>
+<tr>
+<td>[…]</td>
+<td>字符集合。匹配所包含的任意一个字符。例如， ‘[abc]’ 可以匹配 “plain” 中的 ‘a’。</td>
+</tr>
+<tr>
+<td>[ ^…]</td>
+<td>负值字符集合。匹配未包含的任意字符。例如， ‘[ ^abc]’ 可以匹配 “plain” 中的’p’。</td>
+</tr>
+<tr>
+<td>p1|p2|p3</td>
+<td>匹配 p1 或 p2 或 p3。例如，’z|food’ 能匹配 “z” 或 “food”。’(z|f)ood’ 则匹配 “zood” 或 “food”。</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配前面的子表达式零次或多次。例如，zo* 能匹配 “z” 以及 “zoo”。* 等价于{0,}。</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配前面的子表达式一次或多次。例如，’zo+’ 能匹配 “zo” 以及 “zoo”，但不能匹配 “z”。+ 等价于 {1,}。</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>n 是一个非负整数。匹配确定的 n 次。例如，’o{2}’ 不能匹配 “Bob” 中的 ‘o’，但是能匹配 “food” 中的两个 o。</td>
+</tr>
+<tr>
+<td>{n,m}</td>
+<td>m 和 n 均为非负整数，其中n &lt;= m。最少匹配 n 次且最多匹配 m 次。</td>
+</tr>
+</tbody></table>
+<p><strong>(3)操作</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><code class="hljs mysql">-- ^ 在字符串开始处进行匹配<br>SELECT  &#39;abc&#39; REGEXP &#39;^a&#39;;<br> <br>-- $ 在字符串末尾开始匹配<br>SELECT  &#39;abc&#39; REGEXP &#39;a$&#39;;<br>SELECT  &#39;abc&#39; REGEXP &#39;c$&#39;;<br> <br>-- . 匹配任意字符<br>SELECT  &#39;abc&#39; REGEXP &#39;.b&#39;;<br>SELECT  &#39;abc&#39; REGEXP &#39;.c&#39;;<br>SELECT  &#39;abc&#39; REGEXP &#39;a.&#39;;<br> <br>-- [...] 匹配括号内的任意单个字符<br>SELECT  &#39;abc&#39; REGEXP &#39;[xyz]&#39;;<br>SELECT  &#39;abc&#39; REGEXP &#39;[xaz]&#39;;<br> <br>-- [^...] 注意^符合只有在[]内才是取反的意思，在别的地方都是表示开始处匹配<br>SELECT  &#39;a&#39; REGEXP &#39;[^abc]&#39;;<br>SELECT  &#39;x&#39; REGEXP &#39;[^abc]&#39;;<br>SELECT  &#39;abc&#39; REGEXP &#39;[^a]&#39;;<br> <br>-- a* 匹配0个或多个a,包括空字符串。 可以作为占位符使用.有没有指定字符都可以匹配到数据<br> <br>SELECT &#39;stab&#39; REGEXP &#39;.ta*b&#39;;<br>SELECT &#39;stb&#39; REGEXP &#39;.ta*b&#39;;<br>SELECT &#39;&#39; REGEXP &#39;a*&#39;;<br> <br> -- a&#123;m,n&#125; 匹配m到n个a,包含m和n<br> <br>SELECT &#39;auuuuc&#39; REGEXP &#39;au&#123;3,5&#125;c&#39;;<br>SELECT &#39;auuuuc&#39; REGEXP &#39;au&#123;4,5&#125;c&#39;;<br>SELECT &#39;auuuuc&#39; REGEXP &#39;au&#123;5,10&#125;c&#39;;<br> <br>-- (abc) abc作为一个序列匹配，不用括号括起来都是用单个字符去匹配，如果要把多个字符作为一个整体去匹配就需要用到括号，所以括号适合上面的所有情况。<br>SELECT &#39;xababy&#39; REGEXP &#39;x(abab)y&#39;;<br>SELECT &#39;xababy&#39; REGEXP &#39;x(ab)*y&#39;;<br>SELECT &#39;xababy&#39; REGEXP &#39;x(ab)&#123;1,2&#125;y&#39;;<br> <br>-- a?  匹配0个或者1个a<br>SELECT &#39;stb&#39; REGEXP &#39;.ta?b&#39;;<br>SELECT &#39;stab&#39; REGEXP &#39;.ta?b&#39;;<br>SELECT &#39;staab&#39; REGEXP &#39;.ta?b&#39;;<br> <br>-- a1|a2  匹配a1或者a2，<br>SELECT &#39;a&#39; REGEXP &#39;a|b&#39;;<br>SELECT &#39;b&#39; REGEXP &#39;a|b&#39;;<br>SELECT &#39;b&#39; REGEXP &#39;^(a|b)&#39;;<br>SELECT &#39;a&#39; REGEXP &#39;^(a|b)&#39;;<br>SELECT &#39;c&#39; REGEXP &#39;^(a|b)&#39;;<br> <br>-- a&#123;m&#125; 匹配m个a<br> <br>SELECT &#39;auuuuc&#39; REGEXP &#39;au&#123;4&#125;c&#39;;<br>SELECT &#39;auuuuc&#39; REGEXP &#39;au&#123;3&#125;c&#39;;<br> <br>-- a+  匹配1个或者多个a,但是不包括空字符<br>SELECT &#39;stab&#39; REGEXP &#39;.ta+b&#39;;<br>SELECT &#39;stb&#39; REGEXP &#39;.ta+b&#39;;<br></code></pre></td></tr></table></figure>
+
+
+            </div>
+            <hr>
+            <div>
+              <div class="post-metas mb-3">
+                
+                  <div class="post-meta mr-3">
+                    <i class="iconfont icon-category"></i>
+                    
+                      <a class="hover-with-bg" href="/categories/MySQL/">MySQL</a>
+                    
+                  </div>
+                
+                
+                  <div class="post-meta">
+                    <i class="iconfont icon-tags"></i>
+                    
+                      <a class="hover-with-bg" href="/tags/MySQL/">MySQL</a>
+                    
+                  </div>
+                
+              </div>
+              
+                <p class="note note-warning">
+                  
+                    本博客所有文章除特别声明外，均采用 <a target="_blank" href="https://creativecommons.org/licenses/by-sa/4.0/deed.zh" rel="nofollow noopener noopener">CC BY-SA 4.0 协议</a> ，转载请注明出处！
+                  
+                </p>
+              
+              
+                <div class="post-prevnext">
+                  <article class="post-prev col-6">
+                    
+                    
+                      <a href="/2021/12/22/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-%EF%BC%88%E5%A4%9A%E8%A1%A8%E6%93%8D%E4%BD%9C%E3%80%81%E5%87%BD%E6%95%B0%E3%80%81%E8%A7%86%E5%9B%BE%E3%80%81%E5%AD%98%E5%82%A8%E8%BF%87%E7%A8%8B%E3%80%81%E8%A7%A6%E5%8F%91%E5%99%A8%EF%BC%89/">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">MySQL数据库基本操作 - （多表操作、函数、视图、存储过程、触发器）</span>
+                        <span class="visible-mobile">Previous</span>
+                      </a>
+                    
+                  </article>
+                  <article class="post-next col-6">
+                    
+                    
+                      <a href="/2021/12/16/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9F%BA%E6%9C%AC%E6%93%8D%E4%BD%9C-DDL/">
+                        <span class="hidden-mobile">MySQL数据库基本操作 - DDL</span>
+                        <span class="visible-mobile">Next</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
+                    
+                  </article>
+                </div>
+              
+            </div>
+
+            
+              <!-- Comments -->
+              <article class="comments" id="comments" lazyload>
+                
+                  
+                
+                
+  <div id="valine"></div>
+  <script type="text/javascript">
+    Fluid.utils.lazyComments('valine', function() {
+      Fluid.utils.createScript('https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js', function () {
+        new Valine({
+          el: "#valine",
+          app_id: "99lfyqRg3CLazXoohVQjMwH3-gzGzoHsz",
+          app_key: "qx9rFQuqjhuegpH6AwJ8B0eD",
+          placeholder: "说点什么",
+          path: window.location.pathname,
+          avatar: "retro",
+          meta: ["nick","mail","link"],
+          pageSize: "10",
+          lang: "zh-CN",
+          highlight: false,
+          recordIP: true,
+          serverURLs: "",
+        });
+      });
+    });
+  </script>
+  <noscript>Please enable JavaScript to view the
+    <a target="_blank" href="https://valine.js.org" rel="nofollow noopener noopener">comments powered by Valine.</a>
+  </noscript>
+
+
+              </article>
+            
+          </article>
+        </div>
+      </div>
+    </div>
+    
+      <div class="d-none d-lg-block col-lg-2 toc-container" id="toc-ctn">
+        <div id="toc">
+  <p class="toc-header"><i class="iconfont icon-list"></i>&nbsp;TOC</p>
+  <div class="toc-body" id="toc-body"></div>
+</div>
+
+      </div>
+    
+  </div>
+</div>
+
+<!-- Custom -->
+
+
+    
+
+    
+      <a id="scroll-top-button" href="#" role="button">
+        <i class="iconfont icon-arrowup" aria-hidden="true"></i>
+      </a>
+    
+
+    
+      <div class="modal fade" id="modalSearch" tabindex="-1" role="dialog" aria-labelledby="ModalLabel"
+     aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">Search</h4>
+        <button type="button" id="local-search-close" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-3">
+        <div class="md-form mb-5">
+          <input type="text" id="local-search-input" class="form-control validate">
+          <label data-error="x" data-success="v"
+                 for="local-search-input">keyword</label>
+        </div>
+        <div class="list-group" id="local-search-result"></div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+
+    
+  </main>
+
+  <footer class="text-center mt-5 py-3">
+  <div class="footer-content">
+     <a href="https://hexo.io" target="_blank" rel="nofollow noopener"><span>Hexo</span></a> <i class="iconfont icon-love"></i> <a href="https://github.com/fluid-dev/hexo-theme-fluid" target="_blank" rel="nofollow noopener"><span>Fluid</span></a> 
+  </div>
+  
+
+  
+
+  
+</footer>
+
+
+  <!-- SCRIPTS -->
+  
+  <script  src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js" ></script>
+  <link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.css" />
+
+  <script>
+    NProgress.configure({"showSpinner":false,"trickleSpeed":100})
+    NProgress.start()
+    window.addEventListener('load', function() {
+      NProgress.done();
+    })
+  </script>
+
+
+<script  src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js" ></script>
+<script  src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.min.js" ></script>
+<script  src="/js/debouncer.js" ></script>
+<script  src="/js/events.js" ></script>
+<script  src="/js/plugins.js" ></script>
+
+<!-- Plugins -->
+
+
+  
+    <script  src="/js/img-lazyload.js" ></script>
+  
+
+
+
+  
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/tocbot@4.12.0/dist/tocbot.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js" ></script>
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/anchor-js@4.3.0/anchor.min.js" ></script>
+
+
+
+  <script defer src="https://cdn.jsdelivr.net/npm/clipboard@2.0.6/dist/clipboard.min.js" ></script>
+
+
+
+
+
+
+  <script  src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11/lib/typed.min.js" ></script>
+  <script>
+    (function (window, document) {
+      var typing = Fluid.plugins.typing;
+      var title = document.getElementById('subtitle').title;
+      
+      typing(title)
+      
+    })(window, document);
+  </script>
+
+
+
+  <script  src="/js/local-search.js" ></script>
+  <script>
+    (function () {
+      var path = "/local-search.xml";
+      $('#local-search-input').on('click', function() {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      });
+      $('#modalSearch').on('shown.bs.modal', function() {
+        $('#local-search-input').focus();
+      });
+    })()
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 主题的启动项 保持在最底部 -->
+<script  src="/js/boot.js" ></script>
+
+
+</body>
+</html>
